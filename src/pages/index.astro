@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Preloader    from '@components/Preloader.astro';
-import Navbar       from '@components/Navbar.astro';
 import Hero         from '@components/Hero.astro';
 import About        from '@components/About.astro';
 import Services     from '@components/Services.astro';
@@ -12,6 +11,7 @@ import CTABanner    from '@components/CTABanner.astro';
 import FAQ          from '@components/FAQ.astro';
 import Contact      from '@components/Contact.astro';
 import Footer       from '@components/Footer.astro';
+import AnimatedNav from '@components/react/AnimatedNav';
 ---
 
 <BaseLayout
@@ -19,7 +19,7 @@ import Footer       from '@components/Footer.astro';
   description="Centro veterinario de confianza en Madrid. Medicina general, cirugía, diagnóstico por imagen, nutrición clínica y urgencias 24h para perros y gatos."
 >
   <Preloader />
-  <Navbar />
+  <AnimatedNav client:load />
   <main id="main-content">
     <Hero />
     <About />

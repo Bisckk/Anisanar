@@ -1,0 +1,224 @@
+.animated-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 1.5rem 0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animated-nav.scrolled {
+  padding: 0.75rem 0;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Logo */
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.logo-img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.nav-logo:hover .logo-img {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.logo-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: 0.05em;
+  display: flex;
+}
+
+.logo-ani { color: #fff; }
+.logo-sanar { color: #8CC63F; font-style: italic; }
+
+.scrolled .logo-ani { color: #1e293b; }
+
+/* Desktop Links */
+.nav-links-wrapper {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  padding: 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .nav-links-wrapper { display: block; }
+}
+
+.scrolled .nav-links-wrapper {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.05);
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 0.5rem;
+}
+
+.nav-link {
+  position: relative;
+  padding: 0.6rem 1.2rem;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  z-index: 1;
+}
+
+.scrolled .nav-link {
+  color: rgba(30, 41, 59, 0.8);
+}
+
+.nav-link:hover {
+  color: #fff;
+}
+
+.scrolled .nav-link:hover {
+  color: #1e293b;
+}
+
+.nav-pill {
+  position: absolute;
+  inset: 0;
+  background: #8CC63F; /* ANI Green */
+  border-radius: 999px;
+  z-index: -1;
+  box-shadow: 0 4px 15px rgba(140, 198, 63, 0.3);
+}
+
+.scrolled .nav-pill {
+  background: #2BAABC; /* SANAR Blue */
+  box-shadow: 0 4px 15px rgba(43, 170, 188, 0.2);
+}
+
+/* Actions & CTA */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-cta {
+  background: #8CC63F;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(140, 198, 63, 0.2);
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .nav-cta { display: block; }
+}
+
+.nav-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(140, 198, 63, 0.3);
+  filter: brightness(1.1);
+}
+
+/* Burger */
+.nav-burger {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+@media (min-width: 1024px) {
+  .nav-burger { display: none; }
+}
+
+.nav-burger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: #fff;
+  transition: 0.3s;
+}
+
+.scrolled .nav-burger span {
+  background: #1e293b;
+}
+
+.nav-burger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.nav-burger.open span:nth-child(2) { opacity: 0; }
+.nav-burger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+/* Mobile Menu */
+.mobile-menu {
+  position: absolute;
+  top: 100%;
+  left: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.mobile-link {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  text-decoration: none;
+  text-align: center;
+}
+
+.mobile-cta {
+  background: #2BAABC;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 999px;
+  text-align: center;
+  font-weight: 600;
+  text-decoration: none;
+}
