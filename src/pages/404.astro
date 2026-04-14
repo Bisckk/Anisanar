@@ -1,0 +1,167 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { PawPrint } from '@lucide/astro';
+---
+
+<BaseLayout
+  title="Página no encontrada | Anisanar Veterinaria"
+  description="Lo sentimos, la página que buscas no existe. Vuelve al inicio de Anisanar Veterinaria."
+  noindex={true}
+>
+  <main class="not-found" id="not-found-content" aria-labelledby="not-found-heading">
+    <!-- Deco text -->
+    <span class="not-found__deco" aria-hidden="true">404</span>
+
+    <div class="not-found__content">
+      <span class="not-found__paw" aria-hidden="true" id="nf-paw"><PawPrint stroke-width="2" class="w-16 h-16 text-[#8CC63F] fill-current" /></span>
+      <h1 id="not-found-heading" class="not-found__heading" id="nf-heading">
+        Página no encontrada
+      </h1>
+      <p class="not-found__body" id="nf-body">
+        Parece que esta página se ha ido a pasear con tu mascota.<br/>
+        Vuelve al inicio o explora nuestros servicios.
+      </p>
+      <div class="not-found__ctas" id="nf-ctas">
+        <a href="/" class="btn-nf-primary">
+          Volver al inicio
+        </a>
+        <a href="/#services" class="btn-nf-outline">
+          Ver servicios
+        </a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: 100vh;
+    background: var(--color-forest);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 2rem;
+  }
+
+  .not-found__deco {
+    position: absolute;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(14rem, 30vw, 32rem);
+    font-weight: 700;
+    color: rgba(212, 196, 160, 0.06);
+    line-height: 1;
+    letter-spacing: -0.05em;
+    pointer-events: none;
+    user-select: none;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .not-found__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .not-found__paw {
+    font-size: 4rem;
+    display: block;
+    opacity: 0;
+    transform: scale(0.5);
+  }
+
+  .not-found__heading {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 500;
+    color: var(--color-charcoal);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .not-found__body {
+    font-size: clamp(1rem, 1.5vw, 1.125rem);
+    line-height: 1.75;
+    color: rgba(30, 41, 59, 0.6);
+    max-width: 420px;
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  .not-found__ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  .btn-nf-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #8CC63F;
+    color: #ffffff;
+    padding: 0.875rem 2rem;
+    border-radius: 9999px;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    text-decoration: none;
+    transition: background 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+  }
+
+  .btn-nf-primary:hover {
+    background: var(--color-clay);
+    transform: translateY(-2px);
+  }
+
+  .btn-nf-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: var(--color-charcoal);
+    border: 1.5px solid rgba(30, 41, 59, 0.3);
+    padding: 0.875rem 2rem;
+    border-radius: 9999px;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    text-decoration: none;
+    transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+  }
+
+  .btn-nf-outline:hover {
+    border-color: var(--color-charcoal);
+    background: rgba(30, 41, 59, 0.06);
+    transform: translateY(-2px);
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+
+  tl
+    .to('#nf-paw', {
+      opacity: 1,
+      scale: 1,
+      duration: 0.8,
+      ease: 'back.out(1.6)',
+    })
+    .to('#nf-heading', { opacity: 1, y: 0, duration: 0.9 }, '-=0.4')
+    .to('#nf-body',    { opacity: 1, y: 0, duration: 0.8 }, '-=0.5')
+    .to('#nf-ctas',    { opacity: 1, y: 0, duration: 0.8 }, '-=0.5');
+</script>

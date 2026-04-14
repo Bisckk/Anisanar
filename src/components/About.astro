@@ -1,0 +1,264 @@
+---
+import { Heart, Microscope, Leaf, Handshake, Star } from '@lucide/astro';
+
+const values = [
+  { icon: Heart, title: 'Medicina con vocación', desc: 'Cada consulta es tratada con la misma dedicación y cariño que ponemos en nuestros propios animales.' },
+  { icon: Microscope, title: 'Ciencia actualizada', desc: 'Protocolos basados en la evidencia más reciente y formación continua de todo nuestro equipo.' },
+  { icon: Leaf, title: 'Enfoque integrador', desc: 'Cuidamos el bienestar físico, emocional y conductual de cada paciente de forma holística.' },
+  { icon: Handshake, title: 'Alianza con el propietario', desc: 'Te explicamos cada paso del proceso, porque eres parte esencial del equipo terapéutico.' },
+];
+---
+
+<section id="about" class="section-spacing" aria-labelledby="about-heading">
+  <div class="container-gutter">
+    <div class="about__grid">
+
+      <!-- Left: image -->
+      <div class="about__image-col reveal-left">
+        <div class="about__image-wrap">
+          <img
+            src="https://images.unsplash.com/photo-1583511655826-05700d52f4d9?w=800&q=80"
+            alt="Veterinaria sosteniendo cariñosamente a un gato naranja en consulta"
+            class="about__img blob"
+            width="600"
+            height="700"
+            loading="lazy"
+          />
+
+          <!-- Floating card 1 -->
+          <div class="about__badge about__badge--1 reveal-scale">
+            <span class="about__badge-number">15+</span>
+            <span class="about__badge-label">Años de experiencia</span>
+          </div>
+
+          <!-- Floating card 2 -->
+          <div class="about__badge about__badge--2 reveal-scale">
+            <div class="about__badge-stars" aria-label="5 estrellas">
+              <Star stroke-width="2" class="w-4 h-4 inline-block text-[#8CC63F] fill-current" />
+              <Star stroke-width="2" class="w-4 h-4 inline-block text-[#8CC63F] fill-current" />
+              <Star stroke-width="2" class="w-4 h-4 inline-block text-[#8CC63F] fill-current" />
+              <Star stroke-width="2" class="w-4 h-4 inline-block text-[#8CC63F] fill-current" />
+              <Star stroke-width="2" class="w-4 h-4 inline-block text-[#8CC63F] fill-current" />
+            </div>
+            <span class="about__badge-label">Valoración media</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: copy -->
+      <div class="about__copy-col">
+        <!-- Label -->
+        <span class="about__label reveal-up">Sobre nosotros</span>
+
+        <!-- Heading — 3 líneas cortas que posicionen tu metodología o filosofía -->
+        <h2 id="about-heading" class="about__heading reveal-up">
+          Medicina rigurosa.<br/>
+          <em>Trato cercano.</em><br/>
+          Sin concesiones.
+        </h2>
+
+        <!-- Párrafo 1 — Historia y posicionamiento: cuándo se fundó, por qué y qué os hace distintos -->
+        <p class="about__body reveal-up">
+          <!-- Personaliza: año de fundación, ciudad y el "por qué" detrás de la clínica -->
+          [Nombre de la clínica] abrió sus puertas en [año] con una premisa
+          clara: la excelencia clínica y la empatía no son conceptos opuestos.
+          Hoy somos un equipo de [N] veterinarios especializados que tratamos
+          cada caso con la misma dedicación que pondríamos con nuestros propios
+          animales.
+        </p>
+        <!-- Párrafo 2 — Diferencial técnico: equipamiento, capacidades, ventajas operativas -->
+        <p class="about__body reveal-up">
+          <!-- Personaliza: menciona tu equipamiento real (eco, Rx digital, laboratorio, quirófano) -->
+          Nuestro equipamiento —radiología digital, ecografía Doppler y
+          laboratorio in-house— nos permite obtener diagnósticos el mismo
+          día de la visita. Porque en medicina, el tiempo es parte del
+          tratamiento.
+        </p>
+
+        <!-- Values list -->
+        <ul class="about__values" data-stagger-parent aria-label="Nuestros valores">
+          {values.map(({ icon: ValueIcon, title, desc }) => (
+            <li class="about__value" data-stagger-child>
+              <span class="about__value-icon" aria-hidden="true">
+                <ValueIcon stroke-width="2" class="w-6 h-6 text-[#8CC63F]" />
+              </span>
+              <div>
+                <strong class="about__value-title">{title}</strong>
+                <p class="about__value-desc">{desc}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        <a href="#contact" class="btn-primary about__cta reveal-up" style="display:inline-flex;margin-top:2.5rem">
+          Conoce al equipo
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decorative bg text -->
+  <span class="about__deco" aria-hidden="true">VET</span>
+</section>
+
+<style>
+  .about__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(3rem, 6vw, 7rem);
+    align-items: center;
+    position: relative;
+  }
+
+  /* Image col */
+  .about__image-col { position: relative; }
+
+  .about__image-wrap {
+    position: relative;
+    max-width: 520px;
+  }
+
+  .about__img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    aspect-ratio: 4 / 5;
+    display: block;
+  }
+
+  /* Badges */
+  .about__badge {
+    position: absolute;
+    background: white;
+    border-radius: 1rem;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 20px 60px rgba(30, 30, 30, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .about__badge--1 {
+    bottom: 2rem;
+    right: -2rem;
+  }
+
+  .about__badge--2 {
+    top: 2rem;
+    right: -2rem;
+  }
+
+  .about__badge-number {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 2.25rem;
+    font-weight: 600;
+    color: var(--color-charcoal);
+    line-height: 1;
+  }
+
+  .about__badge-stars {
+    font-size: 1rem;
+    color: #8CC63F;
+    letter-spacing: 0.1em;
+  }
+
+  .about__badge-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(30, 30, 30, 0.5);
+  }
+
+  /* Copy col */
+  .about__label {
+    display: inline-block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #8CC63F;
+    margin-bottom: 1.25rem;
+  }
+
+  .about__heading {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(2.25rem, 4vw, 4rem);
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--color-charcoal);
+    margin-bottom: 1.75rem;
+    letter-spacing: -0.02em;
+  }
+
+  .about__heading em { color: #8CC63F; }
+
+  .about__body {
+    font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
+    line-height: 1.75;
+    color: rgba(30, 30, 30, 0.7);
+    margin-bottom: 1rem;
+  }
+
+  /* Values */
+  .about__values {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .about__value {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .about__value-icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+    margin-top: 0.1em;
+  }
+
+  .about__value-title {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--color-charcoal);
+    margin-bottom: 0.2rem;
+  }
+
+  .about__value-desc {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: rgba(30, 30, 30, 0.6);
+  }
+
+  /* Deco text */
+  .about__deco {
+    position: absolute;
+    left: -0.05em;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(10rem, 20vw, 22rem);
+    font-weight: 600;
+    line-height: 1;
+    color: rgba(45, 74, 62, 0.04);
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.05em;
+    z-index: -1;
+  }
+
+  @media (max-width: 900px) {
+    .about__grid { grid-template-columns: 1fr; }
+    .about__image-wrap { max-width: 100%; }
+    .about__badge--1, .about__badge--2 { right: 0.5rem; }
+    .about__deco { display: none; }
+  }
+</style>

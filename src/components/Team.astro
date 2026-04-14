@@ -1,0 +1,211 @@
+---
+import { team } from '@data/team';
+---
+
+<section id="team" class="section-spacing" aria-labelledby="team-heading">
+  <div class="container-gutter">
+
+    <!-- Header -->
+    <div class="team__header">
+      <span class="team__label reveal-up">El equipo</span>
+      <h2 id="team-heading" class="team__heading reveal-up">
+        Profesionales que<br/>
+        <em>aman</em> lo que hacen.
+      </h2>
+    </div>
+
+    <!-- Grid -->
+    <div class="team__grid" data-stagger-parent>
+      {team.map((member) => (
+        <article class="team-card" data-stagger-child aria-label={member.name}>
+          <!-- Image -->
+          <div class="team-card__img-wrap">
+            <img
+              src={member.img}
+              alt={member.imgAlt}
+              class="team-card__img"
+              width="400"
+              height="533"
+              loading="lazy"
+            />
+            <div class="team-card__overlay" aria-hidden="true"></div>
+          </div>
+
+          <!-- Info (always visible) -->
+          <div class="team-card__info">
+            <h3 class="team-card__name">{member.name}</h3>
+            <p class="team-card__role">{member.role}</p>
+            <p class="team-card__spec">{member.specialty}</p>
+
+            <!-- Bio reveal on hover -->
+            <div class="team-card__bio-wrap">
+              <p class="team-card__bio">{member.bio}</p>
+              <ul class="team-card__creds" aria-label={`Formación de ${member.name}`}>
+                {member.credentials.map((c) => (
+                  <li class="team-card__cred">{c}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Header */
+  .team__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: clamp(3rem, 5vw, 5rem);
+  }
+
+  .team__label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #8CC63F;
+  }
+
+  .team__heading {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 3.75rem);
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--color-charcoal);
+    letter-spacing: -0.02em;
+  }
+
+  .team__heading em { color: #8CC63F; }
+
+  /* Grid */
+  .team__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  /* Card */
+  .team-card {
+    position: relative;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    background: #f1f5f9;
+    cursor: pointer;
+  }
+
+  /* Image */
+  .team-card__img-wrap {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+  }
+
+  .team-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .team-card:hover .team-card__img { transform: scale(1.05); }
+
+  .team-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(15, 23, 42, 0.92) 0%,
+      rgba(15, 23, 42, 0.25)  40%,
+      rgba(15, 23, 42, 0)  100%
+    );
+    transition: background 0.4s ease, backdrop-filter 0.4s ease;
+  }
+
+  .team-card:hover .team-card__overlay { 
+    background: linear-gradient(
+      to top,
+      rgba(15, 23, 42, 0.96) 0%,
+      rgba(15, 23, 42, 0.6)  50%,
+      rgba(15, 23, 42, 0.25)  100%
+    );
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  /* Info */
+  .team-card__info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem;
+  }
+
+  .team-card__name {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(1.125rem, 1.8vw, 1.375rem);
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.2;
+    margin-bottom: 0.25rem;
+  }
+
+  .team-card__role {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8CC63F;
+    margin-bottom: 0.25rem;
+  }
+
+  .team-card__spec {
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.4;
+    margin-bottom: 0;
+  }
+
+  /* Bio (hover reveal) */
+  .team-card__bio-wrap {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .team-card:hover .team-card__bio-wrap { max-height: 200px; }
+
+  .team-card__bio {
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.75);
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .team-card__creds {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .team-card__cred {
+    font-size: 0.6875rem;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.02em;
+  }
+
+  @media (max-width: 1024px) {
+    .team__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 560px) {
+    .team__grid { grid-template-columns: 1fr; }
+  }
+</style>

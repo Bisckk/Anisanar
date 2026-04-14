@@ -1,0 +1,244 @@
+---
+const faqs = [
+  {
+    question: '¿Cuáles son los horarios de la clínica?',
+    answer: 'Atendemos de lunes a viernes de 9:00 a 20:00 h y los sábados de 9:00 a 14:00 h. El servicio de urgencias está disponible las 24 horas, los 365 días del año a través de nuestro teléfono de urgencias.',
+  },
+  {
+    question: '¿Necesito pedir cita o puedo ir directamente?',
+    answer: 'Para consultas de rutina recomendamos cita previa para garantizarte un tiempo de consulta sin prisas. Sin embargo, siempre atendemos urgencias sin cita. Puedes reservar online, por teléfono o por WhatsApp.',
+  },
+  {
+    question: '¿Atienden a todo tipo de mascotas?',
+    answer: 'Estamos especializados en perros y gatos. Para animales exóticos (conejos, aves, reptiles) recomendamos contactarnos primero para evaluar si podemos atender tu caso específico.',
+  },
+  {
+    question: '¿Qué debo llevar en la primera visita?',
+    answer: 'Te pedimos la cartilla de vacunación de tu mascota, cualquier analítica o informe previo, y si has iniciado algún tratamiento, trae los medicamentos para que podamos revisar las dosis y compatibilidades.',
+  },
+  {
+    question: '¿Tienen servicio de hospitalización?',
+    answer: 'Sí, contamos con una unidad de hospitalización equipada con monitoreo continuo de signos vitales, fluidoterapia, oxigenoterapia y zona separada para felinos. Te enviamos un parte médico diario.',
+  },
+  {
+    question: '¿Cómo funciona el seguro de mascotas en la clínica?',
+    answer: 'Trabajamos con las principales aseguradoras del mercado. Te pedimos que nos informes al llegar qué seguro tienes para gestionar la facturación correctamente. En caso de duda, nuestro equipo de recepción te orientará.',
+  },
+  {
+    question: '¿Ofrecen seguimiento post-operatorio?',
+    answer: 'Todos los procedimientos quirúrgicos incluyen la revisión de sutura y el seguimiento post-quirúrgico básico. Si el caso lo requiere, diseñamos un protocolo de fisioterapia o rehabilitación personalizado.',
+  },
+  {
+    question: '¿Puedo quedarme con mi mascota durante la consulta?',
+    answer: 'Por supuesto. Creemos que la presencia del propietario reduce el estrés del animal y facilita que nos des información valiosa sobre su comportamiento en casa. Siempre eres bienvenido en la consulta.',
+  },
+];
+
+// JSON-LD FAQPage schema
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(({ question, answer }) => ({
+    '@type': 'Question',
+    name: question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: answer,
+    },
+  })),
+};
+---
+
+<section id="faq" class="faq section-spacing" aria-labelledby="faq-heading">
+  <div class="container-gutter">
+    <div class="faq__grid">
+
+      <!-- Left: sticky header -->
+      <div class="faq__header">
+        <span class="faq__label reveal-up">FAQ</span>
+        <h2 id="faq-heading" class="faq__heading reveal-up">
+          Preguntas<br/>
+          <em>frecuentes.</em>
+        </h2>
+        <p class="faq__sub reveal-up">
+          Si no encuentras lo que buscas, escríbenos y te responderemos
+          a la mayor brevedad.
+        </p>
+        <a href="#contact" class="btn-primary faq__cta reveal-up" style="display:inline-flex;margin-top:2rem">
+          Más preguntas → Contáctanos
+        </a>
+      </div>
+
+      <!-- Right: accordion -->
+      <div class="faq__accordion" id="faq-accordion">
+        {faqs.map(({ question, answer }, i) => (
+          <div class="faq-item" id={`faq-item-${i}`}>
+            <button
+              class="faq-item__trigger"
+              aria-expanded="false"
+              aria-controls={`faq-answer-${i}`}
+              id={`faq-btn-${i}`}
+              data-index={i}
+            >
+              <span class="faq-item__q">{question}</span>
+              <svg class="faq-item__chevron" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div
+              class="faq-item__answer"
+              id={`faq-answer-${i}`}
+              role="region"
+              aria-labelledby={`faq-btn-${i}`}
+              hidden
+            >
+              <p class="faq-item__text">{answer}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQPage JSON-LD -->
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<style>
+  .faq {
+    background: var(--color-charcoal);
+  }
+
+  .faq__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: clamp(3rem, 6vw, 7rem);
+    align-items: start;
+  }
+
+  /* Left */
+  .faq__header {
+    position: sticky;
+    top: 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .faq__label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #8CC63F;
+  }
+
+  .faq__heading {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(2.25rem, 4vw, 3.5rem);
+    font-weight: 500;
+    line-height: 1.1;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+  }
+
+  .faq__heading em { color: #8CC63F; }
+
+  .faq__sub {
+    font-size: clamp(0.875rem, 1.1vw, 1rem);
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 320px;
+  }
+
+  /* Accordion */
+  .faq__accordion {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .faq-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .faq-item__trigger {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 0;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .faq-item__q {
+    font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
+    font-weight: 500;
+    color: #ffffff;
+    line-height: 1.4;
+    transition: color 0.25s ease;
+  }
+
+  .faq-item__trigger:hover .faq-item__q { color: #8CC63F; }
+
+  .faq-item__chevron {
+    flex-shrink: 0;
+    color: #2BAABC;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .faq-item__trigger[aria-expanded="true"] .faq-item__chevron {
+    transform: rotate(180deg);
+  }
+
+  .faq-item__answer {
+    overflow: hidden;
+  }
+
+  .faq-item__answer:not([hidden]) {
+    display: block;
+  }
+
+  .faq-item__text {
+    font-size: clamp(0.875rem, 1.1vw, 0.9375rem);
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.65);
+    padding-bottom: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .faq__grid { grid-template-columns: 1fr; }
+    .faq__header { position: static; }
+  }
+</style>
+
+<script>
+  // Accessible accordion with auto-close
+  const triggers = document.querySelectorAll<HTMLButtonElement>('.faq-item__trigger');
+
+  triggers.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const isOpen   = btn.getAttribute('aria-expanded') === 'true';
+      const answerId = btn.getAttribute('aria-controls')!;
+      const answer   = document.getElementById(answerId);
+
+      // Close all others
+      triggers.forEach((otherBtn) => {
+        const otherAnswerId = otherBtn.getAttribute('aria-controls')!;
+        const otherAnswer   = document.getElementById(otherAnswerId);
+        otherBtn.setAttribute('aria-expanded', 'false');
+        if (otherAnswer) otherAnswer.hidden = true;
+      });
+
+      // Toggle current
+      if (!isOpen && answer) {
+        btn.setAttribute('aria-expanded', 'true');
+        answer.hidden = false;
+      }
+    });
+  });
+</script>

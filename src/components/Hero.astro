@@ -1,0 +1,360 @@
+---
+// ── Reemplaza estos datos con los reales de tu clínica ────────────────────────
+const stats = [
+  { number: '15+',  label: 'Años ejerciendo'       }, // ← Año de fundación
+  { number: '8K+',  label: 'Casos resueltos'        }, // ← Histórico de pacientes
+  { number: '4.9', label: 'Valoración en Google', hasStar: true   }, // ← Rating real verificado
+  { number: '24 h', label: 'Urgencias veterinarias' },
+];
+
+import { Star } from '@lucide/astro';
+---
+
+<section
+  id="hero"
+  class="hero"
+  aria-label="Bienvenida — Anisanar Veterinaria"
+>
+  <!-- Background image with parallax -->
+  <div class="hero__bg-wrap" aria-hidden="true">
+    <div
+      class="hero__bg"
+      data-parallax="-0.25"
+      style="background-image: url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=1800&q=85')"
+    ></div>
+    <div class="hero__overlay"></div>
+  </div>
+
+  <!-- Decorative orbs -->
+  <div class="hero__orb hero__orb--1 animate-float" aria-hidden="true"></div>
+  <div class="hero__orb hero__orb--2 animate-float-delay" aria-hidden="true"></div>
+
+  <!-- Decorative bg text -->
+  <span class="hero__deco-text" aria-hidden="true">VET</span>
+
+  <!-- Main content -->
+  <div class="hero__content container-gutter">
+    <div class="hero__text">
+      <!-- Tag — Reemplaza con: "[Nombre clínica] · [Ciudad] · Est. [Año]" -->
+      <div id="hero-tag" class="hero__tag" role="text">
+        <span class="hero__tag-dot" aria-hidden="true"></span>
+        <!-- Personaliza: especialidad, ciudad y año de fundación -->
+        Clínica Veterinaria de Referencia &middot; Madrid &middot; Est. 2009
+      </div>
+
+      <!-- Headline — Escribe el diferenciador principal en 3 frases cortas -->
+      <h1 class="hero__headline" aria-label="La salud de tu mascota, en las mejores manos">
+        <span class="hero__line hero__line--1">La salud de tu</span>
+        <span class="hero__line hero__line--2">mascota, en las</span>
+        <span class="hero__line hero__line--3 italic">mejores manos.</span>
+      </h1>
+
+      <!-- Subtext — 1–2 frases que resuman tu propuesta de valor única -->
+      <p id="hero-sub" class="hero__sub">
+        <!-- Personaliza: menciona especialidades destacadas y años de experiencia -->
+        Diagnóstico preciso, cirugía especializada y seguimiento continuo
+        desde [año]. Porque para nosotros, cada paciente tiene nombre y
+        cada familia merece una explicación clara.
+      </p>
+
+      <!-- CTAs -->
+      <div id="hero-ctas" class="hero__ctas">
+        <a href="#contact" class="btn-primary">
+          Agendar cita
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="#services" class="btn-outline">Ver servicios</a>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div id="hero-stats" class="hero__stats" role="list" aria-label="Estadísticas de la clínica">
+      {stats.map(({ number, label, hasStar }) => (
+        <div class="hero__stat" role="listitem">
+          <span class="hero__stat-number">
+            {number}
+            {hasStar && <Star stroke-width="2" class="w-8 h-8 inline-block text-[#8CC63F] fill-current" />}
+          </span>
+          <span class="hero__stat-label">{label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div id="hero-scroll" class="hero__scroll" aria-hidden="true">
+    <span class="hero__scroll-line"></span>
+    <span class="hero__scroll-label">scroll</span>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    background: #0f172a;
+    padding-top: clamp(8rem, 15svh, 12rem);
+    padding-bottom: clamp(4rem, 8vw, 6rem);
+  }
+
+  /* BG */
+  .hero__bg-wrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: -20%;
+    background-size: cover;
+    background-position: center;
+    will-change: transform;
+  }
+
+  .hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      160deg,
+      rgba(15, 23, 42, 0.92) 0%,
+      rgba(15, 23, 42, 0.7) 50%,
+      rgba(15, 23, 42, 0.88) 100%
+    );
+  }
+
+  /* Orbs */
+  .hero__orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  .hero__orb--1 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(140, 198, 63, 0.2) 0%, transparent 70%);
+    top: -100px;
+    right: -100px;
+  }
+
+  .hero__orb--2 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(43, 170, 188, 0.15) 0%, transparent 70%);
+    bottom: 20%;
+    left: -80px;
+  }
+
+  /* Deco text */
+  .hero__deco-text {
+    position: absolute;
+    right: -2%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(14rem, 25vw, 30rem);
+    font-weight: 600;
+    line-height: 0.8;
+    color: rgba(255, 255, 255, 0.04);
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.05em;
+  }
+
+  /* Content */
+  .hero__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2.5rem, 6vw, 4rem); /* Responsive fluid gap (Mobile-first mindset) */
+  }
+
+  /* Tag — initial state managed by GSAP, not CSS */
+  .hero__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.65);
+    /* No opacity/transform here — GSAP sets the initial state */
+  }
+
+  .hero__tag-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: #8CC63F;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 8px rgba(140, 198, 63, 0.6);
+  }
+
+  /* Headline */
+  .hero__headline {
+    margin-top: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1em;
+    overflow: hidden;
+  }
+
+  .hero__line {
+    display: block;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(3.5rem, 2rem + 7.5vw, 9rem);
+    font-weight: 500;
+    line-height: 0.95;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+    overflow: hidden;
+    /* Initial state set by GSAP */
+  }
+
+  .hero__line--3 { color: #8CC63F; }
+
+  /* Sub */
+  .hero__sub {
+    max-width: 520px;
+    font-size: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* CTAs */
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  /* Stats */
+  .hero__stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+
+  .hero__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 1rem;
+    gap: 0.25rem;
+    background: rgba(255, 255, 255, 0.06);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    text-align: center;
+    transition: background 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+  }
+
+  .hero__stat:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-4px);
+  }
+
+  .hero__stat:last-child { border-right: none; }
+
+  .hero__stat-number {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(1.75rem, 3vw, 2.75rem);
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1;
+  }
+
+  .hero__stat-label {
+    font-size: clamp(0.625rem, 0.75vw, 0.75rem);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+    font-weight: 500;
+  }
+
+  /* Scroll indicator */
+  .hero__scroll {
+    position: absolute;
+    bottom: 2.5rem;
+    right: var(--spacing-gutter);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+  }
+
+  .hero__scroll-line {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  .hero__scroll-label {
+    font-size: 0.625rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { transform: scaleY(1); opacity: 0.6; }
+    50%       { transform: scaleY(0.5); opacity: 1; }
+  }
+
+  @media (max-width: 640px) {
+    .hero__stats { grid-template-columns: repeat(2, 1fr); }
+    .hero__stat  { border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  // GSAP owns all initial states — no CSS opacity/transform on these elements
+  gsap.set('#hero-tag',    { opacity: 0, y: 16 });
+  gsap.set('.hero__line',  { yPercent: 110 });
+  gsap.set('#hero-sub',    { opacity: 0, y: 24 });
+  gsap.set('#hero-ctas',   { opacity: 0, y: 20 });
+  gsap.set('#hero-stats',  { opacity: 0, y: 24 });
+  gsap.set('#hero-scroll', { opacity: 0 });
+
+  function runHeroTimeline() {
+    const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+    tl
+      .to('#hero-tag',    { opacity: 1, y: 0,       duration: 0.9 })
+      .to('.hero__line',  { yPercent: 0,             duration: 1.1, stagger: 0.1 }, '-=0.5')
+      .to('#hero-sub',    { opacity: 1, y: 0,        duration: 0.9 }, '-=0.55')
+      .to('#hero-ctas',   { opacity: 1, y: 0,        duration: 0.8 }, '-=0.55')
+      .to('#hero-stats',  { opacity: 1, y: 0,        duration: 0.8 }, '-=0.5')
+      .to('#hero-scroll', { opacity: 1,              duration: 0.6 }, '-=0.2');
+  }
+
+  document.addEventListener('preloader:done', runHeroTimeline);
+
+  // Fallback: if preloader is not in the page, run after a short delay
+  setTimeout(() => {
+    const tag = document.getElementById('hero-tag');
+    if (tag && gsap.getProperty(tag, 'opacity') === 0) {
+      runHeroTimeline();
+    }
+  }, 1200);
+</script>

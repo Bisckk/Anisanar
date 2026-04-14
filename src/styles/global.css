@@ -1,0 +1,224 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS Custom Properties ─────────────────────────────────────────────── */
+:root {
+  --color-forest:   #f8fafc; /* slate-50 background for alternate sections */
+  --color-cream:    #ffffff; /* pure white default background */
+  --color-clay:     #8CC63F; /* ANI Green */
+  --color-sage:     #2BAABC; /* SANAR Blue */
+  --color-charcoal: #1e293b; /* slate-800 for dark crisp text */
+  --color-sand:     #f1f5f9; /* slate-100 for borders/lines */
+
+  --font-display: "Montserrat", system-ui, sans-serif;
+  --font-body:    "Outfit", system-ui, sans-serif;
+
+  --ease-expo:     cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-circ:     cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --spacing-section: clamp(5rem, 4rem + 5vw, 9rem);
+  --spacing-gutter:  clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+}
+
+/* ─── Base Reset ─────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-cream);
+  color: var(--color-charcoal);
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ─── Noise Overlay ──────────────────────────────────────────────────────── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+/* ─── Custom Scrollbar ───────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-cream); }
+::-webkit-scrollbar-thumb { background: var(--color-sage); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-charcoal); }
+
+/* ─── Selection ──────────────────────────────────────────────────────────── */
+::selection {
+  background: var(--color-clay);
+  color: var(--color-cream);
+}
+
+/* ─── Custom Cursor Removed ──────────────────────────────────────────────── */
+
+/* ─── GSAP Reveal Initial States ─────────────────────────────────────────── */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(60px);
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-60px);
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(60px);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.85);
+}
+
+/* ─── Utility Classes ────────────────────────────────────────────────────── */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.section-spacing {
+  padding-top: var(--spacing-section);
+  padding-bottom: var(--spacing-section);
+}
+
+.container-gutter {
+  padding-left: var(--spacing-gutter);
+  padding-right: var(--spacing-gutter);
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-clay) 0%, var(--color-sand) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.blob {
+  border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%;
+}
+
+/* ─── Button Styles ──────────────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-clay);
+  color: var(--color-cream);
+  padding: 0.875rem 2rem;
+  border-radius: 9999px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  letter-spacing: 0.02em;
+  transition: background 0.3s var(--ease-expo), transform 0.3s var(--ease-expo), box-shadow 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  background: #7ab332; /* darker shade of ANI Green */
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(140, 198, 63, 0.35);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: var(--color-sage);
+  border: 1.5px solid var(--color-sage);
+  padding: 0.875rem 2rem;
+  border-radius: 9999px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  letter-spacing: 0.02em;
+  transition: border-color 0.3s var(--ease-expo), background 0.3s var(--ease-expo), transform 0.3s var(--ease-expo), color 0.3s var(--ease-expo);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-outline:hover {
+  border-color: var(--color-sage);
+  color: #fff;
+  background: var(--color-sage);
+  transform: translateY(-2px);
+}
+
+/* ─── Form Styles ────────────────────────────────────────────────────────── */
+.form-label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-charcoal);
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  display: block;
+  width: 100%;
+  background: white;
+  border: 1.5px solid rgba(45, 74, 62, 0.15);
+  border-radius: 0.75rem;
+  padding: 0.875rem 1.125rem;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--color-charcoal);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--color-sage);
+  box-shadow: 0 0 0 3px rgba(122, 158, 142, 0.18);
+}
+
+.form-input::placeholder {
+  color: rgba(30, 30, 30, 0.35);
+}
+
+/* ─── Reduced Motion ─────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal-up, .reveal-left, .reveal-right, .reveal-scale {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

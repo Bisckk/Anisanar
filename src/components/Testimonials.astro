@@ -1,0 +1,190 @@
+---
+const reviews = [
+  {
+    quote: 'La Dra. Vargas es increíble. Explicó todo con mucha claridad y mi perro salió de la consulta mucho mejor. Sin duda la mejor clínica veterinaria que he visitado.',
+    author: 'Laura M.',
+    pet: 'Mamá de Toby, Labrador',
+    rating: 5,
+  },
+  {
+    quote: 'Llevé a mi gata de urgencias a medianoche y el Dr. Mora atendió con una calma y profesionalidad impresionantes. Me tranquilizó a mí y salvó a mi Misu.',
+    author: 'Carlos R.',
+    pet: 'Dueño de Misu, Europeo Común',
+    rating: 5,
+  },
+  {
+    quote: 'El programa de nutrición de la Dra. Luna cambió la vida de mi beagle. Perdió 3 kg en 4 meses y ahora está como un cachorro. Completamente recomendable.',
+    author: 'Ana P.',
+    pet: 'Mamá de Hank, Beagle',
+    rating: 5,
+  },
+  {
+    quote: 'Instalaciones impecables, equipo amabilísimo y precios muy razonables para la calidad que ofrecen. Llevo 5 años yendo y nunca me han fallado.',
+    author: 'Javier S.',
+    pet: 'Papá de Bella, Border Collie',
+    rating: 5,
+  },
+  {
+    quote: 'La cirugía de mi golden fue perfecta. El Dr. Ibarra nos mantuvo informados en todo momento y la recuperación fue más rápida de lo esperado.',
+    author: 'Marta G.',
+    pet: 'Mamá de Leo, Golden Retriever',
+    rating: 5,
+  },
+  {
+    quote: 'Por fin una clínica donde no sientes que te tienen prisa. Se toman el tiempo necesario para entender al animal y al dueño. Eso no tiene precio.',
+    author: 'Roberto F.',
+    pet: 'Papá de Coco, Yorkshire Terrier',
+    rating: 5,
+  },
+];
+
+// Duplicate for infinite marquee
+const allReviews = [...reviews, ...reviews];
+import { Star } from '@lucide/astro';
+---
+
+<section
+  id="testimonials"
+  class="testimonials section-spacing"
+  aria-labelledby="testimonials-heading"
+>
+  <div class="container-gutter testimonials__header">
+    <span class="testimonials__label reveal-up">Reseñas</span>
+    <h2 id="testimonials-heading" class="testimonials__heading reveal-up">
+      Lo que dicen las familias<br/>
+      <em>que ya confían</em> en nosotros.
+    </h2>
+  </div>
+
+  <!-- Marquee -->
+  <div class="testimonials__marquee-wrap" aria-label="Reseñas de clientes">
+    <div class="testimonials__marquee" role="list">
+      {allReviews.map(({ quote, author, pet, rating }, i) => (
+        <blockquote
+          class="review-card"
+          role="listitem"
+          aria-label={`Reseña de ${author}`}
+        >
+          <div class="review-card__stars" aria-label={`${rating} de 5 estrellas`}>
+            {Array.from({ length: rating }).map(() => (
+              <Star stroke-width="2" class="w-4 h-4 inline-block text-[#8CC63F] fill-current" />
+            ))}
+          </div>
+          <p class="review-card__quote">"{quote}"</p>
+          <cite class="review-card__cite">
+            <strong class="review-card__author">{author}</strong>
+            <span class="review-card__pet">{pet}</span>
+          </cite>
+        </blockquote>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .testimonials {
+    background: var(--color-forest);
+    overflow: hidden;
+  }
+
+  .testimonials__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: clamp(2.5rem, 4vw, 4rem);
+  }
+
+  .testimonials__label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #8CC63F;
+  }
+
+  .testimonials__heading {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 3.75rem);
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--color-charcoal);
+    letter-spacing: -0.02em;
+  }
+
+  .testimonials__heading em { color: #8CC63F; }
+
+  /* Marquee */
+  .testimonials__marquee-wrap {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+  }
+
+  .testimonials__marquee {
+    display: flex;
+    gap: 1.5rem;
+    animation: marquee 40s linear infinite;
+    width: max-content;
+  }
+
+  .testimonials__marquee:hover { animation-play-state: paused; }
+
+  @keyframes marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .testimonials__marquee { animation: none; }
+    .testimonials__marquee-wrap { overflow-x: auto; }
+  }
+
+  /* Card */
+  .review-card {
+    flex-shrink: 0;
+    width: clamp(280px, 32vw, 420px);
+    background: rgba(30, 41, 59, 0.06);
+    border: 1px solid rgba(30, 41, 59, 0.1);
+    border-radius: 1.25rem;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-style: normal;
+    transition: background 0.3s ease;
+  }
+
+  .review-card:hover { background: rgba(30, 41, 59, 0.1); }
+
+  .review-card__stars {
+    font-size: 1rem;
+    color: #8CC63F;
+    letter-spacing: 0.1em;
+  }
+
+  .review-card__quote {
+    font-size: clamp(0.875rem, 1.1vw, 1rem);
+    line-height: 1.7;
+    color: rgba(30, 41, 59, 0.82);
+    flex: 1;
+  }
+
+  .review-card__cite {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    font-style: normal;
+  }
+
+  .review-card__author {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--color-charcoal);
+  }
+
+  .review-card__pet {
+    font-size: 0.75rem;
+    color: rgba(30, 41, 59, 0.45);
+    letter-spacing: 0.04em;
+  }
+</style>

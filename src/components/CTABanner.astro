@@ -1,0 +1,172 @@
+---
+// Mid-page conversion banner
+---
+
+<section
+  class="cta-banner section-spacing"
+  aria-labelledby="cta-heading"
+>
+  <!-- Pattern texture -->
+  <div class="cta-banner__pattern" aria-hidden="true">
+    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="cross" width="32" height="32" patternUnits="userSpaceOnUse">
+          <path d="M16 8v16M8 16h16" stroke="rgba(30, 41, 59, 0.1)" stroke-width="1"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#cross)"/>
+    </svg>
+  </div>
+
+  <!-- Orb -->
+  <div class="cta-banner__orb animate-float" aria-hidden="true"></div>
+
+  <div class="container-gutter cta-banner__inner">
+    <div class="cta-banner__copy">
+      <span class="cta-banner__label reveal-up">¿Listo para dar el siguiente paso?</span>
+      <h2 id="cta-heading" class="cta-banner__heading reveal-up">
+        Tu mascota merece<br/>
+        <em>atención hoy</em>.
+      </h2>
+      <p class="cta-banner__body reveal-up">
+        Agenda una consulta o llámanos directamente. Siempre hay alguien
+        disponible para ayudarte, incluso en urgencias.
+      </p>
+    </div>
+
+    <div class="cta-banner__actions reveal-scale">
+      <a href="#contact" class="cta-banner__btn cta-banner__btn--primary">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M3 10h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Agendar cita
+      </a>
+      <a href="tel:+34000000000" class="cta-banner__btn cta-banner__btn--outline">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27 11.36 11.36 0 003.55.71 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.36 11.36 0 00.71 3.55 1 1 0 01-.27 1.11l-2.32 2.13z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Llamar ahora
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-banner {
+    background: #8CC63F;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-banner__pattern {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .cta-banner__orb {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(30, 41, 59, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    right: -100px;
+    top: -100px;
+    pointer-events: none;
+  }
+
+  .cta-banner__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(2rem, 5vw, 5rem);
+    flex-wrap: wrap;
+  }
+
+  .cta-banner__copy { flex: 1; min-width: 280px; }
+
+  .cta-banner__label {
+    display: inline-block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(30, 41, 59, 0.7);
+    margin-bottom: 1rem;
+  }
+
+  .cta-banner__heading {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--color-charcoal);
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .cta-banner__heading em {
+    font-style: italic;
+    color: var(--color-cream);
+  }
+
+  .cta-banner__body {
+    font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
+    line-height: 1.7;
+    color: rgba(30, 41, 59, 0.8);
+    max-width: 460px;
+  }
+
+  .cta-banner__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .cta-banner__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    padding: 1rem 2rem;
+    border-radius: 9999px;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .cta-banner__btn:hover { transform: translateY(-2px); }
+
+  .cta-banner__btn--primary {
+    background: var(--color-charcoal);
+    color: #8CC63F;
+    box-shadow: 0 4px 20px rgba(30, 30, 30, 0.15);
+  }
+
+  .cta-banner__btn--primary:hover {
+    box-shadow: 0 12px 32px rgba(30, 30, 30, 0.2);
+  }
+
+  .cta-banner__btn--outline {
+    background: transparent;
+    color: var(--color-charcoal);
+    border: 1.5px solid rgba(30, 41, 59, 0.5);
+  }
+
+  .cta-banner__btn--outline:hover {
+    border-color: var(--color-charcoal);
+    background: rgba(30, 41, 59, 0.08);
+  }
+
+  @media (max-width: 768px) {
+    .cta-banner__actions { flex-direction: row; flex-wrap: wrap; }
+  }
+</style>

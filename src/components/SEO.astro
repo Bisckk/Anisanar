@@ -1,0 +1,156 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  image?: string;
+  imageAlt?: string;
+  type?: 'website' | 'article';
+  schema?: object;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  image = '/og-image.jpg',
+  imageAlt = 'Anisanar Veterinaria — Cuidamos a tu mejor amigo',
+  type = 'website',
+  schema,
+  noindex = false,
+} = Astro.props;
+
+const siteUrl   = 'https://anisanar.com';
+const fullTitle = title ? (title.includes('Anisanar') ? title : `${title} | Anisanar Veterinaria`) : 'Anisanar Veterinaria';
+const ogImage   = image.startsWith('http') ? image : `${siteUrl}${image}`;
+const canonicalUrl = canonical ?? Astro.url.href;
+
+// ─── JSON-LD Schemas ───────────────────────────────────────────────────────
+const localBusinessSchema = {
+  '@context': 'https://schema.org',
+  '@type': ['LocalBusiness', 'VeterinaryCare'],
+  '@id': siteUrl,
+  name: 'Anisanar Veterinaria',
+  description: 'Centro veterinario especializado en medicina general, cirugía, diagnóstico por imagen y nutrición clínica para perros y gatos.',
+  url: siteUrl,
+  telephone: '+34-000-000-000',
+  email: 'info@anisanar.com',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Calle Ejemplo 123',
+    addressLocality: 'Madrid',
+    addressRegion: 'Madrid',
+    postalCode: '28001',
+    addressCountry: 'ES',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 40.4168,
+    longitude: -3.7038,
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '09:00',
+      closes: '20:00',
+    },
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Saturday'],
+      opens: '09:00',
+      closes: '14:00',
+    },
+  ],
+  sameAs: [
+    'https://instagram.com/anisanar',
+    'https://facebook.com/anisanar',
+  ],
+  image: ogImage,
+  priceRange: '€€',
+  currenciesAccepted: 'EUR',
+  paymentAccepted: 'Cash, Credit Card, Debit Card',
+  areaServed: {
+    '@type': 'City',
+    name: 'Madrid',
+  },
+};
+
+const webPageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': canonicalUrl,
+  url: canonicalUrl,
+  name: fullTitle,
+  description,
+  isPartOf: { '@id': siteUrl },
+  inLanguage: 'es-ES',
+  dateModified: new Date().toISOString(),
+};
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${siteUrl}/#website`,
+  url: siteUrl,
+  name: 'Anisanar Veterinaria',
+  description: 'Centro veterinario de confianza en Madrid',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${siteUrl}/?q={search_term_string}`,
+    },
+    'query-input': 'required name=search_term_string',
+  },
+  inLanguage: 'es-ES',
+};
+---
+
+<!-- Primary Meta Tags -->
+<title>{fullTitle}</title>
+<meta name="title"       content={fullTitle} />
+<meta name="description" content={description} />
+<meta name="robots"      content={noindex ? 'noindex, nofollow' : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'} />
+<meta name="author"      content="Anisanar Veterinaria" />
+<meta name="language"    content="Spanish" />
+<link rel="canonical"    href={canonicalUrl} />
+
+<!-- Open Graph -->
+<meta property="og:type"        content={type} />
+<meta property="og:url"         content={canonicalUrl} />
+<meta property="og:title"       content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image"       content={ogImage} />
+<meta property="og:image:alt"   content={imageAlt} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height"content="630" />
+<meta property="og:locale"      content="es_ES" />
+<meta property="og:site_name"   content="Anisanar Veterinaria" />
+
+<!-- Twitter Cards -->
+<meta name="twitter:card"        content="summary_large_image" />
+<meta name="twitter:site"        content="@anisanar" />
+<meta name="twitter:title"       content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image"       content={ogImage} />
+<meta name="twitter:image:alt"   content={imageAlt} />
+
+<!-- Favicons + Icons -->
+<link rel="icon"             type="image/png" href="/logo-anisanar.png" />
+<link rel="icon"             type="image/png"     href="/icons/icon-192.png" sizes="192x192" />
+<link rel="apple-touch-icon"                      href="/icons/icon-192.png" />
+<link rel="manifest"                              href="/site.webmanifest" />
+<meta name="theme-color"    content="#ffffff" />
+
+<!-- Preconnect: Google Fonts -->
+<link rel="preconnect"    href="https://fonts.googleapis.com" />
+<link rel="preconnect"    href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet"    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" />
+
+<!-- JSON-LD -->
+<script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(webPageSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+{schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}

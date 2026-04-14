@@ -1,0 +1,304 @@
+---
+const year = new Date().getFullYear();
+
+const quickLinks = [
+  { href: '#about',        label: 'Nosotros' },
+  { href: '#services',     label: 'Servicios' },
+  { href: '#team',         label: 'Equipo' },
+  { href: '#testimonials', label: 'Reseñas' },
+  { href: '#faq',          label: 'FAQ' },
+  { href: '#contact',      label: 'Contacto' },
+];
+
+const social = [
+  {
+    href: 'https://instagram.com/anisanar',
+    label: 'Instagram de Anisanar',
+    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>`,
+  },
+  {
+    href: 'https://facebook.com/anisanar',
+    label: 'Facebook de Anisanar',
+    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  },
+  {
+    href: 'https://wa.me/34000000000',
+    label: 'WhatsApp de Anisanar',
+    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.521-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="currentColor"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.95-1.42A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" stroke="currentColor" stroke-width="1.5"/></svg>`,
+  },
+];
+---
+
+<footer class="footer" role="contentinfo" aria-label="Pie de página — Anisanar Veterinaria">
+  <div class="container-gutter footer__inner">
+
+    <!-- Col 1: Branding -->
+    <div class="footer__col footer__col--brand">
+      <a href="/" class="footer__logo" aria-label="Anisanar Veterinaria — Inicio">
+        <img src="/logo-anisanar.png" alt="Anisanar" class="footer__logo-img" />
+        <span class="footer__logo-text"><span class="logo-ani">ANI</span><span class="logo-sanar">SANAR</span></span>
+      </a>
+      <p class="footer__desc">
+        Centro veterinario de confianza donde la ciencia y el amor
+        por los animales se encuentran cada día.
+      </p>
+      <div class="footer__social" role="list" aria-label="Redes sociales">
+        {social.map(({ href, label, icon }) => (
+          <a
+            href={href}
+            class="footer__social-link"
+            aria-label={label}
+            target="_blank"
+            rel="noopener noreferrer"
+            role="listitem"
+            set:html={icon}
+          />
+        ))}
+      </div>
+    </div>
+
+    <!-- Col 2: Quick links -->
+    <nav class="footer__col" aria-label="Navegación del pie de página">
+      <h3 class="footer__col-heading">Navegación</h3>
+      <ul class="footer__links" role="list">
+        {quickLinks.map(({ href, label }) => (
+          <li role="listitem">
+            <a href={href} class="footer__link">{label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <!-- Col 3: Services -->
+    <div class="footer__col">
+      <h3 class="footer__col-heading">Servicios</h3>
+      <ul class="footer__links" role="list">
+        <li><a href="/servicios/medicina-general"    class="footer__link">Medicina General</a></li>
+        <li><a href="/servicios/cirugia"             class="footer__link">Cirugía</a></li>
+        <li><a href="/servicios/diagnostico-imagen"  class="footer__link">Diagnóstico por Imagen</a></li>
+        <li><a href="/servicios/vacunacion"          class="footer__link">Vacunación</a></li>
+        <li><a href="/servicios/nutricion"           class="footer__link">Nutrición Clínica</a></li>
+        <li><a href="/servicios/hospitalizacion"     class="footer__link">Hospitalización</a></li>
+      </ul>
+    </div>
+
+    <!-- Col 4: Urgencies -->
+    <div class="footer__col footer__col--urgency">
+      <h3 class="footer__col-heading">Urgencias 24h</h3>
+      <div class="footer__urgency-card" aria-label="Teléfono de urgencias">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27 11.36 11.36 0 003.55.71 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.36 11.36 0 00.71 3.55 1 1 0 01-.27 1.11l-2.32 2.13z" stroke="#8CC63F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div>
+          <span class="footer__urgency-label">Línea de urgencias</span>
+          <a href="tel:+34000000000" class="footer__urgency-number">+34 000 000 000</a>
+        </div>
+      </div>
+      <p class="footer__urgency-note">
+        Disponibles las 24 horas, los 365 días del año para cualquier emergencia.
+      </p>
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="footer__bottom">
+    <div class="container-gutter footer__bottom-inner">
+      <p class="footer__copyright">
+        © {year} Anisanar Veterinaria. Todos los derechos reservados.
+      </p>
+      <nav class="footer__legal" aria-label="Navegación legal">
+        <a href="/privacidad" class="footer__legal-link">Privacidad</a>
+        <a href="/cookies"    class="footer__legal-link">Cookies</a>
+        <a href="/aviso-legal"class="footer__legal-link">Aviso Legal</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-forest);
+    color: var(--color-charcoal);
+  }
+
+  .footer__inner {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+    gap: clamp(2rem, 4vw, 4rem);
+    padding-top: clamp(3rem, 5vw, 5rem);
+    padding-bottom: clamp(3rem, 5vw, 5rem);
+  }
+
+  /* Brand */
+  .footer__logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+
+  .footer__logo-img {
+    height: 36px;
+    width: auto;
+    object-fit: contain;
+    border-radius: 6px;
+  }
+
+  .footer__logo-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    display: flex;
+  }
+
+  .logo-ani {
+    color: #8CC63F;
+  }
+
+  .logo-sanar {
+    color: #2BAABC;
+    font-style: italic;
+  }
+
+  .footer__desc {
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: rgba(30, 41, 59, 0.55);
+    margin-bottom: 1.5rem;
+    max-width: 280px;
+  }
+
+  .footer__social {
+    display: flex;
+    gap: 0.625rem;
+  }
+
+  .footer__social-link {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(30, 41, 59, 0.15);
+    border-radius: 0.625rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(30, 41, 59, 0.6);
+    text-decoration: none;
+    transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+  }
+
+  .footer__social-link:hover {
+    border-color: #8CC63F;
+    color: #8CC63F;
+    background: rgba(140, 198, 63, 0.08);
+  }
+
+  /* Nav cols */
+  .footer__col-heading {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(30, 41, 59, 0.4);
+    margin-bottom: 1.25rem;
+  }
+
+  .footer__links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .footer__link {
+    font-size: 0.9375rem;
+    color: rgba(30, 41, 59, 0.65);
+    text-decoration: none;
+    transition: color 0.25s ease;
+  }
+
+  .footer__link:hover { color: var(--color-charcoal); }
+
+  /* Urgency */
+  .footer__urgency-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    background: rgba(30, 41, 59, 0.06);
+    border: 1px solid rgba(140, 198, 63, 0.25);
+    border-radius: 0.875rem;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .footer__urgency-label {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(30, 41, 59, 0.45);
+    margin-bottom: 0.25rem;
+  }
+
+  .footer__urgency-number {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 1.375rem;
+    font-weight: 600;
+    color: var(--color-charcoal);
+    text-decoration: none;
+    transition: color 0.25s ease;
+  }
+
+  .footer__urgency-number:hover { color: #8CC63F; }
+
+  .footer__urgency-note {
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: rgba(30, 41, 59, 0.45);
+  }
+
+  /* Bottom bar */
+  .footer__bottom {
+    border-top: 1px solid rgba(30, 41, 59, 0.08);
+  }
+
+  .footer__bottom-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .footer__copyright {
+    font-size: 0.8125rem;
+    color: rgba(30, 41, 59, 0.35);
+  }
+
+  .footer__legal {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .footer__legal-link {
+    font-size: 0.8125rem;
+    color: rgba(30, 41, 59, 0.35);
+    text-decoration: none;
+    transition: color 0.25s ease;
+  }
+
+  .footer__legal-link:hover { color: rgba(30, 41, 59, 0.7); }
+
+  @media (max-width: 1024px) {
+    .footer__inner { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 560px) {
+    .footer__inner { grid-template-columns: 1fr; }
+    .footer__bottom-inner { flex-direction: column; align-items: flex-start; }
+  }
+</style>

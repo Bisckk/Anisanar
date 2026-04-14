@@ -1,0 +1,497 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Navbar from '@components/Navbar.astro';
+import Footer from '@components/Footer.astro';
+import { services, getServiceById } from '@data/services';
+
+export const getStaticPaths = (() => {
+  return services.map((service) => ({
+    params: { id: service.id },
+    props:  { service },
+  }));
+}) satisfies GetStaticPaths;
+
+const { service } = Astro.props;
+
+const otherServices = services.filter((s) => s.id !== service.id).slice(0, 3);
+
+// JSON-LD MedicalProcedure
+const medicalProcedureSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalProcedure',
+  name: service.title,
+  description: service.fullDesc,
+  procedureType: service.medicalCode,
+  followUp: service.includes.join('. '),
+  preparation: service.features.join('. '),
+  performer: {
+    '@type': 'VeterinaryCare',
+    name: 'Anisanar Veterinaria',
+    url: 'https://anisanar.com',
+  },
+};
+---
+
+<BaseLayout
+  title={`${service.title} | Anisanar Veterinaria`}
+  description={service.shortDesc}
+  image={service.image}
+  imageAlt={service.imageAlt}
+  schema={medicalProcedureSchema}
+>
+  <Navbar />
+
+  <main id="main-content" aria-labelledby="service-heading">
+
+    <!-- Hero -->
+    <section class="service-hero" aria-label={`${service.title} — Anisanar Veterinaria`}>
+      <div
+        class="service-hero__bg"
+        data-parallax="-0.2"
+        style={`background-image:url('${service.image}')`}
+        role="img"
+        aria-label={service.imageAlt}
+      ></div>
+      <div class="service-hero__overlay"></div>
+
+      <div class="container-gutter service-hero__content">
+        <!-- Breadcrumb -->
+        <nav class="service-hero__breadcrumb" aria-label="Migas de pan">
+          <ol>
+            <li><a href="/">Inicio</a></li>
+            <li aria-hidden="true">·</li>
+            <li><a href="/#services">Servicios</a></li>
+            <li aria-hidden="true">·</li>
+            <li aria-current="page">{service.title}</li>
+          </ol>
+        </nav>
+
+        <span class="service-hero__emoji" aria-hidden="true">{service.emoji}</span>
+        <h1 id="service-heading" class="service-hero__heading reveal-up">{service.title}</h1>
+        <p class="service-hero__sub reveal-up">{service.shortDesc}</p>
+      </div>
+    </section>
+
+    <!-- Body -->
+    <div class="service-body container-gutter">
+
+      <!-- Main content -->
+      <article class="service-body__main">
+        <section aria-label="Descripción del servicio">
+          <h2 class="service-body__section-heading reveal-up">¿En qué consiste?</h2>
+          <p class="service-body__text reveal-up">{service.fullDesc}</p>
+        </section>
+
+        <!-- Includes -->
+        <section aria-label="¿Qué incluye?" class="service-body__includes">
+          <h2 class="service-body__section-heading reveal-up">¿Qué incluye?</h2>
+          <ul class="includes-list" data-stagger-parent aria-label={`Contenido del servicio ${service.title}`}>
+            {service.includes.map((item) => (
+              <li class="includes-list__item" data-stagger-child>
+                <span
+                  class="includes-list__bar"
+                  style={`background:${service.accent}`}
+                  aria-hidden="true"
+                ></span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </section>
+      </article>
+
+      <!-- Sidebar -->
+      <aside class="service-sidebar" aria-label="Información y acciones del servicio">
+
+        <!-- Features -->
+        <div class="sidebar-card reveal-scale">
+          <h3 class="sidebar-card__heading">Características</h3>
+          <ul class="sidebar-card__list" aria-label="Características del servicio">
+            {service.features.map((f) => (
+              <li class="sidebar-card__item">
+                <span class="sidebar-card__dot" style={`background:${service.accent}`} aria-hidden="true"></span>
+                {f}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Book CTA -->
+        <div class="sidebar-card sidebar-card--cta reveal-scale">
+          <h3 class="sidebar-card__heading">¿Necesitas este servicio?</h3>
+          <p class="sidebar-card__desc">
+            Agenda tu cita ahora. Te atendemos de lunes a viernes de 9 a 20 h
+            y los sábados de 9 a 14 h.
+          </p>
+          <a href="/#contact" class="btn-primary sidebar-card__btn">
+            Agendar cita
+          </a>
+          <a
+            href="https://wa.me/34000000000"
+            class="sidebar-card__wa"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Contactar por WhatsApp"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.521-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="currentColor"/>
+              <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.95-1.42A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            WhatsApp
+          </a>
+        </div>
+
+        <!-- Urgencies -->
+        <div class="sidebar-card sidebar-card--urgency reveal-scale">
+          <p class="sidebar-urgency__title">Urgencias 24h</p>
+          <a href="tel:+34000000000" class="sidebar-urgency__tel">+34 000 000 000</a>
+          <p class="sidebar-urgency__note">Disponibles los 365 días del año</p>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Other services -->
+    {otherServices.length > 0 && (
+      <section class="other-services section-spacing" aria-labelledby="other-services-heading">
+        <div class="container-gutter">
+          <h2 id="other-services-heading" class="other-services__heading reveal-up">
+            Otros servicios
+          </h2>
+          <div class="other-services__grid" data-stagger-parent>
+            {otherServices.map((s) => (
+              <a
+                href={`/servicios/${s.id}`}
+                class="other-card"
+                data-stagger-child
+                aria-label={`Ver servicio: ${s.title}`}
+              >
+                <span class="other-card__emoji" aria-hidden="true">{s.emoji}</span>
+                <h3 class="other-card__title">{s.title}</h3>
+                <p class="other-card__desc">{s.shortDesc}</p>
+                <span class="other-card__link" aria-hidden="true">Ver más →</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* ─── Hero ─────────────────────────────────────────────────────────────── */
+  .service-hero {
+    position: relative;
+    min-height: 60vh;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: clamp(3rem, 5vw, 5rem);
+    overflow: hidden;
+  }
+
+  .service-hero__bg {
+    position: absolute;
+    inset: -20%;
+    background-size: cover;
+    background-position: center;
+    will-change: transform;
+  }
+
+  .service-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, rgba(30,30,30,0.85) 0%, rgba(45,74,62,0.7) 100%);
+  }
+
+  .service-hero__content {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Breadcrumb */
+  .service-hero__breadcrumb ol {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    list-style: none;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .service-hero__breadcrumb a,
+  .service-hero__breadcrumb li {
+    font-size: 0.8125rem;
+    color: rgba(30, 41, 59, 0.5);
+    text-decoration: none;
+    transition: color 0.25s ease;
+  }
+
+  .service-hero__breadcrumb a:hover { color: var(--color-charcoal); }
+
+  [aria-current="page"] { color: rgba(30, 41, 59, 0.85) !important; }
+
+  .service-hero__emoji {
+    display: block;
+    font-size: 3rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .service-hero__heading {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(2.5rem, 6vw, 6rem);
+    font-weight: 500;
+    color: var(--color-charcoal);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .service-hero__sub {
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+    line-height: 1.7;
+    color: rgba(30, 41, 59, 0.7);
+    max-width: 600px;
+  }
+
+  /* ─── Body ─────────────────────────────────────────────────────────────── */
+  .service-body {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: clamp(3rem, 5vw, 6rem);
+    align-items: start;
+    padding-top: clamp(3rem, 5vw, 5rem);
+    padding-bottom: clamp(3rem, 5vw, 5rem);
+  }
+
+  .service-body__section-heading {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 500;
+    color: var(--color-charcoal);
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
+    margin-top: 2.5rem;
+  }
+
+  .service-body__section-heading:first-child { margin-top: 0; }
+
+  .service-body__text {
+    font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
+    line-height: 1.8;
+    color: rgba(30, 30, 30, 0.7);
+  }
+
+  /* Includes */
+  .service-body__includes { margin-top: 2.5rem; }
+
+  .includes-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    margin-top: 0.5rem;
+  }
+
+  .includes-list__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    font-size: 0.9375rem;
+    color: rgba(30, 30, 30, 0.75);
+    line-height: 1.5;
+  }
+
+  .includes-list__bar {
+    flex-shrink: 0;
+    width: 4px;
+    height: 20px;
+    border-radius: 4px;
+    margin-top: 0.1em;
+  }
+
+  /* ─── Sidebar ───────────────────────────────────────────────────────────── */
+  .service-sidebar {
+    position: sticky;
+    top: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .sidebar-card {
+    background: var(--color-charcoal);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    border: 1px solid rgba(45, 74, 62, 0.08);
+  }
+
+  .sidebar-card__heading {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-charcoal);
+    margin-bottom: 1rem;
+  }
+
+  .sidebar-card__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .sidebar-card__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    color: rgba(30, 30, 30, 0.7);
+    line-height: 1.5;
+  }
+
+  .sidebar-card__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 0.3em;
+  }
+
+  /* CTA card */
+  .sidebar-card--cta { background: var(--color-charcoal); }
+  .sidebar-card--cta .sidebar-card__heading { color: #ffffff; }
+
+  .sidebar-card__desc {
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: rgba(30, 41, 59, 0.65);
+    margin-bottom: 1.25rem;
+  }
+
+  .sidebar-card__btn { width: 100%; justify-content: center; margin-bottom: 0.875rem; }
+
+  .sidebar-card__wa {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #25D366;
+    text-decoration: none;
+    padding: 0.75rem;
+    border: 1px solid rgba(37, 211, 102, 0.25);
+    border-radius: 9999px;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .sidebar-card__wa:hover {
+    background: rgba(37, 211, 102, 0.08);
+    border-color: #25D366;
+  }
+
+  /* Urgency card */
+  .sidebar-card--urgency {
+    background: #8CC63F;
+    text-align: center;
+  }
+
+  .sidebar-urgency__title {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(30, 41, 59, 0.65);
+    margin-bottom: 0.5rem;
+  }
+
+  .sidebar-urgency__tel {
+    display: block;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 1.625rem;
+    font-weight: 600;
+    color: var(--color-charcoal);
+    text-decoration: none;
+    margin-bottom: 0.375rem;
+  }
+
+  .sidebar-urgency__note {
+    font-size: 0.8125rem;
+    color: rgba(30, 41, 59, 0.6);
+  }
+
+  /* ─── Other services ────────────────────────────────────────────────────── */
+  .other-services {
+    background: var(--color-charcoal);
+    border-top: 1px solid rgba(45, 74, 62, 0.1);
+  }
+
+  .other-services__heading {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(1.75rem, 3vw, 2.75rem);
+    font-weight: 500;
+    color: var(--color-charcoal);
+    letter-spacing: -0.02em;
+    margin-bottom: 2.5rem;
+  }
+
+  .other-services__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .other-card {
+    background: white;
+    border-radius: 1.25rem;
+    padding: 2rem;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border: 1px solid rgba(45, 74, 62, 0.08);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+
+  .other-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 48px rgba(45, 74, 62, 0.1);
+  }
+
+  .other-card__emoji { font-size: 2rem; display: block; }
+
+  .other-card__title {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 1.375rem;
+    font-weight: 600;
+    color: var(--color-charcoal);
+    margin-top: 0.25rem;
+  }
+
+  .other-card__desc {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: rgba(30, 30, 30, 0.6);
+    flex: 1;
+  }
+
+  .other-card__link {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #8CC63F;
+    margin-top: 0.5rem;
+  }
+
+  @media (max-width: 1024px) {
+    .service-body { grid-template-columns: 1fr; }
+    .service-sidebar { position: static; }
+  }
+
+  @media (max-width: 768px) {
+    .other-services__grid { grid-template-columns: 1fr; }
+  }
+</style>

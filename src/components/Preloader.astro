@@ -1,0 +1,240 @@
+---
+// Preloader.astro — Anisanar Centro Veterinario
+// Splash screen hiper-optimizado para máxima fluidez (GPU Acceleration, 240hz feel).
+---
+
+<div id="anisanar-loader" class="preloader-wrapper" aria-hidden="true">
+  <!-- Cortinas de fondo optimizadas -->
+  <div class="curtain top-curtain" id="curtain-top"></div>
+  <div class="curtain bottom-curtain" id="curtain-bottom"></div>
+
+  <div class="loader-content" id="loader-content">
+    <div class="icon-wrapper">
+      <img
+        class="loader-icon"
+        src="/logo-anisanar.png"
+        alt="Anisanar ícono"
+        width="160"
+        height="160"
+      />
+      <!-- Anillos decorativos que se expanden -->
+      <div class="ring ring-1"></div>
+      <div class="ring ring-2"></div>
+    </div>
+
+    <!-- Texto de la marca principal -->
+    <div class="brand-group">
+      <div class="brand-name">
+        <span class="letter">A</span>
+        <span class="letter">N</span>
+        <span class="letter">I</span>
+        <span class="letter highlight">S</span>
+        <span class="letter highlight">A</span>
+        <span class="letter highlight">N</span>
+        <span class="letter highlight">A</span>
+        <span class="letter highlight">R</span>
+      </div>
+      <div class="brand-subtitle">
+        centro veterinario
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,800;1,800&family=Outfit:wght@400;500;600&display=swap');
+
+  .preloader-wrapper {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: all;
+    background: transparent;
+  }
+
+  .curtain, .loader-content, .loader-icon, .ring, .letter, .brand-subtitle {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    perspective: 1000px;
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    transform: translateZ(0); 
+  }
+
+  .curtain {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 50vh;
+    background: var(--color-charcoal); /* New cream background */
+    z-index: 1;
+  }
+  .top-curtain { top: 0; }
+  .bottom-curtain { bottom: 0; }
+
+  .loader-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .icon-wrapper {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .loader-icon {
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
+    border-radius: 24px;
+    z-index: 3;
+    opacity: 0;
+  }
+
+  .ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 3.5px solid #8CC63F; /* New ANI Green */
+    opacity: 0;
+    z-index: 2;
+  }
+  .ring-2 {
+    border-color: #2BAABC; /* New SANAR Blue */
+  }
+
+  .brand-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .brand-name {
+    display: flex;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3.6rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    overflow: hidden;
+    padding: 0 10px 5px 10px;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .letter {
+    color: #8CC63F; /* ANI Green */
+    display: inline-block;
+    transform: translateY(110%);
+  }
+  .letter.highlight {
+    color: #2BAABC; /* SANAR Blue */
+    font-style: italic; /* Requested explicitly for 'SANAR' */
+  }
+
+  .brand-subtitle {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 12px;
+    color: var(--color-charcoal); /* Dark Charcoal */
+    padding-left: 12px; /* Offset to center optically against letter-spacing */
+    margin-top: 5px;
+    opacity: 0;
+    transform: translateY(10px);
+    text-transform: lowercase;
+  }
+
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  window.addEventListener('load', () => {
+    gsap.config({ force3D: true });
+
+    const loader = document.getElementById('anisanar-loader');
+    if (!loader) return;
+
+    const icon = document.querySelector('.loader-icon');
+    const rings = document.querySelectorAll('.ring');
+    const letters = document.querySelectorAll('.letter');
+    const subtitle = document.querySelector('.brand-subtitle');
+    const panelTop = document.getElementById('curtain-top');
+    const panelBot = document.getElementById('curtain-bottom');
+    const content = document.getElementById('loader-content');
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        document.dispatchEvent(new CustomEvent('preloader:done'));
+        loader.style.display = 'none';
+        loader.remove(); 
+      }
+    });
+
+    // 1. Icon entry
+    tl.fromTo(icon, 
+      { opacity: 0, scale: 0.8, y: 30 }, 
+      { opacity: 1, scale: 1, y: 0, duration: 0.7, ease: "expo.out" }
+    )
+    
+    // 2. Rings expanding
+    .fromTo(rings, 
+      { scale: 0.8, opacity: 1 }, 
+      { scale: 2.5, opacity: 0, duration: 0.8, stagger: 0.15, ease: "power3.out" }, 
+      "-=0.6"
+    )
+
+    // 3. Letters jumping in
+    .to(letters, {
+      y: 0,
+      duration: 0.6,
+      stagger: 0.03,
+      ease: "power4.out"
+    }, "-=0.7")
+
+    // 4. Subtitle fading in dynamically
+    .to(subtitle, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: "power2.out"
+    }, "-=0.4")
+
+    // 5. Viewing pause
+    .to({}, { duration: 0.4 }) 
+
+    // 6. Content fading back
+    .to(content, {
+      scale: 0.92,
+      opacity: 0,
+      y: -15,
+      duration: 0.35,
+      ease: "power2.inOut"
+    })
+
+    // 7. Curtain sweeps
+    .to(panelTop, {
+      yPercent: -100,
+      duration: 0.65,
+      ease: "power4.inOut"
+    }, "-=0.15")
+    .to(panelBot, {
+      yPercent: 100,
+      duration: 0.65,
+      ease: "power4.inOut"
+    }, "<"); 
+
+  });
+</script>

@@ -1,0 +1,229 @@
+---
+const photos = [
+  {
+    src: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=80',
+    alt: 'Dos perros corriendo juntos al aire libre',
+    label: 'Bienestar animal',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=80',
+    alt: 'Golden retriever siendo examinado por veterinaria',
+    label: 'Consulta general',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1583511655826-05700d52f4d9?w=800&q=80',
+    alt: 'Gato naranja tranquilo en la consulta',
+    label: 'Medicina felina',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1601758174114-e711c0cbaa69?w=800&q=80',
+    alt: 'Perro sano y activo jugando',
+    label: 'Seguimiento nutricional',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?w=800&q=80',
+    alt: 'Veterinario revisa a perro labrador en camilla',
+    label: 'Exploración completa',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&q=80',
+    alt: 'Veterinaria sonriendo con un cachorro',
+    label: 'Cuidado con vocación',
+  },
+];
+---
+
+<section
+  id="gallery"
+  class="gallery section-spacing"
+  aria-labelledby="gallery-heading"
+>
+  <div class="container-gutter gallery__header">
+    <span class="gallery__label reveal-up">Galería</span>
+    <h2 id="gallery-heading" class="gallery__heading reveal-up">
+      Un vistazo a nuestra<br/><em>clínica</em>.
+    </h2>
+    <p class="gallery__hint reveal-up" aria-live="polite">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M5 12h14M15 8l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      Arrastra para explorar
+    </p>
+  </div>
+
+  <!-- Horizontal scroll track -->
+  <div class="gallery__track-wrap" id="gallery-track-wrap">
+    <div class="gallery__track" id="gallery-track">
+      {photos.map(({ src, alt, label }) => (
+        <div class="gallery__item">
+          <div class="gallery__img-wrap">
+            <img
+              src={src}
+              alt={alt}
+              class="gallery__img"
+              width="400"
+              height="520"
+              loading="lazy"
+            />
+            <div class="gallery__item-overlay" aria-hidden="true">
+              <span class="gallery__item-label">{label}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .gallery {
+    background: var(--color-charcoal);
+    overflow: hidden;
+  }
+
+  .gallery__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .gallery__label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #8CC63F;
+  }
+
+  .gallery__heading {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 3.75rem);
+    font-weight: 500;
+    line-height: 1.1;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+  }
+
+  .gallery__heading em { color: #8CC63F; }
+
+  .gallery__hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 500;
+  }
+
+  /* Track */
+  .gallery__track-wrap {
+    width: 100%;
+    overflow: hidden;
+    cursor: grab;
+  }
+
+  .gallery__track-wrap:active { cursor: grabbing; }
+
+  .gallery__track {
+    display: flex;
+    gap: 1.25rem;
+    padding: 0 var(--spacing-gutter) 2rem;
+    will-change: transform;
+    width: max-content;
+  }
+
+  /* Item */
+  .gallery__item {
+    flex-shrink: 0;
+    width: clamp(240px, 28vw, 360px);
+  }
+
+  .gallery__img-wrap {
+    position: relative;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+  }
+
+  .gallery__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .gallery__item:hover .gallery__img { transform: scale(1.04); }
+
+  /* Overlay */
+  .gallery__item-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.85) 0%, transparent 55%);
+    display: flex;
+    align-items: flex-end;
+    padding: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .gallery__item:hover .gallery__item-overlay { opacity: 1; }
+
+  .gallery__item-label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #ffffff;
+    transform: translateY(8px);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .gallery__item:hover .gallery__item-label { transform: translateY(0); }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { Draggable } from 'gsap/Draggable';
+
+  gsap.registerPlugin(ScrollTrigger, Draggable);
+
+  const track    = document.getElementById('gallery-track')!;
+  const trackWrap = document.getElementById('gallery-track-wrap')!;
+
+  function getScrollAmount() {
+    return track.scrollWidth - trackWrap.clientWidth;
+  }
+
+  // Animation that dynamically evaluates total width
+  const tween = gsap.to(track, {
+    x: () => -getScrollAmount(),
+    ease: 'none'
+  });
+
+  ScrollTrigger.create({
+    trigger: '#gallery',
+    start: 'center center',
+    end: () => `+=${getScrollAmount() + 100}`, // Se le da 100px extra de respiro al final para que termine cómodamente
+    pin: true,
+    pinSpacing: true,
+    animation: tween,
+    scrub: true, // Al usar Lenis (smooth scroll nativo), 'true' delega el momentum al scroll natural eliminando desincronizaciones y solapamientos
+    invalidateOnRefresh: true,
+  });
+
+  // Draggable synced with dynamic limits
+  Draggable.create(track, {
+    type: 'x',
+    bounds: trackWrap,
+    inertia: true,
+    cursor: 'grab',
+    activeCursor: 'grabbing',
+    onDrag: function() {
+      // Sync scrollTrigger to Draggable state if necessary
+      ScrollTrigger.update();
+    }
+  });
+</script>

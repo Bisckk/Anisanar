@@ -1,0 +1,142 @@
+---
+import SEO from '@components/SEO.astro';
+import '@styles/global.css';
+
+export interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  image?: string;
+  imageAlt?: string;
+  type?: 'website' | 'article';
+  schema?: object;
+  noindex?: boolean;
+}
+
+const { title, description, canonical, image, imageAlt, type, schema, noindex } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <SEO
+      title={title}
+      description={description}
+      canonical={canonical}
+      image={image}
+      imageAlt={imageAlt}
+      type={type}
+      schema={schema}
+      noindex={noindex}
+    />
+  </head>
+  <body>
+    <!-- Custom Cursor Removed -->
+
+    <slot />
+
+    <script>
+      import { gsap } from 'gsap';
+      import { ScrollTrigger } from 'gsap/ScrollTrigger';
+      import Lenis from 'lenis';
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      // ─── Smooth Scroll (Lenis) ──────────────────────────────────────────────
+      const lenis = new Lenis({
+        lerp: 0.08, // Suavidad (0-1)
+        smoothWheel: true,
+        smoothTouch: true, // Activa explícitamente el smooth scroll en dispositivos móviles
+        syncTouch: true, // Mantiene la inercia nativa sincronizada
+        touchMultiplier: 2, // Multiplicador para que el dedo no se sienta "pesado"
+      });
+
+      // Sincronizar Lenis con GSAP
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+      });
+      gsap.ticker.lagSmoothing(0);
+
+      // Custom cursor animations have been removed.
+
+      // ─── Scroll Reveals ─────────────────────────────────────────────────────
+      const revealClasses = [
+        { selector: '.reveal-up',    y: 60,  x: 0 },
+        { selector: '.reveal-left',  y: 0,   x: -60 },
+        { selector: '.reveal-right', y: 0,   x: 60 },
+      ];
+
+      revealClasses.forEach(({ selector, y, x }) => {
+        gsap.utils.toArray<HTMLElement>(selector).forEach((el) => {
+          gsap.set(el, { opacity: 0, y, x });
+          ScrollTrigger.create({
+            trigger: el,
+            start: 'top 88%',
+            onEnter: () => {
+              gsap.to(el, {
+                opacity: 1,
+                y: 0,
+                x: 0,
+                duration: 0.9,
+                ease: 'expo.out',
+              });
+            },
+          });
+        });
+      });
+
+      gsap.utils.toArray<HTMLElement>('.reveal-scale').forEach((el) => {
+        gsap.set(el, { opacity: 0, scale: 0.85 });
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top 88%',
+          onEnter: () => {
+            gsap.to(el, {
+              opacity: 1,
+              scale: 1,
+              duration: 0.9,
+              ease: 'back.out(1.4)',
+            });
+          },
+        });
+      });
+
+      // ─── Stagger Groups ──────────────────────────────────────────────────────
+      document.querySelectorAll<HTMLElement>('[data-stagger-parent]').forEach((parent) => {
+        const children = parent.querySelectorAll<HTMLElement>('[data-stagger-child]');
+        gsap.set(children, { opacity: 0, y: 40 });
+        ScrollTrigger.create({
+          trigger: parent,
+          start: 'top 82%',
+          onEnter: () => {
+            gsap.to(children, {
+              opacity: 1,
+              y: 0,
+              duration: 0.7,
+              ease: 'expo.out',
+              stagger: 0.12,
+            });
+          },
+        });
+      });
+
+      // ─── Parallax ───────────────────────────────────────────────────────────
+      document.querySelectorAll<HTMLElement>('[data-parallax]').forEach((el) => {
+        const speed = parseFloat(el.dataset.parallax ?? '0.3');
+        gsap.to(el, {
+          yPercent: speed * 100,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: el.parentElement ?? el,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
+        });
+      });
+    </script>
+  </body>
+</html>
