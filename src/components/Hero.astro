@@ -8,6 +8,7 @@ const stats = [
 ];
 
 import { Star } from '@lucide/astro';
+import BlurText from '@components/react/BlurText';
 ---
 
 <section
@@ -42,11 +43,16 @@ import { Star } from '@lucide/astro';
         Clínica Veterinaria de Referencia &middot; Madrid &middot; Est. 2009
       </div>
 
-      <!-- Headline — Escribe el diferenciador principal en 3 frases cortas -->
+      <!-- Headline -->
       <h1 class="hero__headline" aria-label="La salud de tu mascota, en las mejores manos">
-        <span class="hero__line hero__line--1">La salud de tu</span>
-        <span class="hero__line hero__line--2">mascota, en las</span>
-        <span class="hero__line hero__line--3 italic">mejores manos.</span>
+        <BlurText 
+          text="La salud de tu mascota, en las mejores manos." 
+          delay={50} 
+          animateBy="words" 
+          direction="bottom"
+          className="hero__line-react"
+          client:load 
+        />
       </h1>
 
       <!-- Subtext — 1–2 frases que resuman tu propuesta de valor única -->
@@ -210,7 +216,7 @@ import { Star } from '@lucide/astro';
     overflow: hidden;
   }
 
-  .hero__line {
+  .hero__line-react {
     display: block;
     font-family: "Cormorant Garamond", Georgia, serif;
     font-size: clamp(3.5rem, 2rem + 7.5vw, 9rem);
@@ -218,8 +224,6 @@ import { Star } from '@lucide/astro';
     line-height: 0.95;
     color: #ffffff;
     letter-spacing: -0.02em;
-    overflow: hidden;
-    /* Initial state set by GSAP */
   }
 
   .hero__line--3 { color: #8CC63F; }
@@ -331,7 +335,6 @@ import { Star } from '@lucide/astro';
 
   // GSAP owns all initial states — no CSS opacity/transform on these elements
   gsap.set('#hero-tag',    { opacity: 0, y: 16 });
-  gsap.set('.hero__line',  { yPercent: 110 });
   gsap.set('#hero-sub',    { opacity: 0, y: 24 });
   gsap.set('#hero-ctas',   { opacity: 0, y: 20 });
   gsap.set('#hero-stats',  { opacity: 0, y: 24 });
@@ -341,7 +344,6 @@ import { Star } from '@lucide/astro';
     const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
     tl
       .to('#hero-tag',    { opacity: 1, y: 0,       duration: 0.9 })
-      .to('.hero__line',  { yPercent: 0,             duration: 1.1, stagger: 0.1 }, '-=0.5')
       .to('#hero-sub',    { opacity: 1, y: 0,        duration: 0.9 }, '-=0.55')
       .to('#hero-ctas',   { opacity: 1, y: 0,        duration: 0.8 }, '-=0.55')
       .to('#hero-stats',  { opacity: 1, y: 0,        duration: 0.8 }, '-=0.5')

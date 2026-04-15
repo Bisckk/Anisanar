@@ -1,6 +1,7 @@
 ---
 import { services } from '@data/services';
 import * as Lucide from '@lucide/astro';
+import SpotlightCard from '@components/react/SpotlightCard';
 ---
 
 <section
@@ -25,43 +26,47 @@ import * as Lucide from '@lucide/astro';
     <!-- Grid -->
     <div class="services__grid" data-stagger-parent>
       {services.map((service) => (
-        <article
-          class="service-card"
-          data-stagger-child
-          data-accent={service.accent}
-          style={`--service-accent: ${service.accent}`}
-          aria-label={service.title}
+        <SpotlightCard 
+          client:visible 
+          spotlightColor={service.accent + '33'} 
+          className="service-card-react"
         >
-          <div class="service-card__glow" aria-hidden="true"></div>
-          <div class="service-card__inner">
-            <span class="service-card__emoji" aria-hidden="true">
-              {(() => {
-                const Icon = Lucide[service.emoji];
-                return Icon ? <Icon stroke-width="2" class="w-10 h-10 inline-block align-middle" /> : null;
-              })()}
-            </span>
-            <h3 class="service-card__title">{service.title}</h3>
-            <p class="service-card__desc">{service.shortDesc}</p>
-            <ul class="service-card__features" aria-label={`Características de ${service.title}`}>
-              {service.features.slice(0, 3).map((f) => (
-                <li class="service-card__feature">
-                  <span class="service-card__dot" aria-hidden="true">·</span>
-                  {f}
-                </li>
-              ))}
-            </ul>
-            <a
-              href={`/servicios/${service.id}`}
-              class="service-card__link"
-              aria-label={`Ver más sobre ${service.title}`}
-            >
-              <span>Ver más</span>
-              <svg class="service-card__arrow" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                <path d="M4 10h12M12 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </a>
-          </div>
-        </article>
+          <article
+            class="service-card-inner-astro"
+            data-stagger-child
+            style={`--service-accent: ${service.accent}`}
+            aria-label={service.title}
+          >
+            <div class="service-card__inner">
+              <span class="service-card__emoji" aria-hidden="true">
+                {(() => {
+                  const Icon = Lucide[service.emoji];
+                  return Icon ? <Icon stroke-width="2" class="w-10 h-10 inline-block align-middle" /> : null;
+                })()}
+              </span>
+              <h3 class="service-card__title">{service.title}</h3>
+              <p class="service-card__desc">{service.shortDesc}</p>
+              <ul class="service-card__features" aria-label={`Características de ${service.title}`}>
+                {service.features.slice(0, 3).map((f) => (
+                  <li class="service-card__feature">
+                    <span class="service-card__dot" aria-hidden="true">·</span>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={`/servicios/${service.id}`}
+                class="service-card__link"
+                aria-label={`Ver más sobre ${service.title}`}
+              >
+                <span>Ver más</span>
+                <svg class="service-card__arrow" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <path d="M4 10h12M12 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </article>
+        </SpotlightCard>
       ))}
     </div>
   </div>
@@ -136,30 +141,12 @@ import * as Lucide from '@lucide/astro';
   }
 
   /* Card */
-  .service-card {
+  .service-card-inner-astro {
     position: relative;
-    background: rgba(30, 30, 30, 0.8);
+    background: transparent;
     overflow: hidden;
     cursor: pointer;
-    transition: background 0.4s ease;
   }
-
-  .service-card:hover { background: rgba(38, 38, 38, 0.95); }
-
-  /* Glow */
-  .service-card__glow {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(
-      circle at 50% 0%,
-      var(--service-accent, #2BAABC) 0%,
-      transparent 65%
-    );
-    opacity: 0;
-    transition: opacity 0.5s ease;
-  }
-
-  .service-card:hover .service-card__glow { opacity: 0.12; }
 
   /* Inner */
   .service-card__inner {

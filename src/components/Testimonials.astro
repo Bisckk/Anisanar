@@ -38,9 +38,8 @@ const reviews = [
   },
 ];
 
-// Duplicate for infinite marquee
-const allReviews = [...reviews, ...reviews];
 import { Star } from '@lucide/astro';
+import Marquee from '@components/react/Marquee';
 ---
 
 <section
@@ -57,28 +56,26 @@ import { Star } from '@lucide/astro';
   </div>
 
   <!-- Marquee -->
-  <div class="testimonials__marquee-wrap" aria-label="Reseñas de clientes">
-    <div class="testimonials__marquee" role="list">
-      {allReviews.map(({ quote, author, pet, rating }, i) => (
-        <blockquote
-          class="review-card"
-          role="listitem"
-          aria-label={`Reseña de ${author}`}
-        >
-          <div class="review-card__stars" aria-label={`${rating} de 5 estrellas`}>
-            {Array.from({ length: rating }).map(() => (
-              <Star stroke-width="2" class="w-4 h-4 inline-block text-[#8CC63F] fill-current" />
-            ))}
-          </div>
-          <p class="review-card__quote">"{quote}"</p>
-          <cite class="review-card__cite">
-            <strong class="review-card__author">{author}</strong>
-            <span class="review-card__pet">{pet}</span>
-          </cite>
-        </blockquote>
-      ))}
-    </div>
-  </div>
+  <Marquee client:visible speed={50} className="testimonials__marquee-react">
+    {reviews.map(({ quote, author, pet, rating }) => (
+      <blockquote
+        class="review-card"
+        role="listitem"
+        aria-label={`Reseña de ${author}`}
+      >
+        <div class="review-card__stars" aria-label={`${rating} de 5 estrellas`}>
+          {Array.from({ length: rating }).map(() => (
+            <Star stroke-width="2" class="w-4 h-4 inline-block text-[#8CC63F] fill-current" />
+          ))}
+        </div>
+        <p class="review-card__quote">"{quote}"</p>
+        <cite class="review-card__cite">
+          <strong class="review-card__author">{author}</strong>
+          <span class="review-card__pet">{pet}</span>
+        </cite>
+      </blockquote>
+    ))}
+  </Marquee>
 </section>
 
 <style>
@@ -113,30 +110,8 @@ import { Star } from '@lucide/astro';
 
   .testimonials__heading em { color: #8CC63F; }
 
-  /* Marquee */
-  .testimonials__marquee-wrap {
-    overflow: hidden;
-    -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
-    mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
-  }
-
-  .testimonials__marquee {
-    display: flex;
-    gap: 1.5rem;
-    animation: marquee 40s linear infinite;
-    width: max-content;
-  }
-
-  .testimonials__marquee:hover { animation-play-state: paused; }
-
-  @keyframes marquee {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .testimonials__marquee { animation: none; }
-    .testimonials__marquee-wrap { overflow-x: auto; }
+  .testimonials__marquee-react {
+    margin-top: 1rem;
   }
 
   /* Card */

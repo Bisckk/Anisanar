@@ -53,10 +53,10 @@
   display: flex;
 }
 
-.logo-ani { color: #fff; }
-.logo-sanar { color: #8CC63F; font-style: italic; }
+.logo-ani { color: #8CC63F; }
+.logo-sanar { color: #2BAABC; font-style: italic; }
 
-.scrolled .logo-ani { color: #1e293b; }
+.scrolled .logo-ani { color: #8CC63F; }
 
 /* Desktop Links */
 .nav-links-wrapper {

@@ -1,0 +1,27 @@
+.spotlight-card {
+  position: relative;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: rgba(30, 41, 59, 0.4);
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
+  overflow: hidden;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.spotlight-card:hover {
+  border-color: rgba(140, 198, 63, 0.4);
+  transform: translateY(-4px);
+}
+
+.spotlight-card-glow {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  transition: opacity 0.5s ease;
+}
+
+.spotlight-card > *:not(.spotlight-card-glow) {
+  position: relative;
+  z-index: 1;
+}
