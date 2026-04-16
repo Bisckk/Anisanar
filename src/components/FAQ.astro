@@ -99,6 +99,13 @@ const faqSchema = {
       </div>
     </div>
   </div>
+
+  <!-- Ola de transición → Contact (blanco) -->
+  <div class="faq__wave" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 72" preserveAspectRatio="none">
+      <path d="M0,36 C240,72 480,0 720,28 C960,56 1200,8 1440,36 L1440,72 L0,72 Z" fill="#ffffff"/>
+    </svg>
+  </div>
 </section>
 
 <!-- FAQPage JSON-LD -->
@@ -107,6 +114,23 @@ const faqSchema = {
 <style>
   .faq {
     background: var(--color-charcoal);
+    position: relative;
+    overflow: hidden;
+    padding-bottom: calc(var(--spacing-section) + 72px);
+  }
+
+  .faq__wave {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    line-height: 0;
+    z-index: 2;
+  }
+  .faq__wave svg {
+    display: block;
+    width: 100%;
+    height: 72px;
   }
 
   .faq__grid {

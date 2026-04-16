@@ -23,7 +23,7 @@ const { title, description, canonical, image, imageAlt, type, schema, noindex } 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet" />
     <SEO
       title={title}
       description={description}
@@ -36,7 +36,11 @@ const { title, description, canonical, image, imageAlt, type, schema, noindex } 
     />
   </head>
   <body>
-    <!-- Custom Cursor Removed -->
+    <!-- Scroll to top on every page load/reload -->
+    <script is:inline>
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+      window.scrollTo(0, 0);
+    </script>
 
     <slot />
 
@@ -49,11 +53,10 @@ const { title, description, canonical, image, imageAlt, type, schema, noindex } 
 
       // ─── Smooth Scroll (Lenis) ──────────────────────────────────────────────
       const lenis = new Lenis({
-        lerp: 0.08, // Suavidad (0-1)
+        lerp: 0.08,
         smoothWheel: true,
-        smoothTouch: true, // Activa explícitamente el smooth scroll en dispositivos móviles
-        syncTouch: true, // Mantiene la inercia nativa sincronizada
-        touchMultiplier: 2, // Multiplicador para que el dedo no se sienta "pesado"
+        syncTouch: true,
+        touchMultiplier: 2,
       });
 
       // Sincronizar Lenis con GSAP

@@ -1,5 +1,6 @@
 ---
 import { services } from '@data/services';
+import ContactStepper from './react/ContactStepper';
 
 const contactInfo = [
   {
@@ -28,7 +29,6 @@ const contactInfo = [
   },
 ];
 
-const petTypes = ['Perro', 'Gato', 'Otro'];
 ---
 
 <section id="contact" class="contact section-spacing" aria-labelledby="contact-heading">
@@ -67,99 +67,9 @@ const petTypes = ['Perro', 'Gato', 'Otro'];
         </ul>
       </div>
 
-      <!-- Right: form -->
+      <!-- Right: stepper -->
       <div class="contact__form-col reveal-right">
-        <form
-          id="contact-form"
-          class="contact__form"
-          novalidate
-          aria-label="Formulario de contacto"
-          method="POST"
-          action="#"
-        >
-          <div class="contact__form-row">
-            <div class="contact__field">
-              <label class="form-label" for="name">Nombre completo *</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                class="form-input"
-                placeholder="Tu nombre"
-                required
-                autocomplete="name"
-                aria-required="true"
-              />
-            </div>
-            <div class="contact__field">
-              <label class="form-label" for="email">Email *</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                class="form-input"
-                placeholder="tu@email.com"
-                required
-                autocomplete="email"
-                aria-required="true"
-              />
-            </div>
-          </div>
-
-          <div class="contact__form-row">
-            <div class="contact__field">
-              <label class="form-label" for="phone">Teléfono</label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                class="form-input"
-                placeholder="+34 600 000 000"
-                autocomplete="tel"
-              />
-            </div>
-            <div class="contact__field">
-              <label class="form-label" for="pet-type">Tipo de mascota</label>
-              <select id="pet-type" name="pet-type" class="form-input" aria-label="Selecciona el tipo de mascota">
-                <option value="">Seleccionar…</option>
-                {petTypes.map((p) => <option value={p.toLowerCase()}>{p}</option>)}
-              </select>
-            </div>
-          </div>
-
-          <div class="contact__field">
-            <label class="form-label" for="service">Servicio de interés</label>
-            <select id="service" name="service" class="form-input" aria-label="Selecciona el servicio">
-              <option value="">Seleccionar servicio…</option>
-              {services.map((s) => <option value={s.id}>{s.title}</option>)}
-              <option value="urgencia">Urgencia</option>
-              <option value="otro">Otro</option>
-            </select>
-          </div>
-
-          <div class="contact__field">
-            <label class="form-label" for="message">Mensaje *</label>
-            <textarea
-              id="message"
-              name="message"
-              class="form-input contact__textarea"
-              placeholder="Cuéntanos cómo podemos ayudar a tu mascota…"
-              required
-              aria-required="true"
-              rows="5"
-            ></textarea>
-          </div>
-
-          <!-- Feedback -->
-          <div id="form-feedback" class="contact__feedback" role="alert" aria-live="assertive" aria-hidden="true"></div>
-
-          <button type="submit" class="btn-primary contact__submit">
-            Enviar mensaje
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-        </form>
+        <ContactStepper client:visible />
       </div>
     </div>
   </div>
@@ -252,104 +162,13 @@ const petTypes = ['Perro', 'Gato', 'Otro'];
 
   a.contact__info-value:hover { color: #8CC63F; }
 
-  /* Form */
+  /* Form col */
   .contact__form-col {
-    background: var(--color-charcoal);
-    border-radius: 1.5rem;
-    padding: clamp(1.75rem, 3vw, 2.75rem);
-  }
-
-  .contact__form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-  }
-
-  .contact__form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
-  }
-
-  .contact__field {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .contact__textarea {
-    resize: vertical;
-    min-height: 120px;
-  }
-
-  .contact__feedback {
-    padding: 0.875rem 1.125rem;
-    border-radius: 0.75rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    display: none;
-  }
-
-  .contact__feedback.success {
-    display: block;
-    background: rgba(122, 158, 142, 0.15);
-    color: var(--color-charcoal);
-    border: 1px solid rgba(122, 158, 142, 0.4);
-  }
-
-  .contact__feedback.error {
-    display: block;
-    background: rgba(140, 198, 63, 0.12);
-    color: #8a3c1a;
-    border: 1px solid rgba(140, 198, 63, 0.35);
-  }
-
-  .contact__submit {
-    align-self: flex-start;
-    margin-top: 0.5rem;
+    min-width: 0;
   }
 
   @media (max-width: 900px) {
     .contact__grid { grid-template-columns: 1fr; }
   }
-
-  @media (max-width: 480px) {
-    .contact__form-row { grid-template-columns: 1fr; }
-  }
 </style>
 
-<script>
-  const form     = document.getElementById('contact-form') as HTMLFormElement;
-  const feedback = document.getElementById('form-feedback')!;
-
-  form?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    feedback.className = 'contact__feedback';
-    feedback.setAttribute('aria-hidden', 'true');
-
-    const name    = (form.elements.namedItem('name')    as HTMLInputElement).value.trim();
-    const email   = (form.elements.namedItem('email')   as HTMLInputElement).value.trim();
-    const message = (form.elements.namedItem('message') as HTMLTextAreaElement).value.trim();
-
-    if (!name || !email || !message) {
-      feedback.textContent = 'Por favor, completa los campos obligatorios (nombre, email y mensaje).';
-      feedback.className   = 'contact__feedback error';
-      feedback.setAttribute('aria-hidden', 'false');
-      return;
-    }
-
-    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRe.test(email)) {
-      feedback.textContent = 'Por favor, introduce un email válido.';
-      feedback.className   = 'contact__feedback error';
-      feedback.setAttribute('aria-hidden', 'false');
-      return;
-    }
-
-    // TODO: Replace with your real form endpoint (Formspree, Netlify Forms, etc.)
-    // Simulated success for demo purposes
-    feedback.textContent = '¡Mensaje enviado! Te responderemos en menos de 24 horas.';
-    feedback.className   = 'contact__feedback success';
-    feedback.setAttribute('aria-hidden', 'false');
-    form.reset();
-  });
-</script>

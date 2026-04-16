@@ -12,6 +12,7 @@ export interface TeamMember {
     instagram?: string;
     linkedin?: string;
   };
+  locked?: boolean;
 }
 
 export const team: TeamMember[] = [
@@ -72,6 +73,71 @@ export const team: TeamMember[] = [
     social: {
       linkedin: 'https://linkedin.com',
     },
+  },
+  {
+    id: 'locked-1',
+    name: '???',
+    role: 'Especialista',
+    specialty: 'Nuevos retos',
+    bio: 'Próximamente descubriremos a este nuevo integrante de élite.',
+    longBio: 'Nuestra clínica está en constante crecimiento. Seguimos evaluando y sumando los mejores talentos y especialistas del sector veterinario para unirse a nuestras filas. Este espacio está reservado para una próxima revelación que potenciará los cuidados de tus mascotas.',
+    img: '', // Will be handled via CSS silhouette
+    imgAlt: 'Personaje bloqueado',
+    credentials: ['Por desbloquear'],
+    social: {},
+    locked: true,
+  },
+  {
+    id: 'locked-2',
+    name: '???',
+    role: 'Nutrición',
+    specialty: 'Nuevos retos',
+    bio: 'Próximamente descubriremos a este nuevo integrante de élite.',
+    longBio: 'Anisanar siempre está cazando talentos. Este espacio está bloqueado temporalmente y aguarda la llegada de un nuevo experto veterinario que compartirá nuestra pasión por el cuidado animal.',
+    img: '',
+    imgAlt: 'Personaje bloqueado',
+    credentials: ['Por desbloquear'],
+    social: {},
+    locked: true,
+  },
+  {
+    id: 'locked-3',
+    name: '???',
+    role: 'Dermatología',
+    specialty: 'Nuevos retos',
+    bio: 'Un nuevo especialista se unirá pronto a nuestro equipo.',
+    longBio: 'Estamos en proceso de incorporar a un profesional de primer nivel en esta área. Mantente atento porque pronto revelaremos quién ocupará este puesto clave en Anisanar.',
+    img: '',
+    imgAlt: 'Personaje bloqueado',
+    credentials: ['Por desbloquear'],
+    social: {},
+    locked: true,
+  },
+  {
+    id: 'locked-4',
+    name: '???',
+    role: 'Cardiología',
+    specialty: 'Nuevos retos',
+    bio: 'Próximamente un nuevo talento reforzará nuestras filas.',
+    longBio: 'Nuestro compromiso con la excelencia nos impulsa a seguir creciendo. Este espacio está reservado para un especialista que elevará aún más la calidad de atención que ofrecemos a tus mascotas.',
+    img: '',
+    imgAlt: 'Personaje bloqueado',
+    credentials: ['Por desbloquear'],
+    social: {},
+    locked: true,
+  },
+  {
+    id: 'locked-5',
+    name: '???',
+    role: 'Rehabilitación',
+    specialty: 'Nuevos retos',
+    bio: 'Un profesional de élite está por revelarse.',
+    longBio: 'El equipo de Anisanar sigue expandiéndose. Este slot guarda el lugar para un futuro miembro que aportará nuevas capacidades y especialidades a nuestra clínica veterinaria.',
+    img: '',
+    imgAlt: 'Personaje bloqueado',
+    credentials: ['Por desbloquear'],
+    social: {},
+    locked: true,
   },
 ];
 

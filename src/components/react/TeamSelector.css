@@ -1,0 +1,642 @@
+/* ── Wrapper ──────────────────────────────────────────────────────────────── */
+.ts-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+  width: 100%;
+  padding: 0 var(--spacing-gutter, 1.5rem);
+}
+
+/* ── Roster ───────────────────────────────────────────────────────────────── */
+.ts-roster {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 720px;
+}
+
+/* ── Slot ─────────────────────────────────────────────────────────────────── */
+.ts-slot {
+  position: relative;
+  width: 90px;
+  flex-shrink: 0;
+  background: #0d1625;
+  border: 2px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  overflow: visible;
+  /* cursor badge sale fuera */
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  transition:
+    transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.28s ease,
+    box-shadow 0.28s ease;
+}
+
+.ts-slot:hover {
+  transform: translateY(-6px) scale(1.03);
+  border-color: rgba(140, 198, 63, 0.45);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+}
+
+.ts-slot--active {
+  border-color: #8CC63F;
+  box-shadow:
+    0 0 0 1px #8CC63F,
+    0 0 28px rgba(140, 198, 63, 0.45),
+    0 16px 36px rgba(0, 0, 0, 0.35);
+}
+
+/* Badge "SELECCIONADO" arriba del slot */
+.ts-slot__cursor {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.42rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #0a111e;
+  background: #8CC63F;
+  padding: 0.22rem 0.65rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: ts-cursor-pulse 1.8s ease-in-out infinite;
+}
+
+.ts-slot__cursor::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 3px solid transparent;
+  border-top-color: #8CC63F;
+}
+
+@keyframes ts-cursor-pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.65;
+  }
+}
+
+/* Número */
+.ts-slot__num {
+  position: absolute;
+  top: 0.55rem;
+  left: 0.55rem;
+  font-size: 0.5rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.25);
+  z-index: 2;
+  line-height: 1;
+}
+
+.ts-slot--active .ts-slot__num {
+  color: rgba(140, 198, 63, 0.6);
+}
+
+/* Retrato */
+.ts-slot__portrait {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 12px 12px 0 0;
+}
+
+.ts-slot__portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ts-slot:hover .ts-slot__portrait img {
+  transform: scale(1.07);
+}
+
+/* Brillo deslizante en slot activo */
+.ts-slot__shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.07) 50%,
+      transparent 70%);
+  background-size: 200% 200%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.ts-slot--active .ts-slot__shine {
+  opacity: 1;
+  animation: ts-shine 2.5s linear infinite;
+}
+
+@keyframes ts-shine {
+  0% {
+    background-position: 150% 150%;
+  }
+
+  100% {
+    background-position: -50% -50%;
+  }
+}
+
+/* Pie del slot */
+.ts-slot__foot {
+  padding: 0.35rem 0.4rem;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 0 0 12px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ts-slot__name {
+  font-family: 'Lexend', system-ui, sans-serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.ts-slot--active .ts-slot__name {
+  color: #8CC63F;
+}
+
+/* ── Stage (área del preview) ─────────────────────────────────────────────── */
+.ts-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+/* ── Locked Placeholders (Smash Style) ────────────────────────────────────── */
+.ts-locked-portrait,
+.ts-locked-preview,
+.ts-locked-avatar {
+  background: #060a12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Lexend', system-ui, sans-serif;
+  color: #16243b;
+  font-weight: 900;
+  width: 100%;
+  height: 100%;
+}
+
+.ts-locked-portrait {
+  font-size: 3.5rem;
+}
+
+.ts-locked-preview {
+  font-size: 12rem;
+}
+
+.ts-locked-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  border: 2px solid #16243b;
+}
+
+/* ── Preview card ─────────────────────────────────────────────────────────── */
+.ts-preview {
+  position: relative;
+  width: 280px;
+}
+
+.ts-card {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 1.25rem;
+  background: #0d1625;
+  outline: none;
+}
+
+.ts-card:focus-visible {
+  box-shadow: 0 0 0 3px #8CC63F;
+}
+
+/* Front */
+.ts-card__front {
+  position: relative;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+}
+
+.ts-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ts-card__gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top,
+      rgba(10, 17, 30, 0.97) 0%,
+      rgba(10, 17, 30, 0.35) 50%,
+      rgba(10, 17, 30, 0) 100%);
+  pointer-events: none;
+}
+
+.ts-card__info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem 1.25rem;
+}
+
+.ts-card__name {
+  font-family: 'Lexend', system-ui, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+  margin-bottom: 0.25rem;
+}
+
+.ts-card__role {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8CC63F;
+  margin-bottom: 0.2rem;
+}
+
+.ts-card__spec {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.4;
+}
+
+.ts-card__hint {
+  position: absolute;
+  top: 0.875rem;
+  right: 0.875rem;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+}
+
+/* Back */
+.ts-card__back {
+  position: absolute;
+  inset: 0;
+  flex-direction: column;
+  gap: 0.75rem;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  background: linear-gradient(155deg, #162035 0%, #0d1625 55%, #0a111e 100%);
+  padding: 1.5rem 1.25rem;
+}
+
+.ts-card__back-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(to right, #8CC63F 0%, #2BAABC 100%);
+}
+
+.preview-back__close {
+  position: absolute;
+  top: 0.875rem;
+  right: 0.875rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  padding: 0;
+  z-index: 2;
+}
+
+.ts-card__back-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.ts-card__back-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(140, 198, 63, 0.45);
+  flex-shrink: 0;
+}
+
+.ts-card__back-name {
+  font-family: 'Lexend', system-ui, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+  margin-bottom: 0.15rem;
+}
+
+.ts-card__back-role {
+  font-size: 0.575rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8CC63F;
+}
+
+.ts-card__back-spec {
+  font-size: 0.72rem;
+  color: rgba(43, 170, 188, 0.9);
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.ts-card__back-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  margin: 0;
+}
+
+.ts-card__back-bio {
+  font-size: 0.72rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.6);
+  flex: 1;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  -webkit-box-orient: vertical;
+}
+
+/* Visibility Classes */
+.mobile-only {
+  display: inline;
+}
+
+.desktop-only {
+  display: none;
+}
+
+.ts-card__back-creds {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: auto;
+}
+
+.ts-card__back-cred {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.38);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  line-height: 1.4;
+}
+
+.ts-card__back-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #8CC63F;
+  flex-shrink: 0;
+  opacity: 0.65;
+}
+
+/* ── Nameplate debajo del preview ─────────────────────────────────────────── */
+.ts-nameplate {
+  display: none;
+}
+
+.ts-nameplate__name {
+  font-family: 'Lexend', system-ui, sans-serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.ts-nameplate__role {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #8CC63F;
+}
+
+/* Hide target flip by default (mobile uses cursor badge) */
+.ts-target-flip {
+  display: none;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (min-width: 1024px) {
+  .mobile-only {
+    display: none !important;
+  }
+
+  .desktop-only {
+    display: inline !important;
+  }
+
+  .ts-wrapper {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4rem;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .ts-roster {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: center;
+    width: 540px;
+    flex-shrink: 0;
+    max-width: none;
+    gap: 1.25rem;
+  }
+
+  /* Keep original card shape */
+  .ts-slot {
+    width: 95px;
+    height: auto;
+    display: block;
+    background: #0d1625;
+    border-radius: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.07);
+    transition: box-shadow 0.28s ease, transform 0.2s ease-out;
+  }
+
+  .ts-slot:hover {
+    transform: translateY(-6px) scale(1.03) !important;
+    border-color: rgba(140, 198, 63, 0.45);
+  }
+
+  .ts-slot--active {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  .ts-target-flip {
+    display: block;
+    position: absolute;
+    inset: -3px;
+    border: 3px solid #8CC63F;
+    border-radius: 16px;
+    background: transparent;
+    box-shadow: 0 16px 36px rgba(140, 198, 63, 0.35);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* Hide the smash-bros mobile cursor pointer on desktop since we have framer motion target flip */
+  .ts-slot__cursor {
+    display: none;
+  }
+
+
+  .ts-stage {
+    flex: 1;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ts-preview {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  /* Make texts cleanly proportional to larger preview size */
+  .ts-card__name {
+    font-size: 1.5rem;
+  }
+
+  .ts-card__role {
+    font-size: 0.8rem;
+  }
+
+  .ts-nameplate__name {
+    font-size: 2.2rem;
+  }
+
+  .ts-nameplate__role {
+    font-size: 0.8rem;
+  }
+
+  .ts-nameplate {
+    display: none;
+  }
+}
+
+@media (max-width: 1023px) {
+
+  /* Only apply vertical floating effects on non-desktop */
+  .ts-slot:hover {
+    transform: translateY(-6px) scale(1.03);
+  }
+
+  /* Smaller slots on mobile so preview takes the spotlight */
+  .ts-wrapper {
+    gap: 1.5rem;
+  }
+
+  .ts-roster {
+    gap: 0.5rem;
+  }
+
+  .ts-slot {
+    width: 52px;
+    border-radius: 10px;
+    border-width: 1.5px;
+  }
+
+  .ts-slot__portrait {
+    border-radius: 8px 8px 0 0;
+  }
+
+  .ts-slot__foot {
+    padding: 0.2rem 0.25rem;
+    border-radius: 0 0 8px 8px;
+  }
+
+  .ts-slot__name {
+    font-size: 0.4rem;
+  }
+
+  .ts-slot__num {
+    font-size: 0.35rem;
+    top: 0.3rem;
+    left: 0.3rem;
+  }
+
+  .ts-slot__cursor {
+    font-size: 0.3rem;
+    top: -16px;
+    padding: 0.15rem 0.4rem;
+  }
+
+  .ts-slot__cursor::after {
+    border-width: 2px;
+    bottom: -3px;
+  }
+}
+
+@media (max-width: 420px) {
+  .ts-slot {
+    width: 46px;
+  }
+}

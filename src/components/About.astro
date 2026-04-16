@@ -102,9 +102,36 @@ const values = [
 
   <!-- Decorative bg text -->
   <span class="about__deco" aria-hidden="true">VET</span>
+
+  <!-- Ola de transición → Services (oscuro) -->
+  <div class="about__wave" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 72" preserveAspectRatio="none">
+      <path d="M0,36 C240,72 480,0 720,28 C960,56 1200,8 1440,36 L1440,72 L0,72 Z" fill="#1e293b"/>
+    </svg>
+  </div>
 </section>
 
 <style>
+  /* Ola de transición */
+  #about {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about__wave {
+    position: absolute;
+    bottom: -1px; /* -1px evita línea blanca entre sección y ola */
+    left: 0;
+    right: 0;
+    line-height: 0;
+  }
+
+  .about__wave svg {
+    display: block;
+    width: 100%;
+    height: 72px;
+  }
+
   .about__grid {
     display: grid;
     grid-template-columns: 1fr 1fr;

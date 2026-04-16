@@ -11,7 +11,7 @@ import CTABanner    from '@components/CTABanner.astro';
 import FAQ          from '@components/FAQ.astro';
 import Contact      from '@components/Contact.astro';
 import Footer       from '@components/Footer.astro';
-import AnimatedNav from '@components/react/AnimatedNav';
+import CardNav      from '@components/react/CardNav.jsx';
 ---
 
 <BaseLayout
@@ -19,7 +19,12 @@ import AnimatedNav from '@components/react/AnimatedNav';
   description="Centro veterinario de confianza en Madrid. Medicina general, cirugía, diagnóstico por imagen, nutrición clínica y urgencias 24h para perros y gatos."
 >
   <Preloader />
-  <AnimatedNav client:load />
+  
+  <div style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; pointer-events: none;">
+    <div style="pointer-events: auto;">
+      <CardNav client:load />
+    </div>
+  </div>
   <main id="main-content">
     <Hero />
     <About />
