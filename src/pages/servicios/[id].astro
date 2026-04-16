@@ -3,7 +3,7 @@ import type { GetStaticPaths } from 'astro';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Navbar from '@components/Navbar.astro';
 import Footer from '@components/Footer.astro';
-import { services, getServiceById } from '@data/services';
+import { services } from '@data/services';
 import * as Lucide from '@lucide/astro';
 
 export const getStaticPaths = (() => {
@@ -15,13 +15,11 @@ export const getStaticPaths = (() => {
 
 const { service } = Astro.props;
 
-const otherServices = services.filter((s) => s.id !== service.id).slice(0, 3);
+const otherServices = services.filter((s) => s.id !== service.id);
 
-// Resolve Lucide icon for the service
 const lucideIcons = Lucide as Record<string, any>;
-const ServiceIcon = lucideIcons[service.emoji] ?? null;
+const ServiceIcon  = lucideIcons[service.emoji] ?? null;
 
-// JSON-LD MedicalProcedure
 const medicalProcedureSchema = {
   '@context': 'https://schema.org',
   '@type': 'MedicalProcedure',
@@ -49,58 +47,70 @@ const medicalProcedureSchema = {
 
   <main id="main-content" aria-labelledby="service-heading">
 
-    <!-- Hero -->
-    <section class="service-hero" aria-label={`${service.title} — Anisanar Veterinaria`}>
+    <!-- ── Hero ──────────────────────────────────────────────────────────── -->
+    <section class="sp-hero" aria-label={`${service.title} — Anisanar Veterinaria`}>
       <div
-        class="service-hero__bg"
-        data-parallax="-0.2"
+        class="sp-hero__bg"
+        data-parallax="-0.15"
         style={`background-image:url('${service.image}')`}
         role="img"
         aria-label={service.imageAlt}
       ></div>
-      <div class="service-hero__overlay"></div>
+      <div class="sp-hero__overlay"></div>
 
-      <div class="container-gutter service-hero__content">
+      <div class="container-gutter sp-hero__content">
+
         <!-- Breadcrumb -->
-        <nav class="service-hero__breadcrumb" aria-label="Migas de pan">
+        <nav class="sp-breadcrumb" aria-label="Ruta de navegación">
           <ol>
             <li><a href="/">Inicio</a></li>
-            <li aria-hidden="true">·</li>
+            <li aria-hidden="true">›</li>
             <li><a href="/#services">Servicios</a></li>
-            <li aria-hidden="true">·</li>
+            <li aria-hidden="true">›</li>
             <li aria-current="page">{service.title}</li>
           </ol>
         </nav>
 
-        <span class="service-hero__emoji" aria-hidden="true">
-          {ServiceIcon && <ServiceIcon stroke-width="1.5" class="w-14 h-14" />}
-        </span>
-        <h1 id="service-heading" class="service-hero__heading reveal-up">{service.title}</h1>
-        <p class="service-hero__sub reveal-up">{service.shortDesc}</p>
+        <!-- Icon badge -->
+        <div class="sp-hero__icon-wrap" aria-hidden="true" style={`--accent:${service.accent}`}>
+          {ServiceIcon && <ServiceIcon stroke-width="1.5" class="w-10 h-10" />}
+        </div>
+
+        <h1 id="service-heading" class="sp-hero__heading">{service.title}</h1>
+        <p class="sp-hero__sub">{service.shortDesc}</p>
+
+        <!-- Feature chips -->
+        <div class="sp-hero__chips" aria-label="Características principales">
+          {service.features.slice(0, 3).map((f) => (
+            <span class="sp-hero__chip">{f}</span>
+          ))}
+        </div>
+      </div>
+
+      <!-- Wave → white body -->
+      <div class="sp-hero__wave" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 64" preserveAspectRatio="none">
+          <path d="M0,32 C360,64 720,0 1080,32 C1260,48 1380,18 1440,32 L1440,64 L0,64 Z" fill="#ffffff"/>
+        </svg>
       </div>
     </section>
 
-    <!-- Body -->
-    <div class="service-body container-gutter">
+    <!-- ── Body ───────────────────────────────────────────────────────────── -->
+    <div class="sp-body container-gutter">
 
-      <!-- Main content -->
-      <article class="service-body__main">
-        <section aria-label="Descripción del servicio">
-          <h2 class="service-body__section-heading reveal-up">¿En qué consiste?</h2>
-          <p class="service-body__text reveal-up">{service.fullDesc}</p>
+      <!-- Main article -->
+      <article class="sp-main">
+        <section>
+          <h2 class="sp-section-h reveal-up">¿En qué consiste?</h2>
+          <p class="sp-body-text reveal-up">{service.fullDesc}</p>
         </section>
 
-        <!-- Includes -->
-        <section aria-label="¿Qué incluye?" class="service-body__includes">
-          <h2 class="service-body__section-heading reveal-up">¿Qué incluye?</h2>
-          <ul class="includes-list" data-stagger-parent aria-label={`Contenido del servicio ${service.title}`}>
+        <section class="sp-includes">
+          <h2 class="sp-section-h reveal-up">¿Qué incluye?</h2>
+          <ul class="sp-includes__list" data-stagger-parent aria-label={`Contenido de ${service.title}`}>
             {service.includes.map((item) => (
-              <li class="includes-list__item" data-stagger-child>
-                <span
-                  class="includes-list__bar"
-                  style={`background:${service.accent}`}
-                  aria-hidden="true"
-                ></span>
+              <li class="sp-includes__item" data-stagger-child>
+                <span class="sp-includes__bar" style={`background:${service.accent}`} aria-hidden="true"></span>
                 {item}
               </li>
             ))}
@@ -109,39 +119,37 @@ const medicalProcedureSchema = {
       </article>
 
       <!-- Sidebar -->
-      <aside class="service-sidebar" aria-label="Información y acciones del servicio">
+      <aside class="sp-sidebar" aria-label="Información y acciones">
 
-        <!-- Features -->
-        <div class="sidebar-card reveal-scale">
-          <h3 class="sidebar-card__heading">Características</h3>
-          <ul class="sidebar-card__list" aria-label="Características del servicio">
+        <!-- Characteristics -->
+        <div class="sp-card reveal-scale">
+          <h3 class="sp-card__h">Características</h3>
+          <ul class="sp-card__list" aria-label="Características del servicio">
             {service.features.map((f) => (
-              <li class="sidebar-card__item">
-                <span class="sidebar-card__dot" style={`background:${service.accent}`} aria-hidden="true"></span>
+              <li class="sp-card__item">
+                <span class="sp-card__dot" style={`background:${service.accent}`} aria-hidden="true"></span>
                 {f}
               </li>
             ))}
           </ul>
         </div>
 
-        <!-- Book CTA -->
-        <div class="sidebar-card sidebar-card--cta reveal-scale">
-          <h3 class="sidebar-card__heading">¿Necesitas este servicio?</h3>
-          <p class="sidebar-card__desc">
+        <!-- CTA -->
+        <div class="sp-card sp-card--cta reveal-scale">
+          <h3 class="sp-card__h">¿Necesitas este servicio?</h3>
+          <p class="sp-card__desc">
             Agenda tu cita ahora. Te atendemos de lunes a viernes de 9 a 20 h
             y los sábados de 9 a 14 h.
           </p>
-          <a href="/#contact" class="btn-primary sidebar-card__btn">
-            Agendar cita
-          </a>
+          <a href="/#contact" class="btn-primary sp-card__btn">Agendar cita</a>
           <a
             href="https://wa.me/34000000000"
-            class="sidebar-card__wa"
+            class="sp-card__wa"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Contactar por WhatsApp"
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.521-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="currentColor"/>
               <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.95-1.42A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" stroke="currentColor" stroke-width="1.5"/>
             </svg>
@@ -149,356 +157,555 @@ const medicalProcedureSchema = {
           </a>
         </div>
 
-        <!-- Urgencies -->
-        <div class="sidebar-card sidebar-card--urgency reveal-scale">
-          <p class="sidebar-urgency__title">Urgencias 24h</p>
-          <a href="tel:+34000000000" class="sidebar-urgency__tel">+34 000 000 000</a>
-          <p class="sidebar-urgency__note">Disponibles los 365 días del año</p>
+        <!-- Urgency -->
+        <div class="sp-card sp-card--urgency reveal-scale">
+          <p class="sp-urgency__label">Urgencias 24h</p>
+          <a href="tel:+34000000000" class="sp-urgency__tel">+34 000 000 000</a>
+          <p class="sp-urgency__note">Disponibles los 365 días del año</p>
         </div>
       </aside>
     </div>
 
-    <!-- Other services -->
+    <!-- ── Other services ─────────────────────────────────────────────────── -->
     {otherServices.length > 0 && (
-      <section class="other-services section-spacing" aria-labelledby="other-services-heading">
+      <section class="sp-others" aria-labelledby="sp-others-h">
         <div class="container-gutter">
-          <h2 id="other-services-heading" class="other-services__heading reveal-up">
-            Otros servicios
-          </h2>
-          <div class="other-services__grid" data-stagger-parent>
-            {otherServices.map((s) => (
-              <a
-                href={`/servicios/${s.id}`}
-                class="other-card"
-                data-stagger-child
-                aria-label={`Ver servicio: ${s.title}`}
-              >
-                <span class="other-card__emoji" aria-hidden="true">{s.emoji}</span>
-                <h3 class="other-card__title">{s.title}</h3>
-                <p class="other-card__desc">{s.shortDesc}</p>
-                <span class="other-card__link" aria-hidden="true">Ver más →</span>
-              </a>
-            ))}
+          <div class="sp-others__header">
+            <span class="sp-others__label reveal-up">Descubre más</span>
+            <h2 id="sp-others-h" class="sp-others__heading reveal-up">Otros servicios</h2>
+          </div>
+
+          <div class="sp-others__grid" data-stagger-parent>
+            {otherServices.map((s) => {
+              const SIcon = lucideIcons[s.emoji] ?? null;
+              return (
+                <a
+                  href={`/servicios/${s.id}`}
+                  class="sp-svc-card"
+                  data-stagger-child
+                  aria-label={`Ver servicio: ${s.title}`}
+                >
+                  <!-- Background photo — same treatment as sc-card__bg -->
+                  <div
+                    class="sp-svc-card__bg"
+                    style={`background-image:url('${s.image}')`}
+                    aria-hidden="true"
+                  ></div>
+                  <!-- Gradient overlay — identical to sc-card__overlay -->
+                  <div class="sp-svc-card__overlay" aria-hidden="true"></div>
+
+                  <!-- Body: all content at bottom, icon replaces number -->
+                  <div class="sp-svc-card__body">
+                    <span class="sp-svc-card__icon" style={`color:${s.accent}`} aria-hidden="true">
+                      {SIcon && <SIcon stroke-width="1.5" class="w-5 h-5" />}
+                    </span>
+                    <h3 class="sp-svc-card__title">{s.title}</h3>
+                    <p class="sp-svc-card__desc">{s.shortDesc}</p>
+                    <span class="sp-svc-card__cta" style={`color:${s.accent}`} aria-hidden="true">
+                      Ver servicio
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                  </div>
+
+                  <!-- Accent rim at BOTTOM — same as sc-card__rim -->
+                  <div class="sp-svc-card__rim" style={`background:${s.accent}`} aria-hidden="true"></div>
+                </a>
+              );
+            })}
           </div>
         </div>
       </section>
     )}
+
   </main>
 
   <Footer />
 </BaseLayout>
 
 <style>
-  /* ─── Hero ─────────────────────────────────────────────────────────────── */
-  .service-hero {
+  /* ── Hero ─────────────────────────────────────────────────────────────── */
+  .sp-hero {
     position: relative;
-    min-height: 60vh;
+    min-height: 52vh;
     display: flex;
     align-items: flex-end;
-    padding-bottom: clamp(3rem, 5vw, 5rem);
+    padding-bottom: calc(clamp(2.5rem, 4vw, 4rem) + 64px); /* room for wave */
     overflow: hidden;
   }
 
-  .service-hero__bg {
+  .sp-hero__bg {
     position: absolute;
     inset: -20%;
     background-size: cover;
     background-position: center;
     will-change: transform;
+    transition: transform 0.1s linear;
   }
 
-  .service-hero__overlay {
+  .sp-hero__overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(160deg, rgba(30,30,30,0.85) 0%, rgba(45,74,62,0.7) 100%);
+    background: linear-gradient(
+      155deg,
+      rgba(15, 23, 42, 0.9) 0%,
+      rgba(30, 41, 59, 0.75) 55%,
+      rgba(15, 23, 42, 0.6) 100%
+    );
   }
 
-  .service-hero__content {
+  .sp-hero__content {
     position: relative;
     z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* Wave */
+  .sp-hero__wave {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    line-height: 0;
+    z-index: 2;
+  }
+  .sp-hero__wave svg {
+    display: block;
+    width: 100%;
+    height: 64px;
   }
 
   /* Breadcrumb */
-  .service-hero__breadcrumb ol {
+  .sp-breadcrumb {
+    margin-bottom: 1.5rem;
+  }
+  .sp-breadcrumb ol {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
     list-style: none;
-    margin-bottom: 1.5rem;
     flex-wrap: wrap;
   }
-
-  .service-hero__breadcrumb a,
-  .service-hero__breadcrumb li {
-    font-size: 0.8125rem;
-    color: rgba(255, 255, 255, 0.5);
+  .sp-breadcrumb a,
+  .sp-breadcrumb li {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.45);
     text-decoration: none;
-    transition: color 0.25s ease;
+    transition: color 0.2s ease;
+  }
+  .sp-breadcrumb a:hover { color: rgba(255, 255, 255, 0.85); }
+  .sp-breadcrumb [aria-current="page"] { color: rgba(255, 255, 255, 0.85); }
+
+  /* Icon badge */
+  .sp-hero__icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--accent, #8CC63F);
+    margin-bottom: 1.25rem;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 
-  .service-hero__breadcrumb a:hover { color: #ffffff; }
-
-  [aria-current="page"] { color: rgba(255, 255, 255, 0.9) !important; }
-
-  .service-hero__emoji {
-    display: block;
-    color: #8CC63F;
-    margin-bottom: 0.75rem;
-  }
-
-  .service-hero__heading {
+  /* Heading */
+  .sp-hero__heading {
     font-family: "Lexend", system-ui, sans-serif;
-    font-size: clamp(2.5rem, 6vw, 6rem);
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
     font-weight: 500;
     color: #ffffff;
     line-height: 1.05;
     letter-spacing: -0.02em;
-    margin-bottom: 1rem;
+    margin-bottom: 0.875rem;
   }
 
-  .service-hero__sub {
-    font-size: clamp(1rem, 1.5vw, 1.25rem);
+  .sp-hero__sub {
+    font-size: clamp(0.9375rem, 1.4vw, 1.125rem);
     line-height: 1.7;
-    color: rgba(255, 255, 255, 0.75);
-    max-width: 600px;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 560px;
+    margin-bottom: 1.5rem;
   }
 
-  /* ─── Body ─────────────────────────────────────────────────────────────── */
-  .service-body {
+  /* Feature chips */
+  .sp-hero__chips {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .sp-hero__chip {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.65);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  /* ── Body grid ────────────────────────────────────────────────────────── */
+  .sp-body {
     display: grid;
-    grid-template-columns: 1fr 340px;
-    gap: clamp(3rem, 5vw, 6rem);
+    grid-template-columns: 1fr 320px;
+    gap: clamp(2.5rem, 5vw, 5rem);
     align-items: start;
-    padding-top: clamp(3rem, 5vw, 5rem);
-    padding-bottom: clamp(3rem, 5vw, 5rem);
+    padding-top: clamp(2.5rem, 4vw, 4rem);
+    padding-bottom: clamp(2.5rem, 4vw, 4rem);
   }
 
-  .service-body__section-heading {
+  .sp-section-h {
     font-family: "Lexend", system-ui, sans-serif;
-    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-size: clamp(1.5rem, 2.5vw, 2.25rem);
     font-weight: 500;
     color: var(--color-charcoal);
     letter-spacing: -0.02em;
-    margin-bottom: 1.25rem;
-    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
   }
+  .sp-section-h:first-child { margin-top: 0; }
 
-  .service-body__section-heading:first-child { margin-top: 0; }
-
-  .service-body__text {
-    font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
+  .sp-body-text {
+    font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
     line-height: 1.8;
-    color: rgba(30, 30, 30, 0.7);
+    color: rgba(30, 30, 30, 0.68);
   }
 
-  /* Includes */
-  .service-body__includes { margin-top: 2.5rem; }
+  .sp-includes { margin-top: 2.25rem; }
 
-  .includes-list {
+  .sp-includes__list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 0.875rem;
+    gap: 0.75rem;
     margin-top: 0.5rem;
   }
-
-  .includes-list__item {
+  .sp-includes__item {
     display: flex;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 0.875rem;
     font-size: 0.9375rem;
-    color: rgba(30, 30, 30, 0.75);
+    color: rgba(30, 30, 30, 0.72);
     line-height: 1.5;
   }
-
-  .includes-list__bar {
+  .sp-includes__bar {
     flex-shrink: 0;
-    width: 4px;
-    height: 20px;
+    width: 3px;
+    height: 18px;
     border-radius: 4px;
-    margin-top: 0.1em;
+    margin-top: 0.15em;
   }
 
-  /* ─── Sidebar ───────────────────────────────────────────────────────────── */
-  .service-sidebar {
+  /* ── Sidebar ──────────────────────────────────────────────────────────── */
+  .sp-sidebar {
     position: sticky;
-    top: 100px;
+    top: 90px;
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1rem;
   }
 
-  .sidebar-card {
+  .sp-card {
     background: var(--color-charcoal);
     border-radius: 1.25rem;
-    padding: 1.75rem;
-    border: 1px solid rgba(45, 74, 62, 0.08);
+    padding: 1.5rem;
   }
 
-  .sidebar-card__heading {
+  .sp-card__h {
     font-family: "Lexend", system-ui, sans-serif;
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 600;
     color: #ffffff;
-    margin-bottom: 1rem;
+    margin-bottom: 0.875rem;
+    letter-spacing: 0.01em;
   }
 
-  .sidebar-card__list {
+  .sp-card__list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 0.625rem;
+    gap: 0.5rem;
   }
-
-  .sidebar-card__item {
+  .sp-card__item {
     display: flex;
     align-items: flex-start;
-    gap: 0.75rem;
-    font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.75);
+    gap: 0.625rem;
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.7);
     line-height: 1.5;
   }
-
-  .sidebar-card__dot {
-    width: 8px;
-    height: 8px;
+  .sp-card__dot {
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     flex-shrink: 0;
     margin-top: 0.3em;
   }
 
   /* CTA card */
-  .sidebar-card--cta { background: var(--color-charcoal); }
-  .sidebar-card--cta .sidebar-card__heading { color: #ffffff; }
-
-  .sidebar-card__desc {
-    font-size: 0.875rem;
+  .sp-card__desc {
+    font-size: 0.8125rem;
     line-height: 1.65;
-    color: rgba(255, 255, 255, 0.65);
-    margin-bottom: 1.25rem;
+    color: rgba(255, 255, 255, 0.58);
+    margin-bottom: 1.1rem;
   }
-
-  .sidebar-card__btn { width: 100%; justify-content: center; margin-bottom: 0.875rem; }
-
-  .sidebar-card__wa {
+  .sp-card__btn {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+    padding: 0.75rem 1.5rem;
+  }
+  .sp-card__wa {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
+    gap: 0.45rem;
+    font-size: 0.8125rem;
     font-weight: 500;
     color: #25D366;
     text-decoration: none;
-    padding: 0.75rem;
-    border: 1px solid rgba(37, 211, 102, 0.25);
+    padding: 0.65rem;
+    border: 1px solid rgba(37, 211, 102, 0.2);
     border-radius: 9999px;
     transition: background 0.25s ease, border-color 0.25s ease;
   }
-
-  .sidebar-card__wa:hover {
+  .sp-card__wa:hover {
     background: rgba(37, 211, 102, 0.08);
     border-color: #25D366;
   }
 
   /* Urgency card */
-  .sidebar-card--urgency {
+  .sp-card--urgency {
     background: #8CC63F;
     text-align: center;
+    padding: 1.25rem;
   }
-
-  .sidebar-urgency__title {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.15em;
+  .sp-urgency__label {
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: rgba(30, 41, 59, 0.65);
-    margin-bottom: 0.5rem;
-  }
-
-  .sidebar-urgency__tel {
-    display: block;
-    font-family: "Lexend", system-ui, sans-serif;
-    font-size: 1.625rem;
-    font-weight: 600;
-    color: var(--color-charcoal);
-    text-decoration: none;
-    margin-bottom: 0.375rem;
-  }
-
-  .sidebar-urgency__note {
-    font-size: 0.8125rem;
     color: rgba(30, 41, 59, 0.6);
+    margin-bottom: 0.35rem;
   }
-
-  /* ─── Other services ────────────────────────────────────────────────────── */
-  .other-services {
-    background: var(--color-charcoal);
-    border-top: 1px solid rgba(45, 74, 62, 0.1);
-  }
-
-  .other-services__heading {
-    font-family: "Lexend", system-ui, sans-serif;
-    font-size: clamp(1.75rem, 3vw, 2.75rem);
-    font-weight: 500;
-    color: #ffffff;
-    letter-spacing: -0.02em;
-    margin-bottom: 2.5rem;
-  }
-
-  .other-services__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-  }
-
-  .other-card {
-    background: white;
-    border-radius: 1.25rem;
-    padding: 2rem;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    border: 1px solid rgba(45, 74, 62, 0.08);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
-    cursor: pointer;
-  }
-
-  .other-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 48px rgba(45, 74, 62, 0.1);
-  }
-
-  .other-card__emoji { font-size: 2rem; display: block; }
-
-  .other-card__title {
+  .sp-urgency__tel {
+    display: block;
     font-family: "Lexend", system-ui, sans-serif;
     font-size: 1.375rem;
     font-weight: 600;
     color: var(--color-charcoal);
-    margin-top: 0.25rem;
+    text-decoration: none;
+    margin-bottom: 0.25rem;
+    transition: opacity 0.2s;
+  }
+  .sp-urgency__tel:hover { opacity: 0.75; }
+  .sp-urgency__note {
+    font-size: 0.75rem;
+    color: rgba(30, 41, 59, 0.55);
   }
 
-  .other-card__desc {
-    font-size: 0.875rem;
-    line-height: 1.6;
-    color: rgba(30, 30, 30, 0.6);
-    flex: 1;
+  /* ── Other services ───────────────────────────────────────────────────── */
+  .sp-others {
+    background: var(--color-charcoal);
+    padding: clamp(3rem, 5vw, 5.5rem) 0;
+    position: relative;
+    overflow: hidden;
   }
 
-  .other-card__link {
-    font-size: 0.8125rem;
-    font-weight: 500;
+  /* dot texture — same as services section on home */
+  .sp-others::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+  }
+
+  .sp-others__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: clamp(1.75rem, 3vw, 2.75rem);
+    position: relative;
+    z-index: 1;
+  }
+
+  .sp-others__label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
     color: #8CC63F;
-    margin-top: 0.5rem;
+  }
+
+  .sp-others__heading {
+    font-family: "Lexend", system-ui, sans-serif;
+    font-size: clamp(1.75rem, 3.5vw, 3rem);
+    font-weight: 500;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  /* Grid — 5 columns on desktop so all 5 cards fit in one row */
+  .sp-others__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.875rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Service card — mirrors sc-card exactly, smaller size ─────────────── */
+  .sp-svc-card {
+    position: relative;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    will-change: transform, opacity;
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,0.07),
+      0 16px 48px rgba(0,0,0,0.4);
+    text-decoration: none;
+    cursor: pointer;
+    /* Portrait — same ratio as carousel */
+    aspect-ratio: 3 / 4;
+    transition:
+      transform  0.38s cubic-bezier(0.16,1,0.3,1),
+      box-shadow 0.38s ease;
+  }
+
+  .sp-svc-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,0.12),
+      0 32px 72px rgba(0,0,0,0.55),
+      0  8px 20px rgba(0,0,0,0.3);
+  }
+
+  /* Background — same scale trick as sc-card__bg */
+  .sp-svc-card__bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.06);
+    transition: transform 0.8s cubic-bezier(0.16,1,0.3,1);
+  }
+  .sp-svc-card:hover .sp-svc-card__bg { transform: scale(1.11); }
+
+  /* Overlay — identical gradient to sc-card__overlay */
+  .sp-svc-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      170deg,
+      rgba(8,12,20,0.18)  0%,
+      rgba(8,12,20,0.52)  38%,
+      rgba(8,12,20,0.90)  65%,
+      rgba(8,12,20,0.97) 100%
+    );
+  }
+
+  /* Rim at BOTTOM — same as sc-card__rim */
+  .sp-svc-card__rim {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    opacity: 0.65;
+    z-index: 2;
+    transition: opacity 0.35s ease;
+  }
+  .sp-svc-card:hover .sp-svc-card__rim { opacity: 1; }
+
+  /* Body — all content at bottom, like sc-card__body */
+  .sp-svc-card__body {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1rem;
+    z-index: 1;
+  }
+
+  /* Icon — same role as sc-card__num */
+  .sp-svc-card__icon {
+    display: block;
+    margin-bottom: 0.35rem;
+    opacity: 0.9;
+    line-height: 1;
+  }
+
+  .sp-svc-card__title {
+    font-family: "Lexend", system-ui, sans-serif;
+    font-size: clamp(0.9rem, 1.4vw, 1.125rem);
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    margin-bottom: 0;
+  }
+
+  /* Description — always visible (not behind active state like carousel) */
+  .sp-svc-card__desc {
+    font-size: 0.72rem;
+    line-height: 1.55;
+    color: rgba(255,255,255,0.58);
+    margin-top: 0.4rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* CTA link — same style as sc-card__cta */
+  .sp-svc-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 0.875rem;
+    transition: gap 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .sp-svc-card:hover .sp-svc-card__cta { gap: 0.6rem; }
+
+  /* ── Responsive ───────────────────────────────────────────────────────── */
+  @media (max-width: 1280px) {
+    .sp-others__grid { grid-template-columns: repeat(4, 1fr); }
   }
 
   @media (max-width: 1024px) {
-    .service-body { grid-template-columns: 1fr; }
-    .service-sidebar { position: static; }
+    .sp-body { grid-template-columns: 1fr; }
+    .sp-sidebar {
+      position: static;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .sp-card--urgency { grid-column: 1 / -1; }
+    .sp-others__grid  { grid-template-columns: repeat(3, 1fr); }
   }
 
-  @media (max-width: 768px) {
-    .other-services__grid { grid-template-columns: 1fr; }
+  @media (max-width: 640px) {
+    .sp-hero          { min-height: 45vh; }
+    .sp-hero__chips   { display: none; }
+    .sp-sidebar       { grid-template-columns: 1fr; }
+    .sp-others__grid  { grid-template-columns: repeat(2, 1fr); gap: 0.625rem; }
   }
 </style>

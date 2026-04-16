@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useMotionTemplate } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionTemplate } from 'framer-motion';
 import './AnimatedNav.css';
 
 const navItems = [
@@ -12,7 +12,6 @@ const navItems = [
 
 export default function AnimatedNav() {
   const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const { scrollY } = useScroll();
@@ -101,55 +100,23 @@ export default function AnimatedNav() {
             Agendar cita
           </a>
 
-          {/* Mobile Burger */}
-          <button
-            className={`nav-burger ${mobileMenuOpen ? 'open' : ''}`}
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label={mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
-          >
-            <span />
-            <span />
-            <span />
-          </button>
+          {/* Mobile CTA pill (visible on ≥ 640px, hidden on very small) */}
+          <a href="#contact" className="nav-cta-mobile">
+            Cita
+          </a>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            className="mobile-menu"
-            initial={{ opacity: 0, y: -12, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -12, scale: 0.97 }}
-            transition={{ type: 'spring', bounce: 0.18, duration: 0.4 }}
-          >
-            {navItems.map((item, i) => (
-              <motion.a
-                key={item.name}
-                href={item.href}
-                className="mobile-link"
-                onClick={() => setMobileMenuOpen(false)}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.04, duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              >
-                {item.name}
-              </motion.a>
-            ))}
-            <motion.a
-              href="#contact"
-              className="mobile-cta"
-              onClick={() => setMobileMenuOpen(false)}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: navItems.length * 0.04, duration: 0.3 }}
-            >
-              Agendar cita
-            </motion.a>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Mobile scrollable links strip — only on < 1024px */}
+      <div className="nav-mobile-strip" aria-label="Navegación rápida">
+        <div className="nav-mobile-strip__track">
+          {navItems.map((item) => (
+            <a key={item.name} href={item.href} className="nav-mobile-link">
+              {item.name}
+            </a>
+          ))}
+        </div>
+      </div>
     </motion.nav>
   );
 }
