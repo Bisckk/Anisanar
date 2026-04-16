@@ -36,6 +36,20 @@ export const POST: APIRoute = async ({ request }) => {
     const data = await request.json();
     const { name, email, phone, petType, petName, service, message } = data;
 
+    const configured =
+      import.meta.env.WA_TOKEN &&
+      import.meta.env.WA_PHONE_ID &&
+      import.meta.env.WA_CLINIC_NUMBER;
+
+    // Sin credenciales → modo demo, simula éxito sin enviar nada
+    if (!configured) {
+      console.info('[book API] Demo mode — credenciales WA no configuradas, simulando éxito.');
+      return new Response(JSON.stringify({ ok: true, demo: true }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
     // ── Mensaje para la clínica ────────────────────────────────────────────
     const clinicMsg = [
       `🐾 *Nueva solicitud de cita — Anisanar*`,
@@ -52,11 +66,9 @@ export const POST: APIRoute = async ({ request }) => {
 
     await sendWhatsApp(import.meta.env.WA_CLINIC_NUMBER, clinicMsg);
 
-    // ── Mensaje de confirmación al cliente (solo si dejó su teléfono) ──────
+    // ── Confirmación al cliente (solo si dejó teléfono) ───────────────────
     if (phone) {
-      // Limpia el número: quita espacios, guiones y el + inicial
       const clientNumber = phone.replace(/[\s\-\(\)]/g, '').replace(/^\+/, '');
-
       const clientMsg = [
         `¡Hola, ${name.split(' ')[0]}! 👋`,
         ``,
