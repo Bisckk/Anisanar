@@ -5,7 +5,9 @@
   align-items: center;
   gap: 2.5rem;
   width: 100%;
+  max-width: 100%;
   padding: 0 var(--spacing-gutter, 1.5rem);
+  overflow-x: hidden;
 }
 
 /* ── Roster ───────────────────────────────────────────────────────────────── */

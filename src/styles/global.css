@@ -36,6 +36,7 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  overflow-x: hidden;
 }
 
 body {
@@ -75,22 +76,22 @@ body::after {
 /* ─── GSAP Reveal Initial States ─────────────────────────────────────────── */
 .reveal-up {
   opacity: 0;
-  transform: translateY(60px);
+  transform: translateY(28px);
 }
 
 .reveal-left {
   opacity: 0;
-  transform: translateX(-60px);
+  transform: translateX(-28px);
 }
 
 .reveal-right {
   opacity: 0;
-  transform: translateX(60px);
+  transform: translateX(28px);
 }
 
 .reveal-scale {
   opacity: 0;
-  transform: scale(0.85);
+  transform: scale(0.94);
 }
 
 /* ─── Utility Classes ────────────────────────────────────────────────────── */

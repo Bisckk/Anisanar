@@ -70,9 +70,9 @@ const { title, description, canonical, image, imageAlt, type, schema, noindex } 
 
       // ─── Scroll Reveals ─────────────────────────────────────────────────────
       const revealClasses = [
-        { selector: '.reveal-up',    y: 60,  x: 0 },
-        { selector: '.reveal-left',  y: 0,   x: -60 },
-        { selector: '.reveal-right', y: 0,   x: 60 },
+        { selector: '.reveal-up',    y: 28,  x: 0 },
+        { selector: '.reveal-left',  y: 0,   x: -28 },
+        { selector: '.reveal-right', y: 0,   x: 28 },
       ];
 
       revealClasses.forEach(({ selector, y, x }) => {
@@ -80,13 +80,13 @@ const { title, description, canonical, image, imageAlt, type, schema, noindex } 
           gsap.set(el, { opacity: 0, y, x });
           ScrollTrigger.create({
             trigger: el,
-            start: 'top 88%',
+            start: 'top 90%',
             onEnter: () => {
               gsap.to(el, {
                 opacity: 1,
                 y: 0,
                 x: 0,
-                duration: 0.9,
+                duration: 0.65,
                 ease: 'expo.out',
               });
             },
@@ -95,16 +95,16 @@ const { title, description, canonical, image, imageAlt, type, schema, noindex } 
       });
 
       gsap.utils.toArray<HTMLElement>('.reveal-scale').forEach((el) => {
-        gsap.set(el, { opacity: 0, scale: 0.85 });
+        gsap.set(el, { opacity: 0, scale: 0.94 });
         ScrollTrigger.create({
           trigger: el,
-          start: 'top 88%',
+          start: 'top 90%',
           onEnter: () => {
             gsap.to(el, {
               opacity: 1,
               scale: 1,
-              duration: 0.9,
-              ease: 'back.out(1.4)',
+              duration: 0.65,
+              ease: 'power3.out',
             });
           },
         });
@@ -113,17 +113,17 @@ const { title, description, canonical, image, imageAlt, type, schema, noindex } 
       // ─── Stagger Groups ──────────────────────────────────────────────────────
       document.querySelectorAll<HTMLElement>('[data-stagger-parent]').forEach((parent) => {
         const children = parent.querySelectorAll<HTMLElement>('[data-stagger-child]');
-        gsap.set(children, { opacity: 0, y: 40 });
+        gsap.set(children, { opacity: 0, y: 20 });
         ScrollTrigger.create({
           trigger: parent,
-          start: 'top 82%',
+          start: 'top 84%',
           onEnter: () => {
             gsap.to(children, {
               opacity: 1,
               y: 0,
-              duration: 0.7,
+              duration: 0.55,
               ease: 'expo.out',
-              stagger: 0.12,
+              stagger: 0.07,
             });
           },
         });

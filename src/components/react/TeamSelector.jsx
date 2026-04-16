@@ -36,9 +36,9 @@ export default function TeamSelector() {
     // Salida del preview actual
     gsap.to(previewRef.current, {
       opacity: 0,
-      y: 18,
-      scale: 0.96,
-      duration: 0.22,
+      y: 12,
+      scale: 0.97,
+      duration: 0.28,
       ease: 'power2.in',
       onComplete: () => {
         activeRef.current = idx;
@@ -47,12 +47,12 @@ export default function TeamSelector() {
         // Entrada del nuevo preview
         gsap.fromTo(
           previewRef.current,
-          { opacity: 0, y: -18, scale: 0.96 },
+          { opacity: 0, y: -12, scale: 0.97 },
           {
             opacity: 1,
             y: 0,
             scale: 1,
-            duration: 0.42,
+            duration: 0.5,
             ease: 'power3.out',
             onComplete: () => { transitionRef.current = false; },
           }
@@ -76,26 +76,38 @@ export default function TeamSelector() {
     if (!flippedRef.current) {
       flippedRef.current = true;
       gsap.timeline()
-        .to(inner, { rotationY: 90, transformPerspective: 900, duration: 0.22, ease: 'power2.in' })
+        .to(inner, {
+          rotationY: 90,
+          transformPerspective: 1400,
+          scale: 0.96,
+          duration: 0.38,
+          ease: 'power3.in',
+        })
         .call(() => {
           front.style.visibility = 'hidden';
           back.style.display = 'flex';
         })
         .fromTo(inner,
-          { rotationY: -90 },
-          { rotationY: 0, transformPerspective: 900, duration: 0.22, ease: 'power2.out' }
+          { rotationY: -90, scale: 0.96 },
+          { rotationY: 0, transformPerspective: 1400, scale: 1, duration: 0.42, ease: 'power3.out' }
         );
     } else {
       flippedRef.current = false;
       gsap.timeline()
-        .to(inner, { rotationY: -90, transformPerspective: 900, duration: 0.22, ease: 'power2.in' })
+        .to(inner, {
+          rotationY: -90,
+          transformPerspective: 1400,
+          scale: 0.96,
+          duration: 0.38,
+          ease: 'power3.in',
+        })
         .call(() => {
           back.style.display = 'none';
           front.style.visibility = 'visible';
         })
         .fromTo(inner,
-          { rotationY: 90 },
-          { rotationY: 0, transformPerspective: 900, duration: 0.22, ease: 'power2.out' }
+          { rotationY: 90, scale: 0.96 },
+          { rotationY: 0, transformPerspective: 1400, scale: 1, duration: 0.42, ease: 'power3.out' }
         );
     }
   }
@@ -111,14 +123,20 @@ export default function TeamSelector() {
 
     gsap.killTweensOf(inner);
     gsap.timeline()
-      .to(inner, { rotationY: -90, transformPerspective: 900, duration: 0.22, ease: 'power2.in' })
+      .to(inner, {
+        rotationY: -90,
+        transformPerspective: 1400,
+        scale: 0.96,
+        duration: 0.38,
+        ease: 'power3.in',
+      })
       .call(() => {
         back.style.display = 'none';
         front.style.visibility = 'visible';
       })
       .fromTo(inner,
-        { rotationY: 90 },
-        { rotationY: 0, transformPerspective: 900, duration: 0.22, ease: 'power2.out' }
+        { rotationY: 90, scale: 0.96 },
+        { rotationY: 0, transformPerspective: 1400, scale: 1, duration: 0.42, ease: 'power3.out' }
       );
   }
 
