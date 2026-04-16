@@ -83,7 +83,7 @@ export const services: Service[] = [
       'Bioquímica sanguínea',
       'Urianálisis completo',
     ],
-    accent: 'var(--color-forest)',
+    accent: '#2BAABC',
     image: 'https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=800&q=80',
     imageAlt: 'Veterinario revisando radiografía digital en pantalla',
     medicalCode: 'S07.0',

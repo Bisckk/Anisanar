@@ -18,34 +18,84 @@ import { team } from '@data/team';
     <div class="team__grid" data-stagger-parent>
       {team.map((member) => (
         <article class="team-card" data-stagger-child aria-label={member.name}>
-          <!-- Image -->
-          <div class="team-card__img-wrap">
-            <img
-              src={member.img}
-              alt={member.imgAlt}
-              class="team-card__img"
-              width="400"
-              height="533"
-              loading="lazy"
-            />
-            <div class="team-card__overlay" aria-hidden="true"></div>
-          </div>
+          <div class="team-card__inner">
 
-          <!-- Info (always visible) -->
-          <div class="team-card__info">
-            <h3 class="team-card__name">{member.name}</h3>
-            <p class="team-card__role">{member.role}</p>
-            <p class="team-card__spec">{member.specialty}</p>
+            <!-- FRONT -->
+            <div class="team-card__front">
+              <div class="team-card__img-wrap">
+                <img
+                  src={member.img}
+                  alt={member.imgAlt}
+                  class="team-card__img"
+                  width="400"
+                  height="533"
+                  loading="lazy"
+                />
+                <div class="team-card__overlay" aria-hidden="true"></div>
+              </div>
 
-            <!-- Bio reveal on hover -->
-            <div class="team-card__bio-wrap">
-              <p class="team-card__bio">{member.bio}</p>
-              <ul class="team-card__creds" aria-label={`Formación de ${member.name}`}>
+              <!-- Info overlay (desktop hover-reveal stays untouched) -->
+              <div class="team-card__info">
+                <h3 class="team-card__name">{member.name}</h3>
+                <p class="team-card__role">{member.role}</p>
+                <p class="team-card__spec">{member.specialty}</p>
+
+                <div class="team-card__bio-wrap">
+                  <p class="team-card__bio">{member.bio}</p>
+                  <ul class="team-card__creds" aria-label={`Formación de ${member.name}`}>
+                    {member.credentials.map((c) => (
+                      <li class="team-card__cred">{c}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Mobile-only tap hint badge -->
+              <div class="team-card__tap-hint" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                ver info
+              </div>
+            </div>
+
+            <!-- BACK — only rendered on mobile via CSS -->
+            <div class="team-card__back" aria-hidden="true">
+              <!-- Gradient accent bar at top -->
+              <div class="team-card__back-accent"></div>
+
+              <!-- Close indicator -->
+              <button class="team-card__back-close" aria-label="Cerrar">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+              </button>
+
+              <!-- Head: avatar + name + role -->
+              <div class="team-card__back-head">
+                <img src={member.img} alt="" class="team-card__back-avatar" aria-hidden="true" />
+                <div>
+                  <h3 class="team-card__back-name">{member.name}</h3>
+                  <p class="team-card__back-role">{member.role}</p>
+                </div>
+              </div>
+
+              <p class="team-card__back-spec">{member.specialty}</p>
+
+              <div class="team-card__back-divider"></div>
+
+              <p class="team-card__back-bio">{member.longBio || member.bio}</p>
+
+              <ul class="team-card__back-creds">
                 {member.credentials.map((c) => (
-                  <li class="team-card__cred">{c}</li>
+                  <li class="team-card__back-cred">
+                    <span class="team-card__back-dot"></span>
+                    {c}
+                  </li>
                 ))}
               </ul>
             </div>
+
           </div>
         </article>
       ))}
@@ -54,7 +104,7 @@ import { team } from '@data/team';
 </section>
 
 <style>
-  /* Header */
+  /* ── Header ──────────────────────────────────────────────────────────────── */
   .team__header {
     display: flex;
     flex-direction: column;
@@ -71,7 +121,7 @@ import { team } from '@data/team';
   }
 
   .team__heading {
-    font-family: "Cormorant Garamond", Georgia, serif;
+    font-family: "Lexend", system-ui, sans-serif;
     font-size: clamp(2rem, 4vw, 3.75rem);
     font-weight: 500;
     line-height: 1.1;
@@ -79,22 +129,32 @@ import { team } from '@data/team';
     letter-spacing: -0.02em;
   }
 
-  .team__heading em { color: #8CC63F; }
+  .team__heading em { color: #8CC63F; font-style: normal; }
 
-  /* Grid */
+  /* ── Grid ────────────────────────────────────────────────────────────────── */
   .team__grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
   }
 
-  /* Card */
+  /* ── Card shell ──────────────────────────────────────────────────────────── */
   .team-card {
     position: relative;
     border-radius: 1.25rem;
     overflow: hidden;
     background: #f1f5f9;
     cursor: pointer;
+  }
+
+  /* Inner wrapper — plain on desktop, becomes 3-D stage on mobile */
+  .team-card__inner {
+    position: relative;
+  }
+
+  /* ── Front face ──────────────────────────────────────────────────────────── */
+  .team-card__front {
+    position: relative;
   }
 
   /* Image */
@@ -120,24 +180,24 @@ import { team } from '@data/team';
     background: linear-gradient(
       to top,
       rgba(15, 23, 42, 0.92) 0%,
-      rgba(15, 23, 42, 0.25)  40%,
-      rgba(15, 23, 42, 0)  100%
+      rgba(15, 23, 42, 0.25) 40%,
+      rgba(15, 23, 42, 0)    100%
     );
     transition: background 0.4s ease, backdrop-filter 0.4s ease;
   }
 
-  .team-card:hover .team-card__overlay { 
+  .team-card:hover .team-card__overlay {
     background: linear-gradient(
       to top,
       rgba(15, 23, 42, 0.96) 0%,
       rgba(15, 23, 42, 0.6)  50%,
-      rgba(15, 23, 42, 0.25)  100%
+      rgba(15, 23, 42, 0.25) 100%
     );
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
   }
 
-  /* Info */
+  /* Info overlay */
   .team-card__info {
     position: absolute;
     bottom: 0;
@@ -147,7 +207,7 @@ import { team } from '@data/team';
   }
 
   .team-card__name {
-    font-family: "Cormorant Garamond", Georgia, serif;
+    font-family: "Lexend", system-ui, sans-serif;
     font-size: clamp(1.125rem, 1.8vw, 1.375rem);
     font-weight: 600;
     color: #ffffff;
@@ -171,7 +231,7 @@ import { team } from '@data/team';
     margin-bottom: 0;
   }
 
-  /* Bio (hover reveal) */
+  /* Bio hover-reveal (desktop) */
   .team-card__bio-wrap {
     max-height: 0;
     overflow: hidden;
@@ -201,6 +261,13 @@ import { team } from '@data/team';
     letter-spacing: 0.02em;
   }
 
+  /* Mobile tap hint — hidden on desktop */
+  .team-card__tap-hint { display: none; }
+
+  /* Back face — hidden on desktop */
+  .team-card__back { display: none; }
+
+  /* ── Responsive grid ─────────────────────────────────────────────────────── */
   @media (max-width: 1024px) {
     .team__grid { grid-template-columns: repeat(2, 1fr); }
   }
@@ -208,4 +275,255 @@ import { team } from '@data/team';
   @media (max-width: 560px) {
     .team__grid { grid-template-columns: 1fr; }
   }
+
+  /* ── Mobile coin-flip ────────────────────────────────────────────────────── */
+  /* Activado por JS cuando detecta un dispositivo touch real (.flip-enabled) */
+
+  /* Perspective container */
+  .team-card.flip-enabled {
+    overflow: visible;
+    perspective: 900px;
+    -webkit-perspective: 900px;
+    perspective-origin: 50% 35%;
+  }
+
+  /* 3-D flip stage */
+  .team-card.flip-enabled .team-card__inner {
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+
+  .team-card.flip-enabled.flipped .team-card__inner {
+    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+  }
+
+  /* Front: ocultar cuando está girada */
+  .team-card.flip-enabled .team-card__front {
+    overflow: hidden;
+    border-radius: 1.25rem;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* Tap hint badge */
+  .team-card.flip-enabled .team-card__tap-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    position: absolute;
+    top: 0.875rem;
+    right: 0.875rem;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 0.3rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .team-card.flip-enabled.flipped .team-card__tap-hint {
+    opacity: 0;
+  }
+
+  /* ── Back face ─────────────────────────────────────────────────────────── */
+  .team-card.flip-enabled .team-card__back {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    position: absolute;
+    inset: 0;
+    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    background: linear-gradient(155deg, #162035 0%, #0d1625 55%, #0a111e 100%);
+    padding: 1.5rem 1.375rem;
+  }
+
+  /* Gradient accent at top */
+  .team-card__back-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(to right, #8CC63F 0%, #2BAABC 100%);
+    display: block;
+  }
+
+  /* Close button */
+  .team-card__back-close {
+    position: absolute;
+    top: 0.875rem;
+    right: 0.875rem;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.55);
+    cursor: pointer;
+    padding: 0;
+  }
+
+  /* Head row: avatar + name/role */
+  .team-card__back-head {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    margin-top: 1rem;
+  }
+
+  .team-card__back-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(140, 198, 63, 0.45);
+    flex-shrink: 0;
+  }
+
+  .team-card__back-name {
+    font-family: 'Lexend', system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.2;
+    margin-bottom: 0.2rem;
+  }
+
+  .team-card__back-role {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #8CC63F;
+  }
+
+  .team-card__back-spec {
+    font-size: 0.75rem;
+    color: rgba(43, 170, 188, 0.9);
+    line-height: 1.4;
+    font-weight: 500;
+  }
+
+  .team-card__back-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .team-card__back-bio {
+    font-size: 0.75rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.6);
+    flex: 1;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+  }
+
+  .team-card__back-creds {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-top: auto;
+  }
+
+  .team-card__back-cred {
+    font-size: 0.6875rem;
+    color: rgba(255, 255, 255, 0.38);
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    line-height: 1.4;
+  }
+
+  .team-card__back-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #8CC63F;
+    flex-shrink: 0;
+    opacity: 0.65;
+  }
 </style>
+
+<script>
+  function initFlipCards() {
+    // Detección real de touch — no depende de media queries
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    if (!isTouch) return;
+
+    const cards = Array.from(
+      document.querySelectorAll<HTMLElement>('.team-card')
+    );
+
+    // Activa la animación 3D añadiendo la clase directamente a cada card
+    cards.forEach((c) => c.classList.add('flip-enabled'));
+
+    function toggle(card: HTMLElement, target: HTMLElement) {
+      const isClose = !!target.closest('.team-card__back-close');
+      const isFlipped = card.classList.contains('flipped');
+
+      // Cierra todas las cards
+      cards.forEach((c) => {
+        c.classList.remove('flipped');
+        c.querySelector('.team-card__back')?.setAttribute('aria-hidden', 'true');
+      });
+
+      // Si no estaba flipeada (y no se tocó el botón cerrar) → flipear
+      if (!isFlipped && !isClose) {
+        card.classList.add('flipped');
+        card.querySelector('.team-card__back')?.setAttribute('aria-hidden', 'false');
+      }
+    }
+
+    cards.forEach((card) => {
+      let startX = 0;
+      let startY = 0;
+      let moved  = false;
+
+      card.addEventListener('touchstart', (e: TouchEvent) => {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        moved  = false;
+      }, { passive: true });
+
+      card.addEventListener('touchmove', (e: TouchEvent) => {
+        if (
+          Math.abs(e.touches[0].clientX - startX) > 8 ||
+          Math.abs(e.touches[0].clientY - startY) > 8
+        ) moved = true;
+      }, { passive: true });
+
+      card.addEventListener('touchend', (e: TouchEvent) => {
+        if (moved) return;         // era un scroll, ignorar
+        e.preventDefault();        // cancela ghost-click de 300ms
+        toggle(card, e.target as HTMLElement);
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFlipCards);
+  } else {
+    initFlipCards();
+  }
+</script>

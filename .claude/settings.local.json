@@ -6,7 +6,27 @@
       "Bash(node -e \"const p = require\\('./node_modules/astro/package.json'\\); console.log\\(p.version\\)\")",
       "Bash(node -e ':*)",
       "Bash(npm install:*)",
-      "Skill(update-config)"
+      "Skill(update-config)",
+      "Bash(node -e \"const pkg = require\\('./node_modules/@react-spring/web/package.json'\\); console.log\\('react-spring version:', pkg.version\\); console.log\\('peerDeps:', JSON.stringify\\(pkg.peerDependencies\\)\\);\")",
+      "Bash(npx astro *)",
+      "Bash(curl -sv http://localhost:4322)",
+      "Bash(curl -s http://localhost:4322/index.html)",
+      "Bash(curl -s http://localhost:4500)",
+      "Bash(curl -v http://localhost:4600)",
+      "Bash(curl -s http://localhost:4700)",
+      "Bash(node -e ' *)",
+      "Bash(timeout 20 node -e ' *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('main:', d.get\\('main'\\)\\); print\\('exports:', list\\(d.get\\('exports', {}\\).keys\\(\\)\\)[:5]\\)\")",
+      "Bash(curl -s \"http://localhost:4900\")",
+      "Bash(jobs -l)",
+      "Bash(curl -s \"http://localhost:5000/_astro/index.astro?type=compiled\")",
+      "Bash(curl -s \"http://localhost:5000/src/pages/index.astro\")",
+      "Bash(node -e \"const v = require\\('C:/Users/Administrator/Desktop/anisanar/Anisanar/node_modules/vite/package.json'\\); console.log\\('Vite version:', v.version\\);\")",
+      "Bash(node -e \"const v = require\\('C:/Users/Administrator/Desktop/anisanar/Anisanar/node_modules/@astrojs/react/package.json'\\); console.log\\('@astrojs/react version:', v.version\\); console.log\\('peer deps:', JSON.stringify\\(v.peerDependencies\\)\\);\")",
+      "Bash(node *)",
+      "Bash(curl -s http://localhost:5100)",
+      "Bash(taskkill /F /IM node.exe)",
+      "Bash(taskkill //F //IM node.exe)"
     ]
   }
 }

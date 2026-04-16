@@ -1,7 +1,11 @@
 ---
 import { services } from '@data/services';
-import * as Lucide from '@lucide/astro';
-import SpotlightCard from '@components/react/SpotlightCard';
+import ServiceCarousel from '@components/react/ServiceCarousel';
+
+// Serialize: pass only plain-object fields React needs
+const carouselServices = services.map(({ id, title, shortDesc, features, accent, image, imageAlt }) => ({
+  id, title, shortDesc, features, accent, image, imageAlt,
+}));
 ---
 
 <section
@@ -22,54 +26,10 @@ import SpotlightCard from '@components/react/SpotlightCard';
         y el equipo más dedicado.
       </p>
     </div>
-
-    <!-- Grid -->
-    <div class="services__grid" data-stagger-parent>
-      {services.map((service) => (
-        <SpotlightCard 
-          client:visible 
-          spotlightColor={service.accent + '33'} 
-          className="service-card-react"
-        >
-          <article
-            class="service-card-inner-astro"
-            data-stagger-child
-            style={`--service-accent: ${service.accent}`}
-            aria-label={service.title}
-          >
-            <div class="service-card__inner">
-              <span class="service-card__emoji" aria-hidden="true">
-                {(() => {
-                  const Icon = Lucide[service.emoji];
-                  return Icon ? <Icon stroke-width="2" class="w-10 h-10 inline-block align-middle" /> : null;
-                })()}
-              </span>
-              <h3 class="service-card__title">{service.title}</h3>
-              <p class="service-card__desc">{service.shortDesc}</p>
-              <ul class="service-card__features" aria-label={`Características de ${service.title}`}>
-                {service.features.slice(0, 3).map((f) => (
-                  <li class="service-card__feature">
-                    <span class="service-card__dot" aria-hidden="true">·</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href={`/servicios/${service.id}`}
-                class="service-card__link"
-                aria-label={`Ver más sobre ${service.title}`}
-              >
-                <span>Ver más</span>
-                <svg class="service-card__arrow" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                  <path d="M4 10h12M12 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </a>
-            </div>
-          </article>
-        </SpotlightCard>
-      ))}
-    </div>
   </div>
+
+  <!-- Carousel (full-bleed within section) -->
+  <ServiceCarousel client:visible services={carouselServices} />
 
   <!-- Dot pattern bg -->
   <div class="services__dots" aria-hidden="true"></div>
@@ -86,7 +46,7 @@ import SpotlightCard from '@components/react/SpotlightCard';
   .services__dots {
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
     background-size: 28px 28px;
     pointer-events: none;
     z-index: 0;
@@ -101,7 +61,7 @@ import SpotlightCard from '@components/react/SpotlightCard';
     align-items: center;
     text-align: center;
     gap: 1rem;
-    margin-bottom: clamp(3rem, 5vw, 5rem);
+    margin-bottom: clamp(2.5rem, 4vw, 4rem);
   }
 
   .services__label {
@@ -113,7 +73,7 @@ import SpotlightCard from '@components/react/SpotlightCard';
   }
 
   .services__heading {
-    font-family: "Cormorant Garamond", Georgia, serif;
+    font-family: "Lexend", system-ui, sans-serif;
     font-size: clamp(2rem, 4vw, 3.75rem);
     font-weight: 500;
     line-height: 1.15;
@@ -128,118 +88,5 @@ import SpotlightCard from '@components/react/SpotlightCard';
     font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
     line-height: 1.7;
     color: rgba(255, 255, 255, 0.6);
-  }
-
-  /* Grid */
-  .services__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5px;
-    border: 1.5px solid rgba(255, 255, 255, 0.08);
-    border-radius: 1.25rem;
-    overflow: hidden;
-  }
-
-  /* Card */
-  .service-card-inner-astro {
-    position: relative;
-    background: transparent;
-    overflow: hidden;
-    cursor: pointer;
-  }
-
-  /* Inner */
-  .service-card__inner {
-    position: relative;
-    padding: clamp(1.75rem, 3vw, 2.5rem);
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    gap: 0;
-  }
-
-  /* Emoji */
-  .service-card__emoji {
-    display: inline-block;
-    font-size: 2.25rem;
-    margin-bottom: 1rem;
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  .service-card:hover .service-card__emoji { transform: scale(1.15); }
-
-  /* Title */
-  .service-card__title {
-    font-family: "Cormorant Garamond", Georgia, serif;
-    font-size: clamp(1.25rem, 2vw, 1.625rem);
-    font-weight: 500;
-    color: #ffffff;
-    line-height: 1.2;
-    margin-bottom: 0.75rem;
-    letter-spacing: -0.01em;
-  }
-
-  /* Desc */
-  .service-card__desc {
-    font-size: 0.875rem;
-    line-height: 1.65;
-    color: rgba(255, 255, 255, 0.6);
-    margin-bottom: 1.25rem;
-  }
-
-  /* Features */
-  .service-card__features {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-    margin-bottom: 1.75rem;
-    flex: 1;
-  }
-
-  .service-card__feature {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8125rem;
-    color: rgba(255, 255, 255, 0.5);
-    line-height: 1.4;
-  }
-
-  .service-card__dot {
-    color: var(--service-accent, #2BAABC);
-    font-size: 1.25rem;
-    line-height: 1;
-    flex-shrink: 0;
-  }
-
-  /* Link */
-  .service-card__link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8125rem;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    color: var(--service-accent, #2BAABC);
-    text-decoration: none;
-    transition: gap 0.3s ease;
-    margin-top: auto;
-  }
-
-  .service-card__arrow {
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .service-card__link:hover .service-card__arrow {
-    transform: translate(4px, -4px);
-  }
-
-  @media (max-width: 900px) {
-    .services__grid { grid-template-columns: repeat(2, 1fr); }
-  }
-
-  @media (max-width: 560px) {
-    .services__grid { grid-template-columns: 1fr; }
   }
 </style>

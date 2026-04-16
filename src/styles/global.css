@@ -11,8 +11,8 @@
   --color-charcoal: #1e293b; /* slate-800 for dark crisp text */
   --color-sand:     #f1f5f9; /* slate-100 for borders/lines */
 
-  --font-display: "Montserrat", system-ui, sans-serif;
-  --font-body:    "Outfit", system-ui, sans-serif;
+  --font-display: "Lexend", system-ui, sans-serif;
+  --font-body:    "Plus Jakarta Sans", system-ui, sans-serif;
 
   --ease-expo:     cubic-bezier(0.16, 1, 0.3, 1);
   --ease-circ:     cubic-bezier(0.4, 0, 0.2, 1);

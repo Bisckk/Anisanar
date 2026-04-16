@@ -1,0 +1,404 @@
+/* ────────────────────────────────────────────────────────────────────────────
+   ServiceCarousel
+   Key layout principle:
+     - .sc-stage is a CSS Grid with place-items:center
+     - All .sc-card share grid-area 1/1  → they ALL start at the visual center
+     - Framer Motion's x / rotateY / scale are applied on top of that centered origin
+     - .sc-stage overflow:visible  + outer section overflow:hidden = clean side-peek
+──────────────────────────────────────────────────────────────────────────── */
+
+/* ── Root ────────────────────────────────────────────────────────────────── */
+.sc-root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: clamp(2rem, 4vw, 3.5rem);
+  /* must NOT clip – outer section does the clipping */
+  overflow: visible;
+}
+
+/* ── 3-D Stage ───────────────────────────────────────────────────────────── */
+.sc-stage {
+  position: relative;
+  width: 100%;
+  height: 520px;
+
+  /* ★ Grid trick: all cards overlap at center */
+  display: grid;
+  place-items: center;
+
+  /* 3-D context */
+  perspective: 1300px;
+  perspective-origin: 50% 42%;
+
+  /* let cards overflow so they peek at the sides */
+  overflow: visible;
+
+  cursor: grab;
+  touch-action: pan-y; /* allow vertical scroll on mobile */
+}
+
+.sc-stage:active { cursor: grabbing; }
+
+/* ── Card ────────────────────────────────────────────────────────────────── */
+.sc-card {
+  /* ★ same grid cell as siblings → starts centered */
+  grid-area: 1 / 1;
+
+  width:  340px;
+  height: 480px;
+  border-radius: 1.5rem;
+  overflow: hidden;       /* clips bg image and overlay */
+  will-change: transform, opacity;
+  /* NO transform-style: preserve-3d — conflicts with overflow:hidden */
+
+  /* subtle outline */
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.07),
+    0 20px 60px rgba(0,0,0,0.45);
+
+  cursor: pointer;
+}
+
+.sc-card--active {
+  cursor: default;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.12),
+    0 40px 100px rgba(0,0,0,0.6),
+    0  8px  24px rgba(0,0,0,0.3);
+}
+
+/* ── Background image ────────────────────────────────────────────────────── */
+.sc-card__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.06);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sc-card--active:hover .sc-card__bg { transform: scale(1.11); }
+
+/* ── Dark gradient overlay ───────────────────────────────────────────────── */
+.sc-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    170deg,
+    rgba(8, 12, 20, 0.18)  0%,
+    rgba(8, 12, 20, 0.52)  38%,
+    rgba(8, 12, 20, 0.90)  65%,
+    rgba(8, 12, 20, 0.97) 100%
+  );
+}
+
+/* ── Accent rim (bottom) ─────────────────────────────────────────────────── */
+.sc-card__rim {
+  position: absolute;
+  bottom: 0;
+  left:   0;
+  right:  0;
+  height: 3px;
+  opacity: 0.6;
+  transition: opacity 0.4s ease, box-shadow 0.4s ease;
+  /* accent color set inline via background; glow uses same color via filter */
+}
+
+.sc-card--active .sc-card__rim {
+  opacity: 1;
+  filter: drop-shadow(0 0 8px currentColor);
+  /* currentColor on the rim element itself = its background color
+     → we override with a safe blur instead                         */
+  box-shadow: none;
+}
+
+/* ── Body (text content) ─────────────────────────────────────────────────── */
+.sc-card__body {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.75rem;
+}
+
+/* Service number */
+.sc-card__num {
+  display: block;
+  font-family: 'Lexend', system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  margin-bottom: 0.5rem;
+  opacity: 0.9;
+}
+
+/* Title */
+.sc-card__title {
+  font-family: 'Lexend', system-ui, sans-serif;
+  font-size: clamp(1.5rem, 2vw, 1.875rem);
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 0;
+}
+
+/* Description – hidden on inactive, reveals on active */
+.sc-card__desc {
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.62);
+  margin-top: 0;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity    0.35s ease,
+    margin-top 0.35s ease;
+}
+
+.sc-card--active .sc-card__desc {
+  margin-top: 0.625rem;
+  max-height: 72px;
+  opacity: 1;
+}
+
+/* Features list */
+.sc-card__features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0;
+  margin-bottom: 0;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.06s,
+    opacity    0.4s ease 0.06s,
+    margin-top 0.35s ease 0.06s;
+}
+
+.sc-card--active .sc-card__features {
+  margin-top: 0.875rem;
+  max-height: 90px;
+  opacity: 1;
+}
+
+.sc-card__feature {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.sc-card__dot {
+  width:  5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+/* CTA link */
+.sc-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  margin-top: 0;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition:
+    max-height 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.1s,
+    opacity    0.35s ease 0.1s,
+    margin-top 0.35s ease 0.1s,
+    gap        0.3s  cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sc-card--active .sc-card__cta {
+  margin-top: 1.25rem;
+  max-height: 40px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sc-card__cta:hover { gap: 0.7rem; }
+
+/* ── Eliminate all browser-default blue outlines & tap highlights ────────── */
+.sc-root *:focus          { outline: none; }
+.sc-root *:focus-visible  { outline: 2px solid rgba(255,255,255,0.35); outline-offset: 3px; }
+
+.sc-arrow,
+.sc-dot {
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
+/* ── Controls wrapper ────────────────────────────────────────────────────── */
+/*   Desktop: transparent row — arrows break out as absolute, dots sit here  */
+/*   Mobile:  solid flex row [← dots →] below the stage                      */
+.sc-controls {
+  position: relative; /* arrows on desktop use this as anchor */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 2.25rem;
+  z-index: 10;
+}
+
+/* ── Arrow buttons ───────────────────────────────────────────────────────── */
+.sc-arrow {
+  /* Desktop: float over the stage */
+  position: absolute;
+  top: 50%;
+  /* offset so the button sits at mid-stage, not mid-controls strip */
+  transform: translateY(calc(-50% - (520px / 2) - 1.125rem));
+  width:  46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: rgba(255,255,255,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background    0.3s ease,
+    border-color  0.3s ease,
+    color         0.3s ease,
+    transform     0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sc-arrow:hover {
+  background:   rgba(255,255,255,0.14);
+  border-color: rgba(255,255,255,0.35);
+  color: #ffffff;
+}
+
+.sc-arrow--prev {
+  left: clamp(0.5rem, 3vw, 3rem);
+}
+.sc-arrow--next {
+  right: clamp(0.5rem, 3vw, 3rem);
+}
+.sc-arrow--prev:hover {
+  transform: translateY(calc(-50% - (520px / 2) - 1.125rem)) translateX(-2px);
+}
+.sc-arrow--next:hover {
+  transform: translateY(calc(-50% - (520px / 2) - 1.125rem)) translateX( 2px);
+}
+
+/* ── Dot indicators ──────────────────────────────────────────────────────── */
+.sc-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sc-dot {
+  height: 0.5rem;
+  width:  0.5rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.2);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition:
+    background 0.4s ease,
+    width      0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sc-dot:hover   { background: rgba(255,255,255,0.42); }
+.sc-dot--active { /* width & background set via inline style */ }
+
+/* ── Active label ────────────────────────────────────────────────────────── */
+.sc-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-top: 0.75rem;
+  opacity: 0.85;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .sc-card { width: 300px; height: 450px; }
+}
+
+@media (max-width: 767px) {
+  .sc-stage {
+    height: 460px;
+    perspective: none;
+    overflow: hidden;
+  }
+
+  /* Card fills almost the full width → no side margins showing the navy bg */
+  .sc-card {
+    width: min(360px, calc(100vw - 1.5rem));
+    height: 420px;
+    border-radius: 1.25rem;
+  }
+
+  /* Gradient edge-fades so the card corners blend into the section bg */
+  .sc-stage::before,
+  .sc-stage::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: clamp(0.5rem, 3vw, 1rem);
+    z-index: 15;
+    pointer-events: none;
+  }
+  .sc-stage::before {
+    left: 0;
+    background: linear-gradient(to right, #1e293b, transparent);
+  }
+  .sc-stage::after {
+    right: 0;
+    background: linear-gradient(to left, #1e293b, transparent);
+  }
+
+  /* Controls become a horizontal row below the stage */
+  .sc-controls {
+    margin-top: 1.5rem;
+    gap: 1rem;
+  }
+
+  /* Arrows come back into flow (no more absolute) */
+  .sc-arrow {
+    position: static;
+    transform: none !important;
+    width:  40px;
+    height: 40px;
+  }
+
+  /* Label stays visible below the row */
+  .sc-label {
+    margin-top: 0.625rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sc-stage { height: 440px; }
+  .sc-card  { height: 400px; }
+}

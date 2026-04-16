@@ -4,6 +4,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Navbar from '@components/Navbar.astro';
 import Footer from '@components/Footer.astro';
 import { services, getServiceById } from '@data/services';
+import * as Lucide from '@lucide/astro';
 
 export const getStaticPaths = (() => {
   return services.map((service) => ({
@@ -15,6 +16,10 @@ export const getStaticPaths = (() => {
 const { service } = Astro.props;
 
 const otherServices = services.filter((s) => s.id !== service.id).slice(0, 3);
+
+// Resolve Lucide icon for the service
+const lucideIcons = Lucide as Record<string, any>;
+const ServiceIcon = lucideIcons[service.emoji] ?? null;
 
 // JSON-LD MedicalProcedure
 const medicalProcedureSchema = {
@@ -67,7 +72,9 @@ const medicalProcedureSchema = {
           </ol>
         </nav>
 
-        <span class="service-hero__emoji" aria-hidden="true">{service.emoji}</span>
+        <span class="service-hero__emoji" aria-hidden="true">
+          {ServiceIcon && <ServiceIcon stroke-width="1.5" class="w-14 h-14" />}
+        </span>
         <h1 id="service-heading" class="service-hero__heading reveal-up">{service.title}</h1>
         <p class="service-hero__sub reveal-up">{service.shortDesc}</p>
       </div>
@@ -224,26 +231,26 @@ const medicalProcedureSchema = {
   .service-hero__breadcrumb a,
   .service-hero__breadcrumb li {
     font-size: 0.8125rem;
-    color: rgba(30, 41, 59, 0.5);
+    color: rgba(255, 255, 255, 0.5);
     text-decoration: none;
     transition: color 0.25s ease;
   }
 
-  .service-hero__breadcrumb a:hover { color: var(--color-charcoal); }
+  .service-hero__breadcrumb a:hover { color: #ffffff; }
 
-  [aria-current="page"] { color: rgba(30, 41, 59, 0.85) !important; }
+  [aria-current="page"] { color: rgba(255, 255, 255, 0.9) !important; }
 
   .service-hero__emoji {
     display: block;
-    font-size: 3rem;
+    color: #8CC63F;
     margin-bottom: 0.75rem;
   }
 
   .service-hero__heading {
-    font-family: "Cormorant Garamond", Georgia, serif;
+    font-family: "Lexend", system-ui, sans-serif;
     font-size: clamp(2.5rem, 6vw, 6rem);
     font-weight: 500;
-    color: var(--color-charcoal);
+    color: #ffffff;
     line-height: 1.05;
     letter-spacing: -0.02em;
     margin-bottom: 1rem;
@@ -252,7 +259,7 @@ const medicalProcedureSchema = {
   .service-hero__sub {
     font-size: clamp(1rem, 1.5vw, 1.25rem);
     line-height: 1.7;
-    color: rgba(30, 41, 59, 0.7);
+    color: rgba(255, 255, 255, 0.75);
     max-width: 600px;
   }
 
@@ -267,7 +274,7 @@ const medicalProcedureSchema = {
   }
 
   .service-body__section-heading {
-    font-family: "Cormorant Garamond", Georgia, serif;
+    font-family: "Lexend", system-ui, sans-serif;
     font-size: clamp(1.75rem, 3vw, 2.5rem);
     font-weight: 500;
     color: var(--color-charcoal);
@@ -329,10 +336,10 @@ const medicalProcedureSchema = {
   }
 
   .sidebar-card__heading {
-    font-family: "Cormorant Garamond", Georgia, serif;
+    font-family: "Lexend", system-ui, sans-serif;
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--color-charcoal);
+    color: #ffffff;
     margin-bottom: 1rem;
   }
 
@@ -348,7 +355,7 @@ const medicalProcedureSchema = {
     align-items: flex-start;
     gap: 0.75rem;
     font-size: 0.875rem;
-    color: rgba(30, 30, 30, 0.7);
+    color: rgba(255, 255, 255, 0.75);
     line-height: 1.5;
   }
 
@@ -367,7 +374,7 @@ const medicalProcedureSchema = {
   .sidebar-card__desc {
     font-size: 0.875rem;
     line-height: 1.65;
-    color: rgba(30, 41, 59, 0.65);
+    color: rgba(255, 255, 255, 0.65);
     margin-bottom: 1.25rem;
   }
 
@@ -410,7 +417,7 @@ const medicalProcedureSchema = {
 
   .sidebar-urgency__tel {
     display: block;
-    font-family: "Cormorant Garamond", Georgia, serif;
+    font-family: "Lexend", system-ui, sans-serif;
     font-size: 1.625rem;
     font-weight: 600;
     color: var(--color-charcoal);
@@ -430,10 +437,10 @@ const medicalProcedureSchema = {
   }
 
   .other-services__heading {
-    font-family: "Cormorant Garamond", Georgia, serif;
+    font-family: "Lexend", system-ui, sans-serif;
     font-size: clamp(1.75rem, 3vw, 2.75rem);
     font-weight: 500;
-    color: var(--color-charcoal);
+    color: #ffffff;
     letter-spacing: -0.02em;
     margin-bottom: 2.5rem;
   }
@@ -465,7 +472,7 @@ const medicalProcedureSchema = {
   .other-card__emoji { font-size: 2rem; display: block; }
 
   .other-card__title {
-    font-family: "Cormorant Garamond", Georgia, serif;
+    font-family: "Lexend", system-ui, sans-serif;
     font-size: 1.375rem;
     font-weight: 600;
     color: var(--color-charcoal);
