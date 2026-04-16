@@ -164,6 +164,7 @@
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
     cursor: pointer;
     white-space: nowrap;
+    width: 100%;
   }
 
   .cta-banner__btn:hover { transform: translateY(-2px); }
@@ -190,6 +191,14 @@
   }
 
   @media (max-width: 768px) {
-    .cta-banner__actions { flex-direction: row; flex-wrap: wrap; }
+    .cta-banner__inner { flex-direction: column; }
+    .cta-banner__actions {
+      flex-direction: column;
+      width: 100%;
+    }
+    .cta-banner__btn {
+      width: 100%;
+      text-align: center;
+    }
   }
 </style>
