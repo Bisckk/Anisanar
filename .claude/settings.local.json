@@ -28,7 +28,8 @@
       "Bash(taskkill /F /IM node.exe)",
       "Bash(taskkill //F //IM node.exe)",
       "WebFetch(domain:reactbits.dev)",
-      "Bash(npm list *)"
+      "Bash(npm list *)",
+      "Bash(npm uninstall *)"
     ]
   }
 }

@@ -177,28 +177,13 @@ export default function ContactStepper() {
   };
 
   const [sending, setSending] = useState(false);
-  const [sendError, setSendError] = useState('');
 
   const submit = async () => {
     setSending(true);
-    setSendError('');
-    try {
-      const petOpt = PET_OPTIONS.find(p => p.value === form.petType);
-      const res = await fetch('/api/book', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...form,
-          petType: petOpt?.label ?? form.petType,
-        }),
-      });
-      if (!res.ok) throw new Error('Error al enviar');
-      setSubmitted(true);
-    } catch {
-      setSendError('No se pudo enviar la solicitud. Inténtalo de nuevo.');
-    } finally {
-      setSending(false);
-    }
+    // Simula un pequeño delay para que se sienta real
+    await new Promise(r => setTimeout(r, 900));
+    setSending(false);
+    setSubmitted(true);
   };
 
   return (
@@ -245,18 +230,15 @@ export default function ContactStepper() {
                   <ArrowRight size={15} strokeWidth={2} />
                 </button>
               ) : (
-                <div className="submit-wrap">
-                  {sendError && <p className="submit-error">{sendError}</p>}
-                  <button
-                    className="stepper__submit"
-                    onClick={submit}
-                    disabled={sending}
-                    type="button"
-                  >
-                    <WhatsAppIcon size={16} />
-                    {sending ? 'Enviando…' : 'Confirmar cita'}
-                  </button>
-                </div>
+                <button
+                  className="stepper__submit"
+                  onClick={submit}
+                  disabled={sending}
+                  type="button"
+                >
+                  <WhatsAppIcon size={16} />
+                  {sending ? 'Enviando…' : 'Confirmar cita'}
+                </button>
               )}
             </div>
           </div>
