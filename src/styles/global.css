@@ -1,3 +1,8 @@
+/* ─── Self-hosted Variable Fonts (eliminates Google Fonts CDN requests) ─── */
+@import '@fontsource-variable/lexend';
+@import '@fontsource-variable/plus-jakarta-sans';
+@import '@fontsource-variable/plus-jakarta-sans/wght-italic.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -60,10 +60,9 @@ import Marquee from '@components/react/Marquee';
     {reviews.map(({ quote, author, pet, rating }) => (
       <blockquote
         class="review-card"
-        role="listitem"
         aria-label={`Reseña de ${author}`}
       >
-        <div class="review-card__stars" aria-label={`${rating} de 5 estrellas`}>
+        <div class="review-card__stars" role="img" aria-label={`${rating} de 5 estrellas`}>
           {Array.from({ length: rating }).map(() => (
             <Star stroke-width="2" class="w-4 h-4 inline-block text-[#8CC63F] fill-current" />
           ))}

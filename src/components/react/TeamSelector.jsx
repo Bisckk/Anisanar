@@ -144,11 +144,10 @@ export default function TeamSelector() {
     <div className="ts-wrapper">
 
       {/* ── ROSTER ─────────────────────────────────────────────────────────── */}
-      <div className="ts-roster" role="list" aria-label="Selecciona un profesional">
+      <ul className="ts-roster" aria-label="Selecciona un profesional">
         {team.map((m, i) => (
+          <li key={m.id}>
           <button
-            key={m.id}
-            role="listitem"
             className={`ts-slot${activeIndex === i ? ' ts-slot--active' : ''}`}
             onClick={() => selectMember(i)}
             aria-label={`Ver perfil de ${m.name}`}
@@ -193,8 +192,9 @@ export default function TeamSelector() {
               </span>
             </div>
           </button>
+          </li>
         ))}
-      </div>
+      </ul>
 
       {/* ── PREVIEW ────────────────────────────────────────────────────────── */}
       <div className="ts-stage">

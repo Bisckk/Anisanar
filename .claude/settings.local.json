@@ -29,7 +29,8 @@
       "Bash(taskkill //F //IM node.exe)",
       "WebFetch(domain:reactbits.dev)",
       "Bash(npm list *)",
-      "Bash(npm uninstall *)"
+      "Bash(npm uninstall *)",
+      "Bash(ls C:/Users/Administrator/Desktop/anisanar/node_modules/@fontsource-variable/plus-jakarta-sans/*.css)"
     ]
   }
 }
