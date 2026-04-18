@@ -4,37 +4,37 @@ import './MasonryGallery.css';
 
 const photos = [
   {
-    src: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=80',
+    src: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=600&q=75&fm=webp&auto=format',
     alt: 'Dos perros corriendo juntos al aire libre',
     label: 'Bienestar animal',
     ratio: '3/4',
   },
   {
-    src: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=80',
+    src: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600&q=75&fm=webp&auto=format',
     alt: 'Golden retriever siendo examinado por veterinaria',
     label: 'Consulta general',
     ratio: '4/5',
   },
   {
-    src: 'https://images.unsplash.com/photo-1583511655826-05700d52f4d9?w=800&q=80',
+    src: 'https://images.unsplash.com/photo-1583511655826-05700d52f4d9?w=600&q=75&fm=webp&auto=format',
     alt: 'Gato naranja tranquilo en la consulta',
     label: 'Medicina felina',
     ratio: '1/1',
   },
   {
-    src: 'https://images.unsplash.com/photo-1601758174114-e711c0cbaa69?w=800&q=80',
+    src: 'https://images.unsplash.com/photo-1601758174114-e711c0cbaa69?w=600&q=75&fm=webp&auto=format',
     alt: 'Perro sano y activo jugando',
     label: 'Seguimiento nutricional',
     ratio: '3/4',
   },
   {
-    src: 'https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?w=800&q=80',
+    src: 'https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?w=600&q=75&fm=webp&auto=format',
     alt: 'Veterinario revisa a perro labrador en camilla',
     label: 'Exploración completa',
     ratio: '4/3',
   },
   {
-    src: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&q=80',
+    src: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=600&q=75&fm=webp&auto=format',
     alt: 'Veterinaria sonriendo con un cachorro',
     label: 'Cuidado con vocación',
     ratio: '3/4',

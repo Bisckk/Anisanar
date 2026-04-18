@@ -1,6 +1,8 @@
 ---
 // Preloader.astro — Anisanar Centro Veterinario
 // Splash screen hiper-optimizado para máxima fluidez (GPU Acceleration, 240hz feel).
+import { Image } from 'astro:assets';
+import logoSrc from '../assets/logo-anisanar.png';
 ---
 
 <div id="anisanar-loader" class="preloader-wrapper" aria-hidden="true">
@@ -10,12 +12,14 @@
 
   <div class="loader-content" id="loader-content">
     <div class="icon-wrapper">
-      <img
+      <Image
         class="loader-icon"
-        src="/logo-anisanar.png"
+        src={logoSrc}
         alt="Anisanar ícono"
-        width="160"
-        height="160"
+        width={140}
+        height={140}
+        format="webp"
+        quality={85}
       />
       <!-- Anillos decorativos que se expanden -->
       <div class="ring ring-1"></div>

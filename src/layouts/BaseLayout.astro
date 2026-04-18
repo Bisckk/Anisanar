@@ -21,6 +21,10 @@ const { title, description, canonical, image, imageAlt, type, schema, noindex } 
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Preconnect to external image CDN -->
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <!-- Preload hero background image (LCP) -->
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=1400&q=80&fm=webp&auto=format" fetchpriority="high" />
     <SEO
       title={title}
       description={description}

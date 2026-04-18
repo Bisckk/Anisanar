@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import logoSrc from '../assets/logo-anisanar.png';
 const year = new Date().getFullYear();
 
 const quickLinks = [
@@ -35,7 +37,7 @@ const social = [
     <!-- Col 1: Branding -->
     <div class="footer__col footer__col--brand">
       <a href="/" class="footer__logo" aria-label="Anisanar Veterinaria — Inicio">
-        <img src="/logo-anisanar.png" alt="Anisanar" class="footer__logo-img" />
+        <Image src={logoSrc} alt="Anisanar" class="footer__logo-img" width={40} height={40} format="webp" quality={85} />
         <span class="footer__logo-text"><span class="logo-ani">ANI</span><span class="logo-sanar">SANAR</span></span>
       </a>
       <p class="footer__desc">

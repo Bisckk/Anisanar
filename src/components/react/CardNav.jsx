@@ -43,6 +43,7 @@ const NAV_ITEMS = [
 const CardNav = ({
   className = '',
   ease = 'power3.out',
+  logoSrc = '/logo-anisanar.png',
 }) => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -205,7 +206,7 @@ const CardNav = ({
           </div>
 
           <a href="/" className="logo-container" aria-label="Inicio">
-            <img src="/logo-anisanar.png" alt="Anisanar Logo" className="logo-img" />
+            <img src={logoSrc} alt="Anisanar Logo" className="logo-img" width={32} height={32} />
             <span className="logo-text">
               <span className="logo-ani">ANI</span>
               <span className="logo-sanar">SANAR</span>

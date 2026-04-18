@@ -12,6 +12,9 @@ import FAQ          from '@components/FAQ.astro';
 import Contact      from '@components/Contact.astro';
 import Footer       from '@components/Footer.astro';
 import CardNav      from '@components/react/CardNav.jsx';
+import { getImage } from 'astro:assets';
+import logoAsset    from '../assets/logo-anisanar.png';
+const optimizedLogo = await getImage({ src: logoAsset, width: 64, height: 64, format: 'webp', quality: 90 });
 ---
 
 <BaseLayout
@@ -22,7 +25,7 @@ import CardNav      from '@components/react/CardNav.jsx';
   
   <div style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; pointer-events: none;">
     <div style="pointer-events: auto;">
-      <CardNav client:load />
+      <CardNav client:load logoSrc={optimizedLogo.src} />
     </div>
   </div>
   <main id="main-content">

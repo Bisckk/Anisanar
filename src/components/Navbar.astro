@@ -1,9 +1,12 @@
 ---
-import CardNav from './react/CardNav.jsx';
+import CardNav    from './react/CardNav.jsx';
+import { getImage } from 'astro:assets';
+import logoAsset  from '../assets/logo-anisanar.png';
+const optimizedLogo = await getImage({ src: logoAsset, width: 64, height: 64, format: 'webp', quality: 90 });
 ---
 
 <header id="navbar" class="navbar-wrapper" role="banner">
-  <CardNav client:load />
+  <CardNav client:load logoSrc={optimizedLogo.src} />
 </header>
 
 <style>
