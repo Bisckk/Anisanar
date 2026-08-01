@@ -1,5 +1,5 @@
 ---
-import { Heart, Microscope, Leaf, Handshake, Star } from '@lucide/astro';
+import { Heart, Microscope, Leaf, Handshake } from '@lucide/astro';
 
 const values = [
   { icon: Heart, title: 'Medicina con vocación', desc: 'Cada consulta es tratada con la misma dedicación y cariño que ponemos en nuestros propios animales.' },
@@ -37,14 +37,8 @@ const values = [
 
           <!-- Floating card 2 -->
           <div class="about__badge about__badge--2 reveal-scale">
-            <div class="about__badge-stars" role="img" aria-label="5 de 5 estrellas">
-              <Star stroke-width="2" class="w-4 h-4 inline-block text-[#8CC63F] fill-current" />
-              <Star stroke-width="2" class="w-4 h-4 inline-block text-[#8CC63F] fill-current" />
-              <Star stroke-width="2" class="w-4 h-4 inline-block text-[#8CC63F] fill-current" />
-              <Star stroke-width="2" class="w-4 h-4 inline-block text-[#8CC63F] fill-current" />
-              <Star stroke-width="2" class="w-4 h-4 inline-block text-[#8CC63F] fill-current" />
-            </div>
-            <span class="about__badge-label">Valoración media</span>
+            <span class="about__badge-number">9/10</span>
+            <span class="about__badge-label">Nos recomiendan</span>
           </div>
         </div>
       </div>
@@ -61,22 +55,20 @@ const values = [
           Sin concesiones.
         </h2>
 
-        <!-- Párrafo 1 — Historia y posicionamiento: cuándo se fundó, por qué y qué os hace distintos -->
         <p class="about__body reveal-up">
-          <!-- Personaliza: año de fundación, ciudad y el "por qué" detrás de la clínica -->
-          [Nombre de la clínica] abrió sus puertas en [año] con una premisa
-          clara: la excelencia clínica y la empatía no son conceptos opuestos.
-          Hoy somos un equipo de [N] veterinarios especializados que tratamos
-          cada caso con la misma dedicación que pondríamos con nuestros propios
-          animales.
+          Anisanar nació el 5 de septiembre de 2011 en San Gil, Santander,
+          del sueño de la Dra. Carolina Martinez, veterinaria y zootecnista,
+          de crear una clínica con vocación de servicio. Empezamos en una
+          pequeña casa ofreciendo consulta, guardería y cirugías básicas, y
+          con el respaldo de la comunidad fuimos creciendo hasta convertirnos
+          en el centro veterinario que somos hoy.
         </p>
-        <!-- Párrafo 2 — Diferencial técnico: equipamiento, capacidades, ventajas operativas -->
         <p class="about__body reveal-up">
-          <!-- Personaliza: menciona tu equipamiento real (eco, Rx digital, laboratorio, quirófano) -->
-          Nuestro equipamiento —radiología digital, ecografía Doppler y
-          laboratorio in-house— nos permite obtener diagnósticos el mismo
-          día de la visita. Porque en medicina, el tiempo es parte del
-          tratamiento.
+          En 2020 ampliamos nuestras instalaciones —incluso en plena
+          pandemia— para sumar consultorios, sala de cirugía y hospitalización
+          propios. Hoy contamos con laboratorio clínico, quirófano, ecografía
+          y terapias de rehabilitación (láser, radioterapia y magnetoterapia)
+          para ofrecer diagnósticos y tratamientos precisos.
         </p>
 
         <!-- Values list -->
@@ -188,12 +180,6 @@ const values = [
     font-weight: 600;
     color: var(--color-charcoal);
     line-height: 1;
-  }
-
-  .about__badge-stars {
-    font-size: 1rem;
-    color: #8CC63F;
-    letter-spacing: 0.1em;
   }
 
   .about__badge-label {

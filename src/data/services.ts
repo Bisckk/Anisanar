@@ -163,6 +163,30 @@ export const services: Service[] = [
     imageAlt: 'Área de hospitalización veterinaria limpia y confortable',
     medicalCode: 'S02.0',
   },
+  {
+    id: 'rehabilitacion',
+    emoji: 'Sparkles',
+    title: 'Rehabilitación y Terapias Físicas',
+    shortDesc: 'Terapia láser, radioterapia y magnetoterapia para acelerar la recuperación de tu mascota.',
+    fullDesc: 'Contamos con equipos de terapia física para acompañar la recuperación de nuestros pacientes tras una cirugía, una lesión o para el manejo de condiciones crónicas como la artrosis. La terapia láser, la radioterapia y la magnetoterapia se combinan según cada caso para reducir el dolor, la inflamación y mejorar la movilidad.',
+    features: [
+      'Terapia láser',
+      'Radioterapia',
+      'Magnetoterapia',
+      'Rehabilitación post-quirúrgica',
+      'Manejo de dolor crónico',
+    ],
+    includes: [
+      'Valoración funcional previa',
+      'Plan de sesiones personalizado',
+      'Seguimiento de la evolución',
+      'Recomendaciones para el hogar',
+    ],
+    accent: '#2BAABC',
+    image: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=400&q=75&fm=webp&auto=format',
+    imageAlt: 'Perro recibiendo sesión de terapia física veterinaria',
+    medicalCode: 'S08.0',
+  },
 ];
 
 export function getServiceById(id: string): Service | undefined {

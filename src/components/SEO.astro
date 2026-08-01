@@ -32,22 +32,21 @@ const localBusinessSchema = {
   '@type': ['LocalBusiness', 'VeterinaryCare'],
   '@id': siteUrl,
   name: 'Anisanar Veterinaria',
-  description: 'Centro veterinario especializado en medicina general, cirugía, diagnóstico por imagen y nutrición clínica para perros y gatos.',
+  description: 'Centro veterinario en San Gil, Santander (Colombia), especializado en medicina general, cirugía, diagnóstico por imagen, rehabilitación y nutrición clínica para perros y gatos.',
   url: siteUrl,
-  telephone: '+34-000-000-000',
-  email: 'info@anisanar.com',
+  telephone: '+57-310-312-0430',
+  email: 'centroveterinarioanisanar@gmail.com',
   address: {
     '@type': 'PostalAddress',
-    streetAddress: 'Calle Ejemplo 123',
-    addressLocality: 'Madrid',
-    addressRegion: 'Madrid',
-    postalCode: '28001',
-    addressCountry: 'ES',
+    streetAddress: 'Cr 17 N 20-69, Avenida Santander',
+    addressLocality: 'San Gil',
+    addressRegion: 'Santander',
+    addressCountry: 'CO',
   },
   geo: {
     '@type': 'GeoCoordinates',
-    latitude: 40.4168,
-    longitude: -3.7038,
+    latitude: 6.5551475,
+    longitude: -73.1415999,
   },
   openingHoursSpecification: [
     {
@@ -64,16 +63,17 @@ const localBusinessSchema = {
     },
   ],
   sameAs: [
-    'https://instagram.com/anisanar',
-    'https://facebook.com/anisanar',
+    'https://www.instagram.com/veterinaria_anisanar',
+    'https://www.facebook.com/share/14fMGzmUgKQ/',
+    'https://www.tiktok.com/@centroveterinario26',
   ],
   image: ogImage,
-  priceRange: '€€',
-  currenciesAccepted: 'EUR',
+  priceRange: '$$',
+  currenciesAccepted: 'COP',
   paymentAccepted: 'Cash, Credit Card, Debit Card',
   areaServed: {
     '@type': 'City',
-    name: 'Madrid',
+    name: 'San Gil',
   },
 };
 
@@ -85,7 +85,7 @@ const webPageSchema = {
   name: fullTitle,
   description,
   isPartOf: { '@id': siteUrl },
-  inLanguage: 'es-ES',
+  inLanguage: 'es-CO',
   dateModified: new Date().toISOString(),
 };
 
@@ -95,7 +95,7 @@ const websiteSchema = {
   '@id': `${siteUrl}/#website`,
   url: siteUrl,
   name: 'Anisanar Veterinaria',
-  description: 'Centro veterinario de confianza en Madrid',
+  description: 'Centro veterinario de confianza en San Gil, Santander',
   potentialAction: {
     '@type': 'SearchAction',
     target: {
@@ -104,7 +104,7 @@ const websiteSchema = {
     },
     'query-input': 'required name=search_term_string',
   },
-  inLanguage: 'es-ES',
+  inLanguage: 'es-CO',
 };
 ---
 
@@ -126,12 +126,11 @@ const websiteSchema = {
 <meta property="og:image:alt"   content={imageAlt} />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height"content="630" />
-<meta property="og:locale"      content="es_ES" />
+<meta property="og:locale"      content="es_CO" />
 <meta property="og:site_name"   content="Anisanar Veterinaria" />
 
 <!-- Twitter Cards -->
 <meta name="twitter:card"        content="summary_large_image" />
-<meta name="twitter:site"        content="@anisanar" />
 <meta name="twitter:title"       content={fullTitle} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image"       content={ogImage} />

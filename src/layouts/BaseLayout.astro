@@ -144,6 +144,34 @@ const { title, description, canonical, image, imageAlt, type, schema, noindex } 
           },
         });
       });
+
+      // ─── Refresh triggers when layout shifts ──────────────────────────────────
+      // Islands hydrate (client:visible/client:load) and images load after the
+      // triggers above were calculated, which can shift the page height and
+      // leave `.reveal-*` elements stuck at opacity:0 forever. Recalculate
+      // whenever the document's height actually changes.
+      let refreshTimer: ReturnType<typeof setTimeout>;
+      new ResizeObserver(() => {
+        clearTimeout(refreshTimer);
+        refreshTimer = setTimeout(() => ScrollTrigger.refresh(), 150);
+      }).observe(document.body);
+
+      window.addEventListener('load', () => ScrollTrigger.refresh());
+
+      // ─── Failsafe ───────────────────────────────────────────────────────────
+      // If for any reason (script error elsewhere, blocked module, disabled JS
+      // animation, GSAP ticker stalled, etc.) an element never got revealed,
+      // snap it visible after a few seconds so content is never permanently
+      // hidden. Uses gsap.set (instant, no ticker dependency) rather than
+      // gsap.to so it can't itself be broken by whatever stalled the ticker.
+      setTimeout(() => {
+        document.querySelectorAll<HTMLElement>('.reveal-up, .reveal-left, .reveal-right, .reveal-scale')
+          .forEach((el) => {
+            if (getComputedStyle(el).opacity === '0') {
+              gsap.set(el, { opacity: 1, x: 0, y: 0, scale: 1 });
+            }
+          });
+      }, 3000);
     </script>
   </body>
 </html>

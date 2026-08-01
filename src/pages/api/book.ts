@@ -3,10 +3,10 @@ import type { APIRoute } from 'astro';
 export const prerender = false;
 
 // ── Meta WhatsApp Cloud API ────────────────────────────────────────────────
-// Variables de entorno necesarias (añádelas en Vercel → Settings → Environment Variables):
+// Variables de entorno necesarias (añádelas en Netlify → Site settings → Environment variables):
 //   WA_TOKEN          → Access Token de tu Meta App
 //   WA_PHONE_ID       → Phone Number ID de tu número de WhatsApp Business
-//   WA_CLINIC_NUMBER  → Número de la clínica con código de país, sin + (ej: 34600000000)
+//   WA_CLINIC_NUMBER  → Número de la clínica con código de país, sin + (ej: 573103120430)
 
 const WA_API = 'https://graph.facebook.com/v19.0';
 

@@ -297,7 +297,7 @@ function Step1({ form, update }) {
             value={form.email} onChange={e => update('email', e.target.value)} />
         </Field>
         <Field label="Teléfono" htmlFor="s-phone">
-          <input id="s-phone" type="tel" className="s-input" placeholder="+34 600 000 000"
+          <input id="s-phone" type="tel" className="s-input" placeholder="+57 310 000 0000"
             value={form.phone} onChange={e => update('phone', e.target.value)} />
         </Field>
       </div>
