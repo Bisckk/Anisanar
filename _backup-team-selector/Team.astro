@@ -1,0 +1,60 @@
+---
+import TeamSelector from './react/TeamSelector.jsx';
+---
+
+<section id="team" class="section-spacing team-section" aria-labelledby="team-heading">
+  <div class="container-gutter">
+
+    <!-- Header -->
+    <div class="team__header">
+      <span class="team__label reveal-up">El equipo</span>
+      <h2 id="team-heading" class="team__heading reveal-up">
+        Profesionales que<br/>
+        <em>aman</em> lo que hacen.
+      </h2>
+    </div>
+
+  </div>
+
+  <!-- Selector interactivo tipo Smash Bros -->
+  <TeamSelector client:visible />
+</section>
+
+<style>
+  /* Fondo oscuro estilo arena de selección */
+  .team-section {
+    background: var(--color-charcoal);
+    overflow-x: hidden;
+    padding-top: 0;
+  }
+
+  /* ── Header ──────────────────────────────────────────────────────────────── */
+  .team__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: clamp(2.5rem, 4vw, 4rem);
+  }
+
+  .team__label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #8CC63F;
+  }
+
+  .team__heading {
+    font-family: "Lexend", system-ui, sans-serif;
+    font-size: clamp(2rem, 4vw, 3.75rem);
+    font-weight: 500;
+    line-height: 1.1;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+  }
+
+  .team__heading em {
+    color: #8CC63F;
+    font-style: normal;
+  }
+</style>

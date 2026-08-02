@@ -144,6 +144,20 @@ const SERVICES = [
   { value: 'Otro',                   Icon: HelpCircle  },
 ];
 
+// ── Validación ───────────────────────────────────────────────────────────
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function isValidEmail(value) {
+  return EMAIL_RE.test(value.trim());
+}
+
+function isValidPhone(value) {
+  const trimmed = value.trim();
+  if (!trimmed) return true; // el teléfono es opcional
+  const digits = trimmed.replace(/\D/g, '');
+  return digits.length >= 7 && digits.length <= 15 && /^[+]?[\d\s()-]+$/.test(trimmed);
+}
+
 const slideVariants = {
   enter:  (dir) => ({ x: dir > 0 ?  50 : -50, opacity: 0 }),
   center: { x: 0, opacity: 1 },
@@ -170,7 +184,7 @@ export default function ContactStepper() {
   const reset  = () => { setForm(EMPTY_FORM); setStep(1); setDir(1); setSubmitted(false); };
 
   const canNext = () => {
-    if (step === 1) return form.name.trim() && form.email.trim();
+    if (step === 1) return form.name.trim() && isValidEmail(form.email) && isValidPhone(form.phone);
     if (step === 2) return !!form.petType;
     if (step === 3) return !!form.service;
     return true;
@@ -280,6 +294,16 @@ function StepProgress({ current }) {
 // ── Step 1 ─────────────────────────────────────────────────────────────────
 
 function Step1({ form, update }) {
+  const [touched, setTouched] = useState({ email: false, phone: false });
+  const touch = (field) => setTouched((t) => ({ ...t, [field]: true }));
+
+  const emailError = touched.email && form.email.trim() && !isValidEmail(form.email)
+    ? 'Ingresa un correo electrónico válido (ej. tu@email.com)'
+    : null;
+  const phoneError = touched.phone && form.phone.trim() && !isValidPhone(form.phone)
+    ? 'Ingresa un número de teléfono válido'
+    : null;
+
   return (
     <div className="step-layout">
       <div className="step-animal">
@@ -292,13 +316,19 @@ function Step1({ form, update }) {
           <input id="s-name" type="text" className="s-input" placeholder="Tu nombre completo"
             value={form.name} onChange={e => update('name', e.target.value)} />
         </Field>
-        <Field label="Email *" htmlFor="s-email">
-          <input id="s-email" type="email" className="s-input" placeholder="tu@email.com"
-            value={form.email} onChange={e => update('email', e.target.value)} />
+        <Field label="Email *" htmlFor="s-email" error={emailError}>
+          <input id="s-email" type="email" inputMode="email" autoComplete="email"
+            className={`s-input ${emailError ? 's-input--error' : ''}`} placeholder="tu@email.com"
+            value={form.email}
+            onChange={e => update('email', e.target.value)}
+            onBlur={() => touch('email')} />
         </Field>
-        <Field label="Teléfono" htmlFor="s-phone">
-          <input id="s-phone" type="tel" className="s-input" placeholder="+57 310 000 0000"
-            value={form.phone} onChange={e => update('phone', e.target.value)} />
+        <Field label="Teléfono" htmlFor="s-phone" error={phoneError}>
+          <input id="s-phone" type="tel" inputMode="tel" autoComplete="tel"
+            className={`s-input ${phoneError ? 's-input--error' : ''}`} placeholder="+57 310 000 0000"
+            value={form.phone}
+            onChange={e => update('phone', e.target.value)}
+            onBlur={() => touch('phone')} />
         </Field>
       </div>
     </div>
@@ -390,15 +420,19 @@ function Step3({ form, update }) {
 function ServiceGrid({ selected, onSelect }) {
   return (
     <div className="service-grid">
-      {SERVICES.map(({ value, Icon }) => (
-        <button key={value} type="button"
-          className={`service-chip ${selected === value ? 'service-chip--active' : ''}`}
-          onClick={() => onSelect(value)}
-        >
-          <Icon size={20} strokeWidth={1.5} />
-          <span className="service-chip__label">{value}</span>
-        </button>
-      ))}
+      {SERVICES.map(({ value, Icon }) => {
+        const isActive = selected === value;
+        return (
+          <button key={value} type="button"
+            className={`service-chip ${isActive ? 'service-chip--active' : ''}`}
+            onClick={() => onSelect(value)}
+            aria-pressed={isActive}
+          >
+            {isActive ? <Check size={20} strokeWidth={2.5} /> : <Icon size={20} strokeWidth={1.5} />}
+            <span className="service-chip__label">{value}</span>
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -470,11 +504,12 @@ function SuccessScreen({ name, onReset }) {
 
 // ── Field wrapper ──────────────────────────────────────────────────────────
 
-function Field({ label, htmlFor, children }) {
+function Field({ label, htmlFor, error, children }) {
   return (
     <div className="s-field">
       <label className="s-label" htmlFor={htmlFor}>{label}</label>
       {children}
+      {error && <p className="s-field__error">{error}</p>}
     </div>
   );
 }

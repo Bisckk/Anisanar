@@ -12,7 +12,7 @@ export interface TeamMember {
     instagram?: string;
     linkedin?: string;
   };
-  locked?: boolean;
+  comingSoon?: boolean;
 }
 
 export const team: TeamMember[] = [
@@ -29,59 +29,55 @@ export const team: TeamMember[] = [
     social: {},
   },
   {
-    id: 'locked-1',
-    name: '???',
+    id: 'coming-soon-1',
+    name: 'Por confirmar',
     role: 'Especialista',
-    specialty: 'Nuevos retos',
-    bio: 'Próximamente descubriremos a este nuevo integrante de élite.',
-    longBio: 'Nuestra clínica está en constante crecimiento. Seguimos evaluando y sumando los mejores talentos y especialistas del sector veterinario para unirse a nuestras filas. Este espacio está reservado para una próxima revelación que potenciará los cuidados de tus mascotas.',
-    img: '', // Will be handled via CSS silhouette
-    imgAlt: 'Personaje bloqueado',
-    credentials: ['Por desbloquear'],
+    specialty: 'Próximamente',
+    bio: 'Seguimos ampliando el equipo. Próximamente sumaremos un/a especialista en esta área.',
+    longBio: 'Anisanar sigue creciendo. Estamos en proceso de incorporar a un/a nuevo/a profesional que refuerce esta área de atención.',
+    img: '',
+    imgAlt: '',
+    credentials: [],
     social: {},
-    locked: true,
+    comingSoon: true,
   },
   {
-    id: 'locked-2',
-    name: '???',
+    id: 'coming-soon-2',
+    name: 'Por confirmar',
     role: 'Nutrición',
-    specialty: 'Nuevos retos',
-    bio: 'Próximamente descubriremos a este nuevo integrante de élite.',
-    longBio: 'Anisanar siempre está cazando talentos. Este espacio está bloqueado temporalmente y aguarda la llegada de un nuevo experto veterinario que compartirá nuestra pasión por el cuidado animal.',
+    specialty: 'Próximamente',
+    bio: 'Seguimos ampliando el equipo. Próximamente sumaremos un/a especialista en esta área.',
+    longBio: 'Anisanar sigue creciendo. Estamos en proceso de incorporar a un/a nuevo/a profesional que refuerce esta área de atención.',
     img: '',
-    imgAlt: 'Personaje bloqueado',
-    credentials: ['Por desbloquear'],
+    imgAlt: '',
+    credentials: [],
     social: {},
-    locked: true,
+    comingSoon: true,
   },
   {
-    id: 'locked-3',
-    name: '???',
+    id: 'coming-soon-3',
+    name: 'Por confirmar',
     role: 'Dermatología',
-    specialty: 'Nuevos retos',
-    bio: 'Un nuevo especialista se unirá pronto a nuestro equipo.',
-    longBio: 'Estamos en proceso de incorporar a un profesional de primer nivel en esta área. Mantente atento porque pronto revelaremos quién ocupará este puesto clave en Anisanar.',
+    specialty: 'Próximamente',
+    bio: 'Seguimos ampliando el equipo. Próximamente sumaremos un/a especialista en esta área.',
+    longBio: 'Anisanar sigue creciendo. Estamos en proceso de incorporar a un/a nuevo/a profesional que refuerce esta área de atención.',
     img: '',
-    imgAlt: 'Personaje bloqueado',
-    credentials: ['Por desbloquear'],
+    imgAlt: '',
+    credentials: [],
     social: {},
-    locked: true,
+    comingSoon: true,
   },
   {
-    id: 'locked-4',
-    name: '???',
+    id: 'coming-soon-4',
+    name: 'Por confirmar',
     role: 'Cardiología',
-    specialty: 'Nuevos retos',
-    bio: 'Próximamente un nuevo talento reforzará nuestras filas.',
-    longBio: 'Nuestro compromiso con la excelencia nos impulsa a seguir creciendo. Este espacio está reservado para un especialista que elevará aún más la calidad de atención que ofrecemos a tus mascotas.',
+    specialty: 'Próximamente',
+    bio: 'Seguimos ampliando el equipo. Próximamente sumaremos un/a especialista en esta área.',
+    longBio: 'Anisanar sigue creciendo. Estamos en proceso de incorporar a un/a nuevo/a profesional que refuerce esta área de atención.',
     img: '',
-    imgAlt: 'Personaje bloqueado',
-    credentials: ['Por desbloquear'],
+    imgAlt: '',
+    credentials: [],
     social: {},
-    locked: true,
+    comingSoon: true,
   },
 ];
-
-export function getMemberById(id: string): TeamMember | undefined {
-  return team.find((m) => m.id === id);
-}

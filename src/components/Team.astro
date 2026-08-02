@@ -1,5 +1,15 @@
 ---
-import TeamSelector from './react/TeamSelector.jsx';
+import { Check } from '@lucide/astro';
+import { team } from '@data/team';
+import TiltedCard from './react/TiltedCard.jsx';
+
+const featured = team.filter((m) => !m.comingSoon);
+const upcoming = team.filter((m) => m.comingSoon);
+
+const socialIcons = {
+  instagram: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>`,
+  linkedin: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M7 10v7M7 7v.01M11 17v-4.5a2.5 2.5 0 015 0V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+};
 ---
 
 <section id="team" class="section-spacing team-section" aria-labelledby="team-heading">
@@ -14,26 +24,98 @@ import TeamSelector from './react/TeamSelector.jsx';
       </h2>
     </div>
 
-  </div>
+    <!-- Featured member(s) -->
+    {featured.map((member) => (
+      <article class="member">
+        <div class="member__photo-col reveal-left">
+          <div class="member__frame">
+            <TiltedCard
+              client:visible
+              imageSrc={member.img}
+              imageAlt={member.imgAlt}
+              badgeText={member.role}
+            />
+          </div>
+        </div>
 
-  <!-- Selector interactivo tipo Smash Bros -->
-  <TeamSelector client:visible />
+        <div class="member__copy-col">
+          <h3 class="member__name reveal-up">{member.name}</h3>
+          <p class="member__title reveal-up">{member.role} &middot; {member.specialty}</p>
+          <p class="member__bio reveal-up">{member.longBio}</p>
+
+          {member.credentials.length > 0 && (
+            <ul class="member__credentials" data-stagger-parent aria-label={`Credenciales de ${member.name}`}>
+              {member.credentials.map((c) => (
+                <li class="member__credential" data-stagger-child>
+                  <Check stroke-width="2.5" class="w-4 h-4 member__credential-icon" aria-hidden="true" />
+                  <span>{c}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <div class="member__footer reveal-up">
+            <a href="#contact" class="btn-primary member__cta">Agendar cita</a>
+            {(member.social.instagram || member.social.linkedin) && (
+              <div class="member__social" aria-label="Redes sociales">
+                {member.social.instagram && (
+                  <a
+                    href={member.social.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Instagram de ${member.name}`}
+                    class="member__social-link"
+                    set:html={socialIcons.instagram}
+                  />
+                )}
+                {member.social.linkedin && (
+                  <a
+                    href={member.social.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`LinkedIn de ${member.name}`}
+                    class="member__social-link"
+                    set:html={socialIcons.linkedin}
+                  />
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </article>
+    ))}
+
+    <!-- Coming soon -->
+    {upcoming.length > 0 && (
+      <div class="team__upcoming reveal-up">
+        <p class="team__upcoming-label">Seguimos ampliando el equipo</p>
+        <ul class="team__upcoming-list" data-stagger-parent aria-label="Próximas incorporaciones">
+          {upcoming.map((m) => (
+            <li class="team__upcoming-chip" data-stagger-child>
+              {m.role}
+              <span class="team__upcoming-tag">Próximamente</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </div>
 </section>
 
 <style>
-  /* Fondo oscuro estilo arena de selección */
+  /* Fondo oscuro, continúa sin salto desde Servicios hacia Galería */
   .team-section {
     background: var(--color-charcoal);
     overflow-x: hidden;
     padding-top: 0;
   }
 
-  /* ── Header ──────────────────────────────────────────────────────────────── */
+  /* ── Header ─────────────────────────────────────────────────────────────── */
   .team__header {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    margin-bottom: clamp(2.5rem, 4vw, 4rem);
+    margin-bottom: clamp(3rem, 5vw, 5rem);
   }
 
   .team__label {
@@ -41,11 +123,11 @@ import TeamSelector from './react/TeamSelector.jsx';
     font-weight: 600;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #8CC63F;
+    color: var(--color-clay);
   }
 
   .team__heading {
-    font-family: "Lexend", system-ui, sans-serif;
+    font-family: var(--font-display);
     font-size: clamp(2rem, 4vw, 3.75rem);
     font-weight: 500;
     line-height: 1.1;
@@ -54,7 +136,156 @@ import TeamSelector from './react/TeamSelector.jsx';
   }
 
   .team__heading em {
-    color: #8CC63F;
+    color: var(--color-clay);
     font-style: normal;
+  }
+
+  /* ── Member spotlight ──────────────────────────────────────────────────── */
+  .member {
+    display: grid;
+    grid-template-columns: 0.85fr 1fr;
+    gap: clamp(3rem, 6vw, 6rem);
+    align-items: center;
+  }
+
+  .member + .member {
+    margin-top: clamp(4rem, 6vw, 6rem);
+    padding-top: clamp(4rem, 6vw, 6rem);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Photo col */
+  .member__photo-col { position: relative; }
+
+  .member__frame {
+    max-width: 420px;
+    aspect-ratio: 4 / 5;
+  }
+
+  /* Copy col */
+  .member__name {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 2.75rem);
+    font-weight: 500;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.375rem;
+  }
+
+  .member__title {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-clay);
+    margin-bottom: 1.5rem;
+  }
+
+  .member__bio {
+    font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.65);
+    margin-bottom: 2rem;
+    max-width: 52ch;
+  }
+
+  .member__credentials {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .member__credential {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .member__credential-icon {
+    flex-shrink: 0;
+    margin-top: 0.15em;
+    color: var(--color-clay);
+  }
+
+  .member__footer {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .member__social {
+    display: flex;
+    gap: 0.625rem;
+  }
+
+  .member__social-link {
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 0.625rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    transition: border-color 0.25s ease, color 0.25s ease;
+  }
+
+  .member__social-link:hover {
+    border-color: var(--color-clay);
+    color: var(--color-clay);
+  }
+
+  /* ── Coming soon ────────────────────────────────────────────────────────── */
+  .team__upcoming {
+    margin-top: clamp(4rem, 6vw, 6rem);
+    padding-top: clamp(2.5rem, 4vw, 3.5rem);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .team__upcoming-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 1.25rem;
+  }
+
+  .team__upcoming-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .team__upcoming-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.65);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+  }
+
+  .team__upcoming-tag {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--color-clay);
+  }
+
+  /* ── Responsive ─────────────────────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .member { grid-template-columns: 1fr; }
+    .member__frame { max-width: 320px; margin: 0 auto; }
   }
 </style>

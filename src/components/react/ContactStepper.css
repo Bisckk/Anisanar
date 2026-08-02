@@ -274,6 +274,22 @@
   box-shadow: 0 0 0 3px rgba(140, 198, 63, 0.12);
 }
 
+.s-input--error {
+  border-color: #ff8080;
+  background: rgba(255, 128, 128, 0.06);
+}
+
+.s-input--error:focus {
+  border-color: #ff8080;
+  box-shadow: 0 0 0 3px rgba(255, 128, 128, 0.14);
+}
+
+.s-field__error {
+  font-size: 0.75rem;
+  color: #ff8080;
+  margin: 0.1rem 0 0;
+}
+
 .s-input option {
   background: #1e293b;
   color: #fff;
@@ -315,10 +331,11 @@
 }
 
 .pet-card--active {
-  background: rgba(140, 198, 63, 0.1);
+  background: #8CC63F;
   border-color: #8CC63F;
-  color: #8CC63F;
-  box-shadow: 0 0 18px rgba(140, 198, 63, 0.2);
+  color: #0a0a0a;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(140, 198, 63, 0.4);
 }
 
 .pet-card__label {
@@ -466,10 +483,11 @@
 }
 
 .service-chip--active {
-  background: rgba(140, 198, 63, 0.12);
+  background: #8CC63F;
   border-color: #8CC63F;
-  color: #8CC63F;
-  box-shadow: 0 0 14px rgba(140, 198, 63, 0.2);
+  color: #0a0a0a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(140, 198, 63, 0.4);
 }
 
 .service-chip__label {
