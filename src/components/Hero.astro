@@ -25,15 +25,21 @@ import BlurText from '@components/react/BlurText';
     </div>
 
     <!-- Huge title -->
+    <!-- El texto real vive en el span sr-only: siempre presente en el HTML y
+         legible por buscadores/lectores de pantalla, sin depender de la
+         animación letra por letra (que es puramente decorativa). -->
     <h1 class="hero__title" aria-label="Anisanar">
-      <BlurText 
-        text="ANISANAR" 
-        delay={80} 
-        animateBy="letters" 
-        direction="bottom"
-        className="hero__title-text"
-        client:load 
-      />
+      <span class="sr-only">Anisanar</span>
+      <div aria-hidden="true">
+        <BlurText
+          text="ANISANAR"
+          delay={80}
+          animateBy="letters"
+          direction="bottom"
+          className="hero__title-text"
+          client:load
+        />
+      </div>
     </h1>
 
     <!-- Bottom left: desc + CTA + stats -->
