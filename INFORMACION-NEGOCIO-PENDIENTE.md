@@ -13,6 +13,7 @@ Actualizado tras recibir e implementar los datos del documento entregado por la 
 - **Equipo**: la Dra. Carolina Martinez Pico es ahora el único perfil real (Directora y Fundadora, con sus credenciales reales: UCC, especialización UPTC, especialización U. La Salle). Los otros 3 veterinarios que aparecían como "reales" (Marcos Ibarra, Sofía Luna, Andrés Mora) **eran completamente inventados** y se eliminaron — no correspondían a personas de Anisanar.
 - **Servicios**: se añadió un 7º servicio "Rehabilitación y Terapias Físicas" (láser, radioterapia, magnetoterapia) que antes no estaba cubierto.
 - **Urgencias 24h**: el sitio afirmaba "urgencias 24h, 365 días del año" en Hero, Footer, banner y páginas de servicio. El documento **no confirma** que exista este servicio, así que se suavizó el lenguaje a "atención de urgencias / contáctanos ante cualquier emergencia", sin prometer disponibilidad 24/7.
+- **Fotos y videos reales de la clínica**: se reemplazaron todas las fotos de stock (Unsplash) del Hero, "Sobre nosotros", los 7 servicios y la galería por fotos reales de Anisanar (quirófano, hospitalización, laboratorio, fachada, equipo, mascotas). Los originales sin procesar quedaron archivados en `_source-media/anisanar-originales/` (fuera de `public/`, no se despliegan). Se añadió además una sección nueva "Anisanar en video" con 6 videos reales de la clínica en un previsualizador: no se reproducen hasta que el usuario hace clic.
 
 ## ✅ Auditoría técnica — corregido
 
@@ -27,12 +28,10 @@ Actualizado tras recibir e implementar los datos del documento entregado por la 
 1. **¿Ofrecen urgencias 24h reales?** Es el punto más importante — si la respuesta es sí, se puede volver a destacar con seguridad (stat, badge "24h", etc.); si no, el texto actual ya es seguro tal cual está.
 2. **Horario exacto de atención.** El sitio sigue mostrando el horario original (Lun–Vie 9–20h, Sáb 9–14h) porque no vino en el documento — hay que confirmarlo o corregirlo.
 3. **Confirmación de servicios**: ¿los 6 servicios originales (Medicina General, Cirugía, Diagnóstico por Imagen, Vacunación, Nutrición Clínica, Hospitalización) + el nuevo de Rehabilitación son exactamente los que ofrecen? ¿Siguen activos peluquería, guardería y tienda de mascotas (mencionados en la historia como servicios fundacionales)?
-4. **Resto del equipo**: solo hay 1 veterinaria real cargada (Dra. Carolina). Hay 4 tarjetas "bloqueadas" (???) reservadas para el resto del staff — si hay más veterinarios/as, auxiliares o personal a mostrar, envía nombre, cargo, especialidad y bio.
-5. **Foto real de la Dra. Carolina** (y de cualquier otro miembro del equipo). Por ahora se usa un avatar con sus iniciales "CM" en vez de una foto de stock, para no mostrar la cara de otra persona bajo su nombre.
-6. **Reseñas reales**: no se recibieron testimonios reales, así que se mantienen las 6 reseñas actuales (ficticias/ilustrativas) tal como indicó el documento.
-7. **Fotos reales de la clínica**: fachada, sala de espera, consultas, quirófano, equipo trabajando. El sitio sigue usando fotos de stock (Unsplash) en galería y servicios.
-8. **Respuestas de FAQ confirmadas**: se dejaron respuestas prudentes (sin afirmar lo no confirmado) para seguros de mascotas, animales exóticos y atención sin cita previa — confirmar la redacción exacta con la clínica.
-9. **Credenciales de WhatsApp Business API** (`WA_TOKEN`, `WA_PHONE_ID`, `WA_CLINIC_NUMBER=573103120430`) — deben configurarse en Netlify → Site settings → Environment variables para que el formulario de citas envíe mensajes reales (hoy corre en modo demo).
+4. **Resto del equipo**: solo hay 1 veterinaria real cargada (Dra. Carolina, ya con foto real suya en la clínica). Hay 4 tarjetas "bloqueadas" (???) reservadas para el resto del staff — si hay más veterinarios/as, auxiliares o personal a mostrar, envía nombre, cargo, especialidad, bio y foto.
+5. **Reseñas reales**: no se recibieron testimonios reales, así que se mantienen las 6 reseñas actuales (ficticias/ilustrativas) tal como indicó el documento.
+6. **Respuestas de FAQ confirmadas**: se dejaron respuestas prudentes (sin afirmar lo no confirmado) para seguros de mascotas, animales exóticos y atención sin cita previa — confirmar la redacción exacta con la clínica.
+7. **Credenciales de WhatsApp Business API** (`WA_TOKEN`, `WA_PHONE_ID`, `WA_CLINIC_NUMBER=573103120430`) — deben configurarse en Netlify → Site settings → Environment variables para que el formulario de citas envíe mensajes reales (hoy corre en modo demo).
 
 ## Cómo continuar
 

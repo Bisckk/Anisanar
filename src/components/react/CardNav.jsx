@@ -26,6 +26,7 @@ const NAV_ITEMS = [
     links: [
       { label: 'Reseñas', href: '#testimonials' },
       { label: 'Galería', href: '#gallery' },
+      { label: 'Videos', href: '#videos' },
       { label: 'Preguntas Frecuentes', href: '#faq' },
     ],
   },

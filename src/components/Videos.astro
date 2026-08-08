@@ -1,0 +1,87 @@
+---
+import VideoGallery from './react/VideoGallery.jsx';
+import { videos } from '@data/videos';
+---
+
+<section
+  id="videos"
+  class="videos section-spacing"
+  aria-labelledby="videos-heading"
+>
+  <div class="container-gutter videos__header">
+    <span class="videos__label reveal-up">Anisanar en video</span>
+    <h2 id="videos-heading" class="videos__heading reveal-up">
+      Míranos<br/><em>en acción</em>.
+    </h2>
+    <p class="videos__sub reveal-up">
+      Un vistazo real a nuestra clínica. Elige el que quieras ver — nada se
+      reproduce hasta que tú lo decidas.
+    </p>
+  </div>
+
+  <div class="container-gutter">
+    <VideoGallery client:visible videos={videos} />
+  </div>
+
+  <!-- Ola de transición → Testimonials (forest) -->
+  <div class="videos__wave" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 72" preserveAspectRatio="none">
+      <path d="M0,36 C240,72 480,0 720,28 C960,56 1200,8 1440,36 L1440,72 L0,72 Z" fill="#f8fafc"/>
+    </svg>
+  </div>
+</section>
+
+<style>
+  .videos {
+    background: #ffffff;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .videos__wave {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    line-height: 0;
+  }
+
+  .videos__wave svg {
+    display: block;
+    width: 100%;
+    height: 72px;
+  }
+
+  .videos__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: clamp(2.5rem, 4vw, 4rem);
+  }
+
+  .videos__label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #8CC63F;
+  }
+
+  .videos__heading {
+    font-family: "Lexend", system-ui, sans-serif;
+    font-size: clamp(2rem, 4vw, 3.75rem);
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--color-charcoal);
+    letter-spacing: -0.02em;
+  }
+
+  .videos__heading em { color: #8CC63F; font-style: normal; }
+
+  .videos__sub {
+    max-width: 520px;
+    font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
+    line-height: 1.7;
+    color: rgba(30, 30, 30, 0.62);
+  }
+</style>

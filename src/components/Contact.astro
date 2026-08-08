@@ -65,6 +65,13 @@ const contactInfo = [
             </li>
           ))}
         </ul>
+
+        <!-- Urgency quick-contact -->
+        <div class="contact__urgency reveal-up">
+          <p class="contact__urgency-label">Urgencias</p>
+          <a href="tel:+573103120430" class="contact__urgency-tel">+57 310 312 04 30</a>
+          <p class="contact__urgency-note">Contáctanos ante cualquier emergencia de tu mascota</p>
+        </div>
       </div>
 
       <!-- Right: stepper -->
@@ -161,6 +168,42 @@ const contactInfo = [
   }
 
   a.contact__info-value:hover { color: #8CC63F; }
+
+  /* Urgency quick-contact */
+  .contact__urgency {
+    margin-top: 2.25rem;
+    background: #8CC63F;
+    border-radius: 1.25rem;
+    padding: 1.25rem 1.5rem;
+    text-align: center;
+  }
+
+  .contact__urgency-label {
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(30, 41, 59, 0.6);
+    margin-bottom: 0.35rem;
+  }
+
+  .contact__urgency-tel {
+    display: block;
+    font-family: "Lexend", system-ui, sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-charcoal);
+    text-decoration: none;
+    margin-bottom: 0.25rem;
+    transition: opacity 0.2s;
+  }
+
+  .contact__urgency-tel:hover { opacity: 0.75; }
+
+  .contact__urgency-note {
+    font-size: 0.8125rem;
+    color: rgba(30, 41, 59, 0.6);
+  }
 
   /* Form col */
   .contact__form-col {
