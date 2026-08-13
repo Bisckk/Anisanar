@@ -2,6 +2,11 @@
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
     "strict": true,
+    // "baseUrl" está deprecado desde TS 6.0 (se irá en TS 7.0), pero Vite/Rollup
+    // todavía lo necesitan para resolver los alias @components/*, @data/*, etc.
+    // en build — quitarlo rompe `npm run build`. Se silencia el aviso en vez de
+    // quitar la opción.
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       "@/*": [
