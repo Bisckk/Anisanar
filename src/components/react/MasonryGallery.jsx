@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import './MasonryGallery.css';
 
@@ -113,9 +113,55 @@ const photos = [
   },
 ];
 
+// Mismos cortes que el resto del sitio para este componente.
+function getColumnCount(width) {
+  if (width <= 480) return 1;
+  if (width <= 768) return 2;
+  return 3;
+}
+
+// Reparte las fotos en columnas explícitas balanceando la altura acumulada
+// (no el conteo de items): cada foto va a la columna más corta hasta ese
+// momento, usando su aspect-ratio real. Así las columnas terminan parejas
+// y no quedan huecos al final de una columna más corta que las demás.
+function distributeIntoColumns(items, columnCount) {
+  const columns = Array.from({ length: columnCount }, () => []);
+  const heights = new Array(columnCount).fill(0);
+
+  items.forEach((photo, index) => {
+    const [w, h] = photo.ratio.split('/').map(Number);
+    const heightUnit = h / w;
+
+    let shortest = 0;
+    for (let c = 1; c < columnCount; c++) {
+      if (heights[c] < heights[shortest]) shortest = c;
+    }
+
+    columns[shortest].push({ ...photo, index });
+    heights[shortest] += heightUnit;
+  });
+
+  return columns;
+}
+
 export default function MasonryGallery() {
   const scrollDirRef = useRef('down');
   const containerRef = useRef(null);
+  // Arranca en 3 (igual que el render del servidor) y se corrige en el
+  // primer efecto tras montar, antes de que las imágenes se hagan visibles.
+  const [columnCount, setColumnCount] = useState(3);
+
+  useEffect(() => {
+    const check = () => setColumnCount(getColumnCount(window.innerWidth));
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  const columns = useMemo(
+    () => distributeIntoColumns(photos, columnCount),
+    [columnCount]
+  );
 
   // Detecta dirección de scroll en tiempo real
   useEffect(() => {
@@ -133,69 +179,63 @@ export default function MasonryGallery() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Anima cada item cuando entra/sale del viewport
+  // Revela cada item una sola vez cuando entra al viewport (con margen
+  // generoso para que ya esté visible antes de que el usuario llegue a él).
+  // No se vuelve a ocultar al salir. Depende de columnCount porque al
+  // recalcular columnas los items cambian de contenedor.
   useEffect(() => {
     if (!containerRef.current) return;
 
     const items = containerRef.current.querySelectorAll('.masonry-item');
 
-    // Estado inicial: invisible
     gsap.set(items, { opacity: 0, y: 52, scale: 0.94 });
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          gsap.killTweensOf(entry.target);
+          if (!entry.isIntersecting) return;
 
-          if (entry.isIntersecting) {
-            // Entra al viewport → anima desde la dirección del scroll
-            const fromY = scrollDirRef.current === 'down' ? 52 : -52;
+          const fromY = scrollDirRef.current === 'down' ? 52 : -52;
 
-            gsap.fromTo(
-              entry.target,
-              { opacity: 0, y: fromY, scale: 0.94 },
-              {
-                opacity: 1,
-                y: 0,
-                scale: 1,
-                duration: 0.72,
-                ease: 'power3.out',
-              }
-            );
-          } else {
-            // Sale del viewport → desvanecido suave hacia la dirección contraria
-            const toY = scrollDirRef.current === 'down' ? -24 : 24;
+          gsap.fromTo(
+            entry.target,
+            { opacity: 0, y: fromY, scale: 0.94 },
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.72,
+              ease: 'power3.out',
+            }
+          );
 
-            gsap.to(entry.target, {
-              opacity: 0,
-              y: toY,
-              scale: 0.96,
-              duration: 0.45,
-              ease: 'power2.in',
-            });
-          }
+          observer.unobserve(entry.target);
         });
       },
       {
         threshold: 0.1,
-        rootMargin: '-10px 0px -10px 0px',
+        rootMargin: '200px 0px 200px 0px',
       }
     );
 
     items.forEach((item) => observer.observe(item));
     return () => observer.disconnect();
-  }, []);
+  }, [columnCount]);
 
   return (
     <div className="masonry-grid" ref={containerRef}>
-      {photos.map(({ src, alt, label, ratio }, i) => (
-        <div key={i} className="masonry-item">
-          <div className="masonry-img-wrap" style={{ aspectRatio: ratio }}>
-            <img src={src} alt={alt} className="masonry-img" loading="lazy" />
-            <div className="masonry-overlay" aria-hidden="true">
-              <span className="masonry-label">{label}</span>
+      {columns.map((column, ci) => (
+        <div className="masonry-column" key={ci}>
+          {column.map(({ src, alt, label, ratio, index }) => (
+            <div key={index} className="masonry-item">
+              <div className="masonry-img-wrap" style={{ aspectRatio: ratio }}>
+                <img src={src} alt={alt} className="masonry-img" loading="lazy" />
+                <div className="masonry-overlay" aria-hidden="true">
+                  <span className="masonry-label">{label}</span>
+                </div>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       ))}
     </div>

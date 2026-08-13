@@ -1,12 +1,22 @@
+/* Columnas explícitas (repartidas por JS balanceando alturas) en vez de
+   CSS `columns`, que no garantiza columnas de igual altura y puede dejar
+   huecos grandes cuando una termina su contenido antes que las otras. */
 .masonry-grid {
-  columns: 3;
-  column-gap: 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
   padding: 0 var(--spacing-gutter, 1.5rem);
 }
 
+.masonry-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  flex: 1;
+  min-width: 0;
+}
+
 .masonry-item {
-  break-inside: avoid;
-  margin-bottom: 1.25rem;
   will-change: transform, opacity;
 }
 
@@ -64,18 +74,11 @@
   transform: translateY(0);
 }
 
+/* El número de columnas lo decide JS (getColumnCount), pero el espaciado
+   entre imágenes se ajusta aquí para pantallas más pequeñas. */
 @media (max-width: 768px) {
-  .masonry-grid {
-    columns: 2;
-    column-gap: 0.875rem;
-  }
-  .masonry-item {
-    margin-bottom: 0.875rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .masonry-grid {
-    columns: 1;
+  .masonry-grid,
+  .masonry-column {
+    gap: 0.875rem;
   }
 }
