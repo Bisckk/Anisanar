@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Stethoscope, Building2, PawPrint, Heart, DoorOpen, ClipboardList, Play, X } from 'lucide-react';
+import { Building2, PawPrint, Heart, DoorOpen, ClipboardList, Play, X } from 'lucide-react';
 import './VideoGallery.css';
 
-const ICONS = { Stethoscope, Building2, PawPrint, Heart, DoorOpen, ClipboardList };
+const ICONS = { Building2, PawPrint, Heart, DoorOpen, ClipboardList };
 
 export default function VideoGallery({ videos }) {
   const [activeId, setActiveId] = useState(null);

@@ -3,7 +3,7 @@ export interface VideoItem {
   title: string;
   description: string;
   src: string;
-  icon: 'Stethoscope' | 'Building2' | 'PawPrint' | 'Heart' | 'DoorOpen' | 'ClipboardList';
+  icon: 'Building2' | 'PawPrint' | 'Heart' | 'DoorOpen' | 'ClipboardList';
   accent: string;
 }
 
@@ -31,14 +31,6 @@ export const videos: VideoItem[] = [
     src: '/anisanar/video-instalaciones-anisanar.mp4',
     icon: 'Building2',
     accent: '#2BAABC',
-  },
-  {
-    id: 'consulta-veterinaria',
-    title: 'Consulta veterinaria',
-    description: 'Una consulta general, de cerca: exploración cuidadosa y trato cercano con cada paciente.',
-    src: '/anisanar/video-consulta-veterinaria.mp4',
-    icon: 'Stethoscope',
-    accent: '#8CC63F',
   },
   {
     id: 'mascota-feliz',

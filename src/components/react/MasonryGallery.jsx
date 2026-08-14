@@ -11,8 +11,8 @@ const photos = [
   },
   {
     src: '/anisanar/gallery-cachorros-doberman.webp',
-    alt: 'Camada de cachorros doberman en la guardería de Anisanar',
-    label: 'Guardería y cuidado diario',
+    alt: 'Camada de cachorros doberman en las instalaciones de Anisanar',
+    label: 'Cuidado diario',
     ratio: '3/4',
   },
   {

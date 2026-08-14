@@ -223,7 +223,10 @@ const CardNav = ({
           </button>
         </div>
 
-        <div className="card-nav-content" aria-hidden={!isExpanded}>
+        {/* data-lenis-prevent: en mobile esta franja se desplaza en horizontal;
+            sin este atributo, Lenis (scroll suave global) captura el gesto táctil
+            y el scroll horizontal nativo nunca llega a moverse. */}
+        <div className="card-nav-content" data-lenis-prevent aria-hidden={!isExpanded}>
           {NAV_ITEMS.map((item, idx) => (
             <div
               key={`${item.label}-${idx}`}
