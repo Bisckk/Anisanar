@@ -22,3 +22,6 @@ Thumbs.db
 
 # Astro cache
 .astro/
+
+# Netlify adapter build output
+.netlify/

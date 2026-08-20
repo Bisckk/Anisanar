@@ -21,6 +21,7 @@ Actualizado tras recibir e implementar los datos del documento entregado por la 
 - **Guardería confirmada como servicio no activo**: se quitó la palabra "Guardería" del label y alt de la foto de los cachorros en la galería (ahora "Cuidado diario"). La mención histórica en "Sobre nosotros" (2011, en pasado) se dejó igual porque describe cómo empezó la clínica, no un servicio actual.
 - **Video incorrecto retirado**: el video "Consulta veterinaria" no mostraba personal real de Anisanar — se quitó del carrusel y el archivo se archivó fuera de `public/` en `_source-media/no-usar-no-es-personal-del-cliente/`. Quedaron 5 videos activos; si tienen un video de reemplazo, lo agregamos.
 - **Enunciado redundante quitado** en "Anisanar en video" (Videos.astro), a pedido del cliente.
+- **El formulario de "Agendar cita" ahora redirige directo a WhatsApp**: al confirmar el paso 4, se abre `wa.me` en una pestaña nueva con un mensaje ya redactado (nombre, email, teléfono si lo dejó, mascota, servicio y notas) al número `+57 310 312 04 30` — el cliente solo tiene que darle "Enviar" en WhatsApp. Ya no depende de `/api/book` ni de configurar la API de WhatsApp Business; funciona hoy mismo, sin variables de entorno. El endpoint `/api/book` se dejó en el código sin usar, por si más adelante quieren retomar el envío automático server-side.
 
 ## ✅ Auditoría técnica — corregido
 
@@ -37,7 +38,7 @@ Actualizado tras recibir e implementar los datos del documento entregado por la 
 2. **Confirmación de servicios**: guardería ya se confirmó que **no** está activa (corregido). ¿Siguen activas peluquería y tienda de mascotas (mencionadas en la historia como servicios fundacionales)? ¿Los 7 servicios actuales (Medicina General, Cirugía, Diagnóstico por Imagen, Vacunación, Nutrición Clínica, Hospitalización, Rehabilitación) son exactamente los que ofrecen hoy?
 3. **Resto del equipo**: solo hay 1 veterinaria real cargada (Dra. Carolina, ya con foto real suya en la clínica). Hay 4 tarjetas "bloqueadas" (???) reservadas para el resto del staff — si hay más veterinarios/as, auxiliares o personal a mostrar, envía nombre, cargo, especialidad, bio y foto.
 4. **Respuestas de FAQ confirmadas**: se dejaron respuestas prudentes (sin afirmar lo no confirmado) para seguros de mascotas, animales exóticos y atención sin cita previa — confirmar la redacción exacta con la clínica.
-5. **Credenciales de WhatsApp Business API** (`WA_TOKEN`, `WA_PHONE_ID`, `WA_CLINIC_NUMBER=573103120430`) — deben configurarse en Netlify → Site settings → Environment variables para que el formulario de citas envíe mensajes reales. El código ya llama correctamente a la API (antes no lo hacía); sin estas variables sigue funcionando en modo demo (confirma que el cliente recibió su solicitud, pero no envía el WhatsApp real).
+5. **Credenciales de WhatsApp Business API** (`WA_TOKEN`, `WA_PHONE_ID`, `WA_CLINIC_NUMBER=573103120430`) — ya **no son necesarias** para que el formulario funcione (ahora redirige directo a WhatsApp, ver arriba). Solo se necesitarían si en el futuro quieren que el sitio envíe mensajes automáticos server-side sin que el cliente tenga que darle "Enviar" manualmente.
 6. **Video de reemplazo para "Consulta veterinaria"** (opcional): si tienen una grabación real de una consulta con su propio personal, la agregamos de vuelta al carrusel.
 
 ## Cómo continuar

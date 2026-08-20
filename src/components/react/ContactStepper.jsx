@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Stethoscope, Scissors, Activity, Bed, Apple, Syringe, Zap, HelpCircle,
   Dog, Cat, Rabbit, User, PawPrint, ClipboardCheck,
-  CheckCircle, ArrowLeft, ArrowRight, RefreshCw, Check, AlertCircle,
+  CheckCircle, ArrowLeft, ArrowRight, RefreshCw, Check,
 } from 'lucide-react';
 import './ContactStepper.css';
 
@@ -17,6 +17,8 @@ function WhatsAppIcon({ size = 16 }) {
 }
 
 // ── Config ─────────────────────────────────────────────────────────────────
+
+const WHATSAPP_NUMBER = '573103120430';
 
 const STEPS = [
   { id: 1, label: 'Tus datos' },
@@ -75,13 +77,11 @@ export default function ContactStepper() {
   const [dir,  setDir]            = useState(1);
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm]           = useState(EMPTY_FORM);
-  const [sending, setSending]     = useState(false);
-  const [error, setError]         = useState(null);
 
   const update = (field, value) => setForm(f => ({ ...f, [field]: value }));
   const next   = () => { setDir(1);  setStep(s => Math.min(s + 1, 4)); };
   const back   = () => { setDir(-1); setStep(s => Math.max(s - 1, 1)); };
-  const reset  = () => { setForm(EMPTY_FORM); setStep(1); setDir(1); setSubmitted(false); setError(null); };
+  const reset  = () => { setForm(EMPTY_FORM); setStep(1); setDir(1); setSubmitted(false); };
 
   const canNext = () => {
     if (step === 1) return form.name.trim() && isValidEmail(form.email) && isValidPhone(form.phone);
@@ -90,23 +90,24 @@ export default function ContactStepper() {
     return true;
   };
 
-  const submit = async () => {
-    setSending(true);
-    setError(null);
-    try {
-      const res = await fetch('/api/book', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data.ok) throw new Error(data.error || 'No se pudo enviar la solicitud');
-      setSubmitted(true);
-    } catch {
-      setError('No pudimos enviar tu solicitud. Intenta de nuevo o escríbenos directo por WhatsApp.');
-    } finally {
-      setSending(false);
-    }
+  // Arma el mensaje con los datos del formulario y abre WhatsApp con ese
+  // texto ya redactado — el cliente solo tiene que confirmar el envío allá.
+  const submit = () => {
+    const petOpt = PET_OPTIONS.find(p => p.value === form.petType);
+    const lines = [
+      'Hola, quiero agendar una cita 🐾',
+      '',
+      `*Nombre:* ${form.name}`,
+      `*Email:* ${form.email}`,
+    ];
+    if (form.phone) lines.push(`*Teléfono:* ${form.phone}`);
+    if (petOpt) lines.push(`*Mascota:* ${petOpt.label}${form.petName ? ` (${form.petName})` : ''}`);
+    lines.push(`*Servicio:* ${form.service}`);
+    if (form.message) lines.push(`*Notas:* ${form.message}`);
+
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+    setSubmitted(true);
   };
 
   return (
@@ -147,26 +148,15 @@ export default function ContactStepper() {
               )}
             </div>
             <div className="stepper__nav-right">
-              {error && (
-                <p className="submit-error">
-                  <AlertCircle size={13} strokeWidth={2} />
-                  {error}
-                </p>
-              )}
               {step < 4 ? (
                 <button className="stepper__next" onClick={next} disabled={!canNext()} type="button">
                   Siguiente
                   <ArrowRight size={15} strokeWidth={2} />
                 </button>
               ) : (
-                <button
-                  className="stepper__submit"
-                  onClick={submit}
-                  disabled={sending}
-                  type="button"
-                >
+                <button className="stepper__submit" onClick={submit} type="button">
                   <WhatsAppIcon size={16} />
-                  {sending ? 'Enviando…' : 'Confirmar cita'}
+                  Enviar por WhatsApp
                 </button>
               )}
             </div>
@@ -373,10 +363,10 @@ function SuccessScreen({ name, onReset }) {
         <CheckCircle size={30} strokeWidth={1.5} />
       </span>
 
-      <h3 className="success-title">Todo listo, {firstName}</h3>
+      <h3 className="success-title">¡Ya casi, {firstName}!</h3>
       <p className="success-body">
-        Tu solicitud fue enviada correctamente.<br />
-        Te responderemos en menos de 24 horas para confirmar tu cita.
+        Abrimos WhatsApp con tu mensaje ya redactado.<br />
+        Solo confírmalo allá y te responderemos en menos de 24 horas.
       </p>
 
       <button className="success-reset" onClick={onReset} type="button">

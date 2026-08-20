@@ -352,19 +352,6 @@
   box-shadow: none;
 }
 
-.submit-error {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 0.75rem;
-  color: #ff8080;
-  margin: 0;
-  max-width: 220px;
-  line-height: 1.4;
-}
-
-.submit-error svg { flex-shrink: 0; }
-
 /* ── Service grid ──────────────────────────────────────────────────────── */
 .service-grid {
   display: grid;
@@ -487,7 +474,5 @@
 
   .stepper__nav { flex-wrap: wrap; gap: 0.75rem; }
   .stepper__nav-right { flex-wrap: wrap; justify-content: flex-end; width: 100%; }
-  .submit-error { max-width: 100%; text-align: right; }
-
   .success-screen { min-height: 320px; }
 }
