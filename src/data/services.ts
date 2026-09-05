@@ -43,11 +43,10 @@ export const services: Service[] = [
     emoji: 'Syringe',
     title: 'Cirugía',
     shortDesc: 'Procedimientos quirúrgicos de tejidos blandos y ortopedia con protocolos de anestesia modernos.',
-    fullDesc: 'Contamos con quirófano completamente equipado y protocolos de anestesia multimodal para garantizar la máxima seguridad de tu mascota. Desde esterilizaciones hasta cirugías de tejidos blandos complejas y ortopedia, nuestro equipo realiza procedimientos con los más altos estándares de asepsia y monitoreo anestésico.',
+    fullDesc: 'Contamos con quirófano completamente equipado y protocolos de anestesia multimodal para garantizar la máxima seguridad de tu mascota. Desde esterilizaciones hasta cirugías de tejidos blandos complejas, nuestro equipo realiza procedimientos con los más altos estándares de asepsia y monitoreo anestésico.',
     features: [
       'Esterilización OVH y orquiectomía',
       'Cirugía de tejidos blandos',
-      'Ortopedia básica y avanzada',
       'Endoscopía diagnóstica',
       'Cirugía oncológica',
     ],
