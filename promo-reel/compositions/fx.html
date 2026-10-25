@@ -1,0 +1,52 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    #fx-leak { position: absolute; inset: -16%; opacity: 0; overflow: hidden; mix-blend-mode: screen; }
+    #fx-leak .lk { position: absolute; inset: -20%; }
+    #fx-amber { background: radial-gradient(ellipse 52% 110% at 10% 58%, rgb(255 241 197 / 92%), transparent 45%), radial-gradient(ellipse 72% 120% at 24% 54%, rgb(255 126 57 / 78%), transparent 66%); filter: blur(2.8vmin); }
+    #fx-red { background: radial-gradient(ellipse 58% 105% at 78% 34%, rgb(255 120 61 / 40%), rgb(255 90 70 / 14%) 48%, transparent 76%); filter: blur(4vmin); }
+    #fx-gold { background: linear-gradient(104deg, transparent 24%, rgb(255 144 62 / 30%) 40%, rgb(255 247 205 / 72%) 51%, rgb(255 124 48 / 22%) 62%, transparent 78%); filter: blur(2vmin); }
+    #fx-flash { position: absolute; inset: -12%; }
+    #fx-flash .fl { position: absolute; inset: 0; opacity: 0; }
+    #fx-wash { background: rgb(255 253 250); }
+    #fx-core { inset: -18%; background: radial-gradient(ellipse 68% 92% at 50% 40%, #fff 0%, rgb(255 255 255 / 98%) 20%, rgb(255 253 250 / 86%) 45%, rgb(255 174 105 / 32%) 67%, transparent 86%); mix-blend-mode: screen; }
+  </style>
+  <div id="root" data-composition-id="fx" data-width="1080" data-height="1920" data-start="0" data-duration="33.5">
+    <div id="fx-leak" data-layout-ignore><div class="lk" id="fx-amber"></div><div class="lk" id="fx-red"></div><div class="lk" id="fx-gold"></div></div>
+    <div id="fx-flash" data-layout-ignore><div class="fl" id="fx-wash"></div><div class="fl" id="fx-core"></div></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.set('#fx-leak, #fx-wash, #fx-core', { opacity: 0 }, 0);
+    tl.set('#fx-amber, #fx-red, #fx-gold, #fx-core', { xPercent: 0, yPercent: 0, scale: 1, rotation: 0 }, 0);
+    
+    tl.fromTo('#fx-leak', { opacity: 0 }, { opacity: 0.5, duration: 0.312, ease: 'sine.out', immediateRender: false }, 6.004);
+    tl.to('#fx-leak', { opacity: 0.22, duration: 0.26, ease: 'sine.inOut' }, 6.446);
+    tl.to('#fx-leak', { opacity: 0, duration: 0.338, ease: 'sine.in' }, 6.784);
+    tl.fromTo('#fx-amber', { xPercent: -20, scale: 0.92, rotation: -4 }, { xPercent: 18, scale: 1.1, rotation: 2, duration: 1.3, ease: 'sine.inOut', immediateRender: false }, 5.9);
+    tl.fromTo('#fx-red', { xPercent: 20, yPercent: -8, scale: 1.08 }, { xPercent: -16, yPercent: 8, scale: 0.94, duration: 1.3, ease: 'sine.inOut', immediateRender: false }, 5.9);
+    tl.fromTo('#fx-gold', { xPercent: -28, rotation: -6 }, { xPercent: 24, rotation: 4, duration: 1.3, ease: 'sine.inOut', immediateRender: false }, 5.9);
+    tl.fromTo('#fx-leak', { opacity: 0 }, { opacity: 0.5, duration: 0.312, ease: 'sine.out', immediateRender: false }, 20.554);
+    tl.to('#fx-leak', { opacity: 0.22, duration: 0.26, ease: 'sine.inOut' }, 20.996);
+    tl.to('#fx-leak', { opacity: 0, duration: 0.338, ease: 'sine.in' }, 21.334);
+    tl.fromTo('#fx-amber', { xPercent: -20, scale: 0.92, rotation: -4 }, { xPercent: 18, scale: 1.1, rotation: 2, duration: 1.3, ease: 'sine.inOut', immediateRender: false }, 20.45);
+    tl.fromTo('#fx-red', { xPercent: 20, yPercent: -8, scale: 1.08 }, { xPercent: -16, yPercent: 8, scale: 0.94, duration: 1.3, ease: 'sine.inOut', immediateRender: false }, 20.45);
+    tl.fromTo('#fx-gold', { xPercent: -28, rotation: -6 }, { xPercent: 24, rotation: 4, duration: 1.3, ease: 'sine.inOut', immediateRender: false }, 20.45);
+    tl.fromTo('#fx-leak', { opacity: 0 }, { opacity: 0.5, duration: 0.264, ease: 'sine.out', immediateRender: false }, 27.838);
+    tl.to('#fx-leak', { opacity: 0.22, duration: 0.22, ease: 'sine.inOut' }, 28.212);
+    tl.to('#fx-leak', { opacity: 0, duration: 0.286, ease: 'sine.in' }, 28.498);
+    tl.fromTo('#fx-amber', { xPercent: -20, scale: 0.92, rotation: -4 }, { xPercent: 18, scale: 1.1, rotation: 2, duration: 1.1, ease: 'sine.inOut', immediateRender: false }, 27.75);
+    tl.fromTo('#fx-red', { xPercent: 20, yPercent: -8, scale: 1.08 }, { xPercent: -16, yPercent: 8, scale: 0.94, duration: 1.1, ease: 'sine.inOut', immediateRender: false }, 27.75);
+    tl.fromTo('#fx-gold', { xPercent: -28, rotation: -6 }, { xPercent: 24, rotation: 4, duration: 1.1, ease: 'sine.inOut', immediateRender: false }, 27.75);
+    
+    tl.fromTo('#fx-wash', { opacity: 0 }, { opacity: 0.8, duration: 0.04, ease: 'power4.in', immediateRender: false }, 9.57);
+    tl.fromTo('#fx-core', { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: 0.05, ease: 'power4.in', immediateRender: false }, 9.56);
+    tl.to('#fx-wash', { opacity: 0, duration: 0.2, ease: 'power3.out' }, 9.61);
+    tl.to('#fx-core', { opacity: 0, scale: 1.18, duration: 0.36, ease: 'power2.out' }, 9.61);
+    tl.fromTo('#fx-wash', { opacity: 0 }, { opacity: 0.8, duration: 0.04, ease: 'power4.in', immediateRender: false }, 28.17);
+    tl.fromTo('#fx-core', { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: 0.05, ease: 'power4.in', immediateRender: false }, 28.16);
+    tl.to('#fx-wash', { opacity: 0, duration: 0.2, ease: 'power3.out' }, 28.21);
+    tl.to('#fx-core', { opacity: 0, scale: 1.18, duration: 0.36, ease: 'power2.out' }, 28.21);
+    window.__timelines["fx"] = tl;
+  </script>
+</template>

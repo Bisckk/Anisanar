@@ -1,4 +1,5 @@
-// Genera la locución con ElevenLabs (SDK oficial, modelo eleven_v4) → voice/NN.mp3 + voice/lines.json (lo consume audio.mjs).
+// Genera la locución con ElevenLabs (SDK oficial, modelo eleven_v4) → <voiceDir>/NN.mp3 + lines.json (lo consume audio.mjs).
+//   node voice.mjs [video]   (video: ver videos.mjs; por defecto "entrega")
 // Cada frase tiene una ventana [t, until] ligada a su escena: si no cabe, se acelera con ffmpeg (atempo, mantiene el tono).
 // Caché: una frase solo se vuelve a sintetizar si cambia su texto o la voz (ahorra créditos).
 //
@@ -12,13 +13,15 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { Readable } from 'node:stream';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { pickVideo } from './videos.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const MODEL = 'eleven_v4';
 const MAX_TEMPO = 1.18;
 
 // t: inicio (s) · until: debe terminar antes (siguiente golpe visual o cambio de escena)
-export const SCRIPT = [
+export const SCRIPTS = {
+  entrega: [
   { t: 0.9, until: 4.55, text: 'La clínica está cerrada… pero tu web sigue atendiendo.' },
   { t: 5.25, until: 8.2, text: 'Te presentamos la nueva página web de Anisanar.' },
   { t: 9.1, until: 13.6, text: 'Tu clínica, a primera vista: con tu identidad y en cualquier dispositivo.' },
@@ -30,7 +33,17 @@ export const SCRIPT = [
   { t: 37.2, until: 41.9, text: 'Más citas, menos llamadas, y una clínica fácil de encontrar.' },
   { t: 43.1, until: 46.3, text: 'Y las opiniones de tus pacientes, a la vista de todos.' },
   { t: 47.9, until: 51.5, text: 'Anisanar. Tu nueva web ya está en línea.' },
-];
+  ],
+  clientes: [
+    { t: 0.3, until: 4.1, text: 'No pueden decirte qué les pasa, pero nosotros sabemos escucharlos.' },
+    { t: 4.5, until: 8.1, text: 'Somos Anisanar, veterinaria en San Gil desde 2011.' },
+    { t: 8.3, until: 14.9, text: 'Consulta, cirugía, laboratorio, hospitalización, fisioterapia y tienda, todo en un solo lugar.' },
+    { t: 15.4, until: 19.2, text: 'Un equipo que cuida a tu mascota como parte de su familia.' },
+    { t: 19.6, until: 23.6, text: 'Por eso, nueve de cada diez familias nos recomiendan.' },
+    { t: 24.0, until: 27.6, text: 'Agenda tu cita en anisanar punto com, directo a WhatsApp.' },
+    { t: 28.1, until: 31.0, text: 'Anisanar. Cuidamos a tu mejor amigo.' },
+  ],
+};
 
 // recorta silencio inicial y final (audio.mjs usa el mismo filtro al decodificar)
 export const TRIM = 'silenceremove=start_periods=1:start_threshold=-45dB,areverse,silenceremove=start_periods=1:start_threshold=-45dB,areverse';
@@ -46,7 +59,7 @@ async function resolveVoice(client) {
   return { id, name: voices.find(v => v.voiceId === id)?.name || id };
 }
 
-async function synth(client, voiceId, i, file) {
+async function synth(client, voiceId, SCRIPT, i, file) {
   const audio = await client.textToSpeech.convert(voiceId, {
     text: SCRIPT[i].text,
     modelId: MODEL,
@@ -72,7 +85,9 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     process.exit(0);
   }
 
-  const dir = path.join(here, 'voice');
+  const video = pickVideo();
+  const SCRIPT = SCRIPTS[video.id];
+  const dir = path.join(here, video.voiceDir);
   mkdirSync(dir, { recursive: true });
   const manifest = path.join(dir, 'lines.json');
   const cache = existsSync(manifest) ? JSON.parse(readFileSync(manifest, 'utf8')) : { lines: [] };
@@ -83,7 +98,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     const id = String(i + 1).padStart(2, '0');
     const raw = path.join(dir, `${id}.raw.mp3`), out = path.join(dir, `${id}.mp3`);
     const cached = cache.voiceId === voice.id && cache.lines.some(l => l.file === `${id}.mp3` && l.text === line.text) && existsSync(raw);
-    if (!cached) await synth(client, voice.id, i, raw);
+    if (!cached) await synth(client, voice.id, SCRIPT, i, raw);
     // ajuste de duración: acelerar sin cambiar el tono si la frase no cabe en su ventana
     const rawDur = durationOf(raw);
     const tempo = rawDur > window ? Math.min(MAX_TEMPO, +(rawDur / window + 0.01).toFixed(3)) : 1;
@@ -93,5 +108,5 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     lines.push({ t: line.t, file: `${id}.mp3`, dur: +dur.toFixed(3), tempo, text: line.text });
   }
   writeFileSync(manifest, JSON.stringify({ voiceId: voice.id, voiceName: voice.name, model: MODEL, lines }, null, 1));
-  console.log(`✔ voice/lines.json — ${voice.name}`);
+  console.log(`✔ ${video.voiceDir}/lines.json — ${voice.name}`);
 }

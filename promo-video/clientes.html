@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+<meta charset="utf-8">
+<title>Anisanar — Video para clientes (9:16)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Outfit:wght@400;500;600;700&display=block" rel="stylesheet">
+<script src="assets/gsap.min.js"></script>
+<script src="assets/icons.js"></script>
+<style>
+/* Video vertical 1080×1920 para Reels / TikTok / estados de WhatsApp.
+   Zona segura: textos entre y≈220 y y≈1480 (arriba y abajo los tapa la interfaz de cada red).
+   Identidad de movimiento igual al video de entrega: entradas expo.out, salidas power3.in, cámara power3.inOut. */
+:root { --teal: #2BAABC; --green: #8CC63F; --wa: #25D366; --ink: #081018; --slate: #94a3b8; --slate2: #dbe3ec; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: #000; }
+#stage { width: 1080px; height: 1920px; position: relative; overflow: hidden; background: #0a141c;
+  font-family: 'Outfit', system-ui, sans-serif; color: #fff; }
+svg.ic { display: block; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
+.scene { position: absolute; inset: 0; opacity: 0; visibility: hidden; overflow: hidden; }
+.fill { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background-size: cover; background-position: center; }
+.w { display: inline-block; will-change: transform; }
+.hl { color: var(--green); }
+.shade-top { position: absolute; left: 0; right: 0; top: 0; height: 900px; background: linear-gradient(180deg, rgba(6,12,18,.85) 0%, rgba(6,12,18,.45) 55%, transparent 100%); }
+.shade-bot { position: absolute; left: 0; right: 0; bottom: 0; height: 900px; background: linear-gradient(0deg, rgba(6,12,18,.9) 0%, rgba(6,12,18,.4) 55%, transparent 100%); }
+#vignette { position: absolute; inset: 0; pointer-events: none; z-index: 50;
+  background: radial-gradient(ellipse 90% 75% at 50% 50%, transparent 60%, rgba(0,0,0,.5) 100%); }
+#grain { position: absolute; inset: 0; z-index: 51; pointer-events: none; opacity: .05; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+#fade { position: absolute; inset: 0; background: #000; opacity: 0; z-index: 60; }
+.big { font: 900 104px/1.02 'Montserrat'; letter-spacing: -.03em; margin: 0; text-shadow: 0 6px 30px rgba(0,0,0,.45); }
+.kicker { font: 700 30px/1 'Montserrat'; letter-spacing: .3em; text-transform: uppercase; color: var(--teal); }
+
+/* S1 gancho */
+#s1 .txt { position: absolute; left: 80px; right: 80px; top: 300px; }
+#s1 .l2 { margin-top: 34px; }
+
+/* S2 logo sobre la entrada real */
+#s2 .dim { position: absolute; inset: 0; background: rgba(6,12,18,.5); }
+#s2 .center { position: absolute; left: 0; right: 0; top: 560px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.logo-card { width: 270px; height: 270px; border-radius: 70px; background: #fff; display: grid; place-items: center; position: relative;
+  box-shadow: 0 30px 80px rgba(0,0,0,.45), 0 0 0 10px rgba(255,255,255,.12); }
+.logo-card img { width: 200px; }
+.ring { position: absolute; left: 50%; top: 50%; width: 270px; height: 270px; margin: -135px 0 0 -135px; border-radius: 50%; border: 4px solid var(--teal); opacity: 0; }
+.ring.g { border-color: var(--green); }
+.wm { font: 900 150px/1 'Montserrat'; margin-top: 56px; display: flex; letter-spacing: .01em; text-shadow: 0 8px 40px rgba(0,0,0,.5); }
+.wm .tl { color: var(--teal); }
+.sub { font: 600 46px/1.25 'Outfit'; color: var(--slate2); margin-top: 22px; text-shadow: 0 4px 20px rgba(0,0,0,.6); }
+.chip { margin-top: 40px; display: inline-flex; align-items: center; gap: 16px; padding: 20px 36px; border-radius: 99px;
+  background: var(--green); color: #0b151d; font: 800 40px 'Montserrat'; box-shadow: 0 16px 40px rgba(140,198,63,.4); }
+
+/* S3 montaje de servicios */
+.shot { position: absolute; inset: 0; overflow: hidden; }
+.shot .label { position: absolute; left: 80px; bottom: 470px; display: flex; align-items: center; gap: 26px; }
+.shot .ico { width: 108px; height: 108px; border-radius: 30px; background: var(--teal); display: grid; place-items: center; box-shadow: 0 14px 34px rgba(0,0,0,.4); }
+.shot:nth-child(even) .ico { background: var(--green); color: #0b151d; }
+.shot .name { font: 900 86px/1 'Montserrat'; letter-spacing: -.02em; text-shadow: 0 6px 30px rgba(0,0,0,.55); }
+.shot .num { position: absolute; left: 80px; bottom: 610px; font: 700 30px 'Montserrat'; letter-spacing: .25em; color: var(--slate2); text-shadow: 0 2px 10px rgba(0,0,0,.6); }
+#s3-head { position: absolute; left: 80px; top: 240px; z-index: 5; padding: 16px 26px; border-radius: 99px; background: rgba(6,12,18,.55); color: #fff; font-size: 30px; }
+#s3-final { position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 6; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+#s3-final .bg { position: absolute; inset: 0; background: rgba(6,12,18,.55); }
+#s3-final .big { position: relative; font-size: 128px; }
+
+/* S4 equipo */
+#s4 .bgimg { filter: blur(10px) brightness(.45); transform: scale(1.1); }
+#s4 .head { position: absolute; left: 80px; right: 80px; top: 230px; }
+/* cuadrícula 3×3 del equipo: la Dra. Carolina en el centro */
+.crew { position: absolute; left: 158px; top: 525px; width: 764px; display: grid; grid-template-columns: repeat(3, 240px); gap: 22px; }
+.mate { position: relative; height: 300px; border-radius: 26px; overflow: hidden; background: #13242f center 18%/cover;
+  box-shadow: 0 20px 44px rgba(0,0,0,.5), 0 0 0 2px rgba(255,255,255,.12); }
+.mate::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 52%, rgba(6,12,18,.92) 100%); }
+.mate .tx { position: absolute; left: 16px; right: 12px; bottom: 14px; z-index: 2; }
+.mate .nm { font: 800 27px/1.1 'Montserrat'; letter-spacing: -.01em; }
+.mate .rl { font: 600 19px/1.2 'Outfit'; color: var(--teal); margin-top: 4px; }
+.mate.lead { z-index: 3; box-shadow: 0 30px 70px rgba(0,0,0,.6), 0 0 0 5px var(--teal); }
+.mate.lead .rl { color: var(--green); }
+.mate .badge { position: absolute; top: 12px; left: 12px; z-index: 2; font: 800 17px 'Montserrat'; letter-spacing: .06em; text-transform: uppercase;
+  padding: 7px 12px; border-radius: 99px; background: var(--green); color: #0b151d; }
+.crew-label { position: absolute; left: 0; right: 0; top: 1500px; text-align: center; font: 700 40px 'Montserrat'; }
+.crew-label span { color: var(--green); }
+
+/* S5 testimonio */
+#s5 .stat { position: absolute; left: 0; right: 0; top: 260px; text-align: center; }
+#s5 .stat .n { font: 900 260px/1 'Montserrat'; letter-spacing: -.04em; text-shadow: 0 10px 40px rgba(0,0,0,.5); }
+#s5 .stat .n em { font-style: normal; color: var(--green); }
+#s5 .stat .l { font: 700 54px/1.1 'Montserrat'; margin-top: 10px; text-shadow: 0 4px 20px rgba(0,0,0,.6); }
+.quote { position: absolute; left: 70px; right: 70px; top: 930px; padding: 56px 56px 46px; border-radius: 40px;
+  background: rgba(255,255,255,.94); color: #10202b; box-shadow: 0 40px 90px rgba(0,0,0,.5); }
+.quote .qi { position: absolute; top: -46px; left: 56px; width: 92px; height: 92px; border-radius: 26px; background: var(--teal); color: #fff; display: grid; place-items: center; }
+.quote p { font: 500 46px/1.4 'Outfit'; margin: 10px 0 30px; }
+.quote .au { font: 700 36px 'Montserrat'; color: #10202b; }
+.quote .au span { display: block; font: 500 32px 'Outfit'; color: #5b6b78; margin-top: 4px; }
+.quote .paws { position: absolute; right: 50px; bottom: 46px; display: flex; gap: 8px; color: var(--green); }
+
+/* S6 agenda (web → WhatsApp) */
+#s6 { background: radial-gradient(ellipse 120% 80% at 50% 30%, #13283a 0%, #0a141c 60%, #060c12 100%); }
+.blob { position: absolute; width: 1200px; height: 1200px; border-radius: 50%; }
+.blob.t { background: radial-gradient(circle, rgba(43,170,188,.32) 0%, transparent 62%); left: -500px; top: -300px; }
+.blob.g { background: radial-gradient(circle, rgba(140,198,63,.22) 0%, transparent 62%); right: -560px; bottom: -300px; }
+#s6 .head { position: absolute; left: 0; right: 0; top: 230px; text-align: center; }
+.phone { position: absolute; left: 255px; top: 560px; width: 570px; height: 1160px; border-radius: 80px; background: #05090d; padding: 18px;
+  box-shadow: 0 0 0 3px #2a3a46, 0 60px 120px rgba(0,0,0,.7); }
+.scr { position: relative; width: 100%; height: 100%; border-radius: 64px; overflow: hidden; background: #0b151d; }
+.notch { position: absolute; left: 50%; top: 22px; width: 150px; height: 40px; margin-left: -75px; border-radius: 22px; background: #05090d; z-index: 20; }
+.sb { position: absolute; left: 0; right: 0; top: 0; height: 80px; display: flex; justify-content: space-between; align-items: center; padding: 14px 44px 0; font: 600 24px 'Outfit'; z-index: 15; }
+.web { position: absolute; inset: 0; }
+.web .bg { position: absolute; inset: 0; background: url('../public/anisanar/hero-equipo-veterinario.jpg') 40% center/cover; }
+.web .ov { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,16,24,.35) 0%, rgba(8,16,24,.3) 35%, rgba(8,16,24,.95) 100%); }
+.web .nav { position: absolute; top: 96px; left: 36px; right: 36px; display: flex; align-items: center; justify-content: space-between; }
+.web .brand { display: flex; align-items: center; gap: 12px; font: 800 26px 'Montserrat'; }
+.web .brand span { width: 48px; height: 48px; border-radius: 14px; background: #fff; display: grid; place-items: center; }
+.web .brand img { width: 36px; }
+.web .menu { width: 48px; height: 48px; border-radius: 14px; background: rgba(255,255,255,.14); display: grid; place-items: center; }
+.web .cnt { position: absolute; left: 36px; right: 36px; bottom: 90px; }
+.web .tg { font: 600 20px 'Outfit'; letter-spacing: .14em; text-transform: uppercase; color: var(--teal); }
+.web .tt { font: 900 92px/1 'Montserrat'; letter-spacing: -.03em; margin: 12px 0 18px; }
+.web .ds { font: 400 24px/1.4 'Outfit'; color: #d5dde6; margin-bottom: 30px; }
+.web .btn { display: inline-flex; align-items: center; gap: 14px; padding: 24px 40px; border-radius: 99px; background: var(--teal); font: 700 30px 'Outfit'; box-shadow: 0 12px 30px rgba(43,170,188,.45); }
+.wa { position: absolute; inset: 0; background: #0b141a; transform: translateX(100%); }
+.wa .hd { position: absolute; top: 0; left: 0; right: 0; padding: 96px 30px 24px; background: #1f2c34; display: flex; align-items: center; gap: 18px; }
+.wa .hd .av { width: 70px; height: 70px; border-radius: 50%; background: #fff; display: grid; place-items: center; }
+.wa .hd .av img { width: 50px; }
+.wa .hd b { font: 600 30px 'Outfit'; display: block; } .wa .hd span { font: 400 22px 'Outfit'; color: #8696a0; }
+.wa .body { position: absolute; top: 210px; left: 0; right: 0; bottom: 0; padding: 30px 24px;
+  background: #0b141a radial-gradient(rgba(255,255,255,.035) 1px, transparent 1px) 0 0/26px 26px; }
+.bub { margin-left: auto; width: 440px; background: #005c4b; border-radius: 24px 6px 24px 24px; padding: 22px 26px 14px;
+  font: 400 27px/1.45 'Segoe UI', 'Outfit', sans-serif; transform-origin: 100% 0; opacity: 0; }
+.bub .ln { opacity: 0; }
+.bub .mt { text-align: right; font: 400 19px 'Outfit'; color: #a7cfc6; margin-top: 6px; }
+.bub .tk { color: #a7cfc6; }
+.touch { position: absolute; left: 0; top: 0; width: 84px; height: 84px; margin: -42px 0 0 -42px; border-radius: 50%; background: rgba(255,255,255,.25);
+  border: 4px solid rgba(255,255,255,.95); box-shadow: 0 8px 20px rgba(0,0,0,.35); z-index: 18; opacity: 0; }
+.tring { position: absolute; left: 0; top: 0; width: 110px; height: 110px; margin: -55px 0 0 -55px; border-radius: 50%; border: 4px solid rgba(43,170,188,.95); z-index: 17; opacity: 0; }
+.url { position: absolute; left: 0; right: 0; top: 1760px; display: flex; justify-content: center; }
+.url div { display: inline-flex; align-items: center; gap: 16px; padding: 18px 34px; border-radius: 99px; background: rgba(255,255,255,.1); border: 2px solid rgba(255,255,255,.18); font: 700 38px 'Outfit'; }
+
+/* S7 cierre */
+#s7 .dim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(6,12,18,.55) 0%, rgba(6,12,18,.72) 45%, rgba(6,12,18,.94) 100%); }
+#s7 .center { position: absolute; left: 0; right: 0; top: 300px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+#s7 .logo-card { width: 230px; height: 230px; border-radius: 60px; }
+#s7 .logo-card img { width: 170px; }
+#s7 .wm { font-size: 136px; margin-top: 44px; }
+.tagline { font: 700 54px/1.2 'Montserrat'; margin-top: 22px; }
+.info { margin-top: 70px; width: 900px; border-radius: 36px; background: rgba(255,255,255,.08); border: 2px solid rgba(255,255,255,.14); padding: 18px 40px; }
+.row { display: flex; align-items: center; gap: 26px; padding: 22px 0; font: 600 38px/1.2 'Outfit'; text-align: left; }
+.row + .row { border-top: 2px solid rgba(255,255,255,.1); }
+.row .ri { width: 72px; height: 72px; flex: none; border-radius: 20px; background: rgba(43,170,188,.2); color: var(--teal); display: grid; place-items: center; }
+.row.wa-row .ri { background: rgba(37,211,102,.18); color: var(--wa); }
+.row small { display: block; font: 500 28px 'Outfit'; color: var(--slate); }
+.cta { margin-top: 56px; position: relative; overflow: hidden; display: inline-flex; align-items: center; gap: 18px; padding: 30px 56px; border-radius: 99px;
+  background: linear-gradient(90deg, var(--teal), #36b9a0 55%, var(--green)); font: 800 44px 'Montserrat'; box-shadow: 0 20px 50px rgba(43,170,188,.4); }
+.cta .shine { position: absolute; top: 0; bottom: 0; width: 140px; left: -180px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent); transform: skewX(-20deg); }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- S1 · GANCHO (video real: paciente feliz) -->
+  <section class="scene" id="s1">
+    <video class="fill" id="v-hook" src="../public/anisanar/video-mascota-feliz.mp4" muted playsinline preload="auto"></video>
+    <div class="shade-top"></div>
+    <div class="txt">
+      <h1 class="big l1"><span class="w">No</span> <span class="w">pueden</span> <span class="w">decirte</span> <span class="w">qué</span> <span class="w">les</span> <span class="w">pasa…</span></h1>
+      <h1 class="big l2"><span class="w">Nosotros</span> <span class="w">sabemos</span> <span class="w hl">escucharlos.</span></h1>
+    </div>
+  </section>
+
+  <!-- S2 · LOGO sobre la entrada real -->
+  <section class="scene" id="s2">
+    <video class="fill" id="v-door" src="../public/anisanar/video-entrada-clinica.mp4" muted playsinline preload="auto"></video>
+    <div class="dim"></div>
+    <div class="center">
+      <div class="logo-card" id="s2-logo"><div class="ring" id="r1"></div><div class="ring g" id="r2"></div><img src="../public/logo-anisanar.png" alt=""></div>
+      <div class="wm" id="s2-wm"><span class="w">A</span><span class="w">N</span><span class="w">I</span><span class="w">S</span><span class="w tl">A</span><span class="w tl">N</span><span class="w tl">A</span><span class="w tl">R</span></div>
+      <div class="sub" id="s2-sub">Centro Veterinario · San Gil, Santander</div>
+      <div class="chip" id="s2-chip"><i data-icon="heart" data-size="40" data-sw="2.6"></i>Desde 2011</div>
+    </div>
+  </section>
+
+  <!-- S3 · SERVICIOS (montaje con fotos y video reales) -->
+  <section class="scene" id="s3">
+    <div id="shots"></div>
+    <div id="s3-head" class="kicker">Nuestros servicios</div>
+    <div id="s3-final"><div class="bg"></div><h1 class="big"><span class="w">Todo</span> <span class="w">en</span> <span class="w">un</span><br><span class="w hl">solo</span> <span class="w hl">lugar.</span></h1></div>
+  </section>
+
+  <!-- S4 · EQUIPO -->
+  <section class="scene" id="s4">
+    <div class="fill bgimg" style="background-image:url('../public/anisanar/hero-equipo-veterinario.jpg')"></div>
+    <div class="shade-top"></div>
+    <div class="head"><h1 class="big" style="font-size:80px"><span class="w">Cuidamos</span> <span class="w">a</span> <span class="w">tu</span> <span class="w">mascota</span> <span class="w hl">como</span> <span class="w hl">familia.</span></h1></div>
+    <div class="crew" id="crew"></div>
+    <div class="crew-label" id="crew-label">Un equipo de <span>9 profesionales</span></div>
+  </section>
+
+  <!-- S5 · TESTIMONIO REAL -->
+  <section class="scene" id="s5">
+    <div class="fill" id="s5-bg" style="background-image:url('../public/anisanar/gallery-golden-dormido.webp')"></div>
+    <div class="shade-top"></div><div class="shade-bot"></div>
+    <div class="stat" id="s5-stat"><div class="n"><span id="s5-n">0</span><em>/10</em></div><div class="l">familias nos recomiendan</div></div>
+    <div class="quote" id="s5-quote">
+      <div class="qi"><i data-icon="quote" data-size="48" data-sw="2.4"></i></div>
+      <p>“Gracias por la atención que le brindaron a Willy y a nosotros. Agradecemos su esfuerzo y la sinceridad de sus diagnósticos.”</p>
+      <div class="au">Alba y Miguel<span>Dueños de Willy</span></div>
+      <div class="paws"><i data-icon="paw-print" data-size="44"></i><i data-icon="heart" data-size="44"></i></div>
+    </div>
+  </section>
+
+  <!-- S6 · AGENDA: web → WhatsApp -->
+  <section class="scene" id="s6">
+    <div class="blob t"></div><div class="blob g"></div>
+    <div class="head"><h1 class="big" style="font-size:100px"><span class="w">Agenda</span> <span class="w">tu</span> <span class="w">cita</span><br><span class="w hl">en</span> <span class="w hl">minutos</span></h1></div>
+    <div class="phone" id="phone">
+      <div class="scr" id="scr">
+        <div class="notch"></div>
+        <div class="sb"><span>9:41</span><span>●●● ▮</span></div>
+        <div class="web" id="web">
+          <div class="bg"></div><div class="ov"></div>
+          <div class="nav"><div class="brand"><span><img src="../public/logo-anisanar.png" alt=""></span>ANISANAR</div><div class="menu"><i data-icon="paw-print" data-size="26"></i></div></div>
+          <div class="cnt">
+            <div class="tg">San Gil, Santander · Est. 2011</div>
+            <div class="tt">ANISANAR</div>
+            <div class="ds">Medicina veterinaria de vanguardia con un trato cercano y humano.</div>
+            <div class="btn" id="web-btn">Agendar cita <i data-icon="arrow-right" data-size="28" data-sw="2.4"></i></div>
+          </div>
+        </div>
+        <div class="wa" id="wa">
+          <div class="hd"><span class="av"><img src="../public/logo-anisanar.png" alt=""></span><div><b>Anisanar Veterinaria</b><span>en línea</span></div></div>
+          <div class="body">
+            <div class="bub" id="bub">
+              <div class="ln">Hola, quiero agendar una cita 🐾</div>
+              <div class="ln">&nbsp;</div>
+              <div class="ln"><b>Nombre:</b> Laura Gómez</div>
+              <div class="ln"><b>Mascota:</b> Perro (Toby)</div>
+              <div class="ln"><b>Servicio:</b> Consulta general</div>
+              <div class="mt">9:42 <span class="tk" id="tk">✓✓</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="tring" id="tring"></div>
+        <div class="touch" id="tch"></div>
+      </div>
+    </div>
+    <div class="url" id="s6-url"><div><i data-icon="globe" data-size="40"></i>anisanar.com</div></div>
+  </section>
+
+  <!-- S7 · CIERRE sobre la fachada real -->
+  <section class="scene" id="s7">
+    <div class="fill" id="s7-bg" style="background-image:url('../public/anisanar/gallery-fachada-clinica.webp')"></div>
+    <div class="dim"></div>
+    <div class="center">
+      <div class="logo-card" id="s7-logo"><div class="ring" id="r3"></div><img src="../public/logo-anisanar.png" alt=""></div>
+      <div class="wm" id="s7-wm"><span class="w">A</span><span class="w">N</span><span class="w">I</span><span class="w">S</span><span class="w tl">A</span><span class="w tl">N</span><span class="w tl">A</span><span class="w tl">R</span></div>
+      <div class="tagline" id="s7-tag">Cuidamos a tu <span class="hl">mejor amigo</span></div>
+      <div class="info" id="s7-info">
+        <div class="row"><span class="ri"><i data-icon="globe" data-size="38"></i></span><div>anisanar.com<small>Agenda tu cita en línea</small></div></div>
+        <div class="row wa-row"><span class="ri"><i data-icon="message-circle" data-size="38"></i></span><div>310 312 04 30<small>WhatsApp y llamadas</small></div></div>
+        <div class="row"><span class="ri"><i data-icon="map-pin" data-size="38"></i></span><div>Cr 17 N 20-69, Av. Santander<small>San Gil, Santander</small></div></div>
+        <div class="row"><span class="ri"><i data-icon="clock" data-size="38"></i></span><div>Lunes a sábado<small>7:00 a. m. – 7:00 p. m.</small></div></div>
+      </div>
+    </div>
+  </section>
+
+  <div id="vignette"></div>
+  <div id="grain"></div>
+  <div id="fade"></div>
+</div>
+
+<script>
+window.STAGE = { w: 1080, h: 1920 };
+// Estructura musical (audio.mjs): beats cada 0.5 s desde t0. drop = logo (beat 8 → 4.2 s), final = cierre (beat 55 → 27.7 s)
+window.MUSIC = { t0: 0.2, drop: 8, arpFrom: 8.2, breakIn: 27.3, final: 55, end: 30.8, pause: null,
+  track: { id: 40, gain: 0.6, under: 3, duck: 0.45 } };  // Lounging By Moonlight (Mixkit, jazz lounge): discreta, a su velocidad original (sounds.mjs)
+
+// ── Servicios del montaje (fotos y video reales de la clínica) ─────────────
+const IMG = f => `../public/anisanar/${f}`;
+const SHOTS = [
+  { name: 'Consulta', icon: 'stethoscope', img: 'servicio-nutricion-clinica.jpg', pos: '50% 30%' },
+  { name: 'Cirugía', icon: 'scissors', img: 'gallery-microcirugia-ocular.webp', pos: '50% 40%' },
+  { name: 'Laboratorio', icon: 'flask-conical', img: 'servicio-diagnostico-imagen.jpg', pos: '30% 50%' },
+  { name: 'Hospitalización', icon: 'bed', img: 'gallery-carino-cachorro.webp', pos: '55% 40%' },
+  { name: 'Fisioterapia', icon: 'activity', img: 'gallery-fisioterapia-pelota.webp', pos: '50% 40%' },
+  { name: 'Farmacia y tienda', icon: 'shopping-bag', video: 'video-instalaciones-anisanar.mp4', from: 10.2 },
+];
+
+function iconSVG(name, size = 24, sw = 2) {
+  return `<svg class="ic" viewBox="0 0 24 24" width="${size}" height="${size}" stroke-width="${sw}">${ICONS[name] || ''}</svg>`;
+}
+document.getElementById('shots').innerHTML = SHOTS.map((s, i) => `
+  <div class="shot" id="shot${i}">
+    ${s.video ? `<video class="fill" id="v-shop" src="${IMG(s.video)}" muted playsinline preload="auto"></video>`
+              : `<div class="fill kb" style="background-image:url('${IMG(s.img)}');background-position:${s.pos}"></div>`}
+    <div class="shade-bot"></div>
+    <div class="num">0${i + 1} / 06</div>
+    <div class="label"><span class="ico">${iconSVG(s.icon, 58, 2.2)}</span><span class="name">${s.name}</span></div>
+  </div>`).join('');
+// ── Equipo (mismos datos que src/data/team.ts); la Dra. Carolina va en la casilla central ──
+const TEAM = [
+  ['maria-jose-acevedo', 'Dra. María José', 'Médica Veterinaria'],
+  ['juan-jose-rueda', 'Dr. Juan José', 'Médico Veterinario'],
+  ['luis-martinez', 'Luis', 'Bacteriólogo'],
+  ['daniela-ruiz', 'Daniela', 'Auxiliar Veterinaria'],
+  ['carolina-martinez', 'Dra. Carolina', 'Directora y Fundadora', true],
+  ['ana-maria-villamizar', 'Ana María', 'Auxiliar Veterinaria'],
+  ['ximena-munoz', 'Ximena', 'Auxiliar Veterinaria'],
+  ['veronica-bustos', 'Verónica', 'Auxiliar Administrativa'],
+  ['alexander-cely', 'Alexander', 'Peluquería Canina'],
+];
+document.getElementById('crew').innerHTML = TEAM.map(([img, name, role, lead]) => `
+  <div class="mate${lead ? ' lead' : ''}" style="background-image:url('../public/team/${img}.webp')">
+    ${lead ? '<span class="badge">Fundadora</span>' : ''}
+    <div class="tx"><div class="nm">${name}</div><div class="rl">${role}</div></div>
+  </div>`).join('');
+document.querySelectorAll('i[data-icon]').forEach(el => {
+  const w = document.createElement('span'); w.style.display = 'inline-flex';
+  w.innerHTML = iconSVG(el.dataset.icon, +el.dataset.size || 24, +el.dataset.sw || 2); el.replaceWith(w);
+});
+
+// ── Timeline ───────────────────────────────────────────────────────────────
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const CUES = [];
+const sfx = (type, t, o = {}) => CUES.push({ type, t: +t.toFixed(3), ...o });
+const DURATION = 31.5;
+const tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
+const show = (s, t) => tl.set(s, { autoAlpha: 1 }, t), hide = (s, t) => tl.set(s, { autoAlpha: 0 }, t);
+const rise = (targets, t, o = {}) => tl.fromTo(targets, { y: o.y ?? 60, opacity: 0, filter: `blur(${o.blur ?? 12}px)` },
+  { y: 0, opacity: 1, filter: 'blur(0px)', duration: o.d ?? .8, stagger: o.st ?? .07, ease: 'expo.out' }, t);
+
+// Clips de video reales: en cada frame se posicionan en su instante exacto (render determinista)
+const CLIPS = [];
+const clip = (sel, start, end, from = 0) => CLIPS.push({ el: $(sel), start, end, from });
+
+// ═════ S1 · GANCHO (0 – 4.2) ═════
+show('#s1', 0);
+clip('#v-hook', 0, 4.6, 8.3);
+tl.fromTo('#v-hook', { scale: 1.04 }, { scale: 1.16, duration: 4.4, ease: 'sine.inOut' }, 0);
+rise('#s1 .l1 .w', .3, { st: .07 });
+tl.to('#s1 .l1', { opacity: .45, duration: .5, ease: 'power2.out' }, 2.05);
+rise('#s1 .l2 .w', 2.1, { st: .1 });
+tl.to('#s1', { scale: 1.5, opacity: 0, filter: 'blur(16px)', duration: .5, ease: 'power3.in' }, 3.8);
+hide('#s1', 4.35);
+
+// ═════ S2 · LOGO sobre la entrada (4.2 – 8.2) ═════
+show('#s2', 4.0);
+clip('#v-door', 4.0, 8.5, 0.2);
+tl.fromTo('#s2', { scale: 1.3, opacity: 0 }, { scale: 1, opacity: 1, duration: .9, ease: 'expo.out' }, 4.0);
+tl.fromTo('#v-door', { scale: 1.0 }, { scale: 1.14, duration: 4.4, ease: 'sine.inOut' }, 4.0);
+tl.fromTo('#s2-logo', { scale: 0, rotation: -60 }, { scale: 1, rotation: 0, duration: .8, ease: 'back.out(1.7)' }, 4.15);
+['#r1', '#r2'].forEach((r, i) => tl.fromTo(r, { scale: .9, opacity: .9 }, { scale: 2.6 + i * .5, opacity: 0, duration: 1.2, ease: 'expo.out' }, 4.3 + i * .12));
+tl.fromTo('#s2-wm .w', { y: 60, opacity: 0, filter: 'blur(12px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: .8, stagger: .05, ease: 'expo.out' }, 4.75);
+rise('#s2-sub', 5.4, { y: 30, blur: 6 });
+tl.fromTo('#s2-chip', { scale: .5, opacity: 0 }, { scale: 1, opacity: 1, duration: .6, ease: 'back.out(2.2)' }, 6.0);
+tl.to('#s2 .center', { y: -80, opacity: 0, filter: 'blur(10px)', duration: .45, ease: 'power3.in' }, 7.8);
+tl.to('#s2', { y: -500, duration: .5, ease: 'power3.in' }, 7.85);
+// (sin efecto propio: la entrada de la primera foto, 0.2 s después, hace la transición)
+hide('#s2', 8.4);
+
+// ═════ S3 · SERVICIOS (8.2 – 15.2): cortes a ritmo, "swipe" vertical como al pasar un Reel ═════
+show('#s3', 8.2);
+const CUT = [8.2, 9.2, 10.2, 11.2, 12.2, 13.2], S3_END = 15.2;
+clip('#v-shop', 13.0, 15.4, SHOTS[5].from);
+rise('#s3-head', 8.35, { y: 20, blur: 4 });
+SHOTS.forEach((s, i) => {
+  const t = CUT[i], next = CUT[i + 1] ?? S3_END, el = `#shot${i}`;
+  tl.fromTo(el, { yPercent: i === 0 ? 30 : 100, opacity: i === 0 ? 0 : 1 }, { yPercent: 0, opacity: 1, duration: .5, ease: 'expo.out' }, t);
+  tl.fromTo(`${el} .kb, ${el} video`, { scale: 1.18 }, { scale: 1.02, duration: next - t + .5, ease: 'sine.out' }, t);
+  tl.fromTo(`${el} .ico`, { scale: 0, rotation: -40 }, { scale: 1, rotation: 0, duration: .5, ease: 'back.out(2.4)' }, t + .12);
+  tl.fromTo(`${el} .name`, { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: .55, ease: 'expo.out' }, t + .16);
+  tl.fromTo(`${el} .num`, { opacity: 0 }, { opacity: 1, duration: .3, ease: 'power1.out' }, t + .1);
+  if (i < SHOTS.length - 1) tl.to(el, { yPercent: -28, filter: 'blur(6px)', duration: .5, ease: 'power3.in' }, next - .1);
+});
+tl.to('#s3-head', { opacity: 0, duration: .3 }, 13.5);
+tl.to('#shot5 .label, #shot5 .num', { opacity: 0, duration: .3, ease: 'power2.in' }, 13.55);
+tl.fromTo('#s3-final', { opacity: 0 }, { opacity: 1, duration: .35, ease: 'power2.out' }, 13.6);
+tl.fromTo('#s3-final .w', { scale: 1.5, opacity: 0, filter: 'blur(14px)' }, { scale: 1, opacity: 1, filter: 'blur(0px)', duration: .6, stagger: .08, ease: 'expo.out' }, 13.65);
+tl.to('#s3', { scale: .85, opacity: 0, filter: 'blur(12px)', duration: .45, ease: 'power3.in' }, 14.9);
+hide('#s3', 15.45);
+
+// ═════ S4 · EQUIPO (15.2 – 19.4) ═════
+show('#s4', 15.2);
+tl.fromTo('#s4 .bgimg', { scale: 1.25 }, { scale: 1.1, duration: 4.4, ease: 'sine.out' }, 15.2);
+tl.fromTo('#s4', { opacity: 0 }, { opacity: 1, duration: .4, ease: 'power2.out' }, 15.2);
+rise('#s4 .head .w', 15.3, { st: .06 });
+// 1) la Dra. Carolina entra en grande en el centro  2) se acomoda en su casilla  3) el equipo aparece en onda desde el centro
+const lead = $('#crew .lead'), mates = $$('#crew .mate:not(.lead)');
+tl.fromTo(lead, { scale: 2.5, opacity: 0, filter: 'blur(14px)' }, { scale: 1.9, opacity: 1, filter: 'blur(0px)', duration: .7, ease: 'expo.out' }, 15.45);
+tl.to(lead, { scale: 1, duration: .6, ease: 'power3.inOut' }, 16.15);
+tl.fromTo(mates, { scale: .55, opacity: 0, x: (i, el) => (540 - (el.offsetLeft + 158 + 120)) * .5, y: (i, el) => (992 - (el.offsetTop + 525 + 150)) * .5 },
+  { scale: 1, opacity: 1, x: 0, y: 0, duration: .75, stagger: { each: .045, from: 'center' }, ease: 'expo.out' }, 16.4);
+rise('#crew-label', 17.2, { y: 30, blur: 6 });
+tl.fromTo('#crew', { scale: 1 }, { scale: 1.04, duration: 2.6, ease: 'sine.inOut' }, 16.6);
+tl.to('#s4', { scale: 1.12, opacity: 0, filter: 'blur(12px)', duration: .45, ease: 'power3.in' }, 19.1);
+hide('#s4', 19.6);
+
+// ═════ S5 · TESTIMONIO (19.4 – 23.8) ═════
+show('#s5', 19.35);
+tl.fromTo('#s5', { opacity: 0 }, { opacity: 1, duration: .4, ease: 'power2.out' }, 19.35);
+tl.fromTo('#s5-bg', { scale: 1.2 }, { scale: 1.04, duration: 4.6, ease: 'sine.out' }, 19.35);
+tl.fromTo('#s5-stat .n', { scale: .6, opacity: 0, filter: 'blur(14px)' }, { scale: 1, opacity: 1, filter: 'blur(0px)', duration: .8 }, 19.5);
+tl.to('#s5-n', { innerText: 9, duration: .9, ease: 'power2.out', snap: { innerText: 1 } }, 19.55);
+rise('#s5-stat .l', 19.9, { y: 30, blur: 6 });
+tl.fromTo('#s5-quote', { y: 200, opacity: 0, rotation: 2 }, { y: 0, opacity: 1, rotation: 0, duration: .9, ease: 'expo.out' }, 20.5);
+tl.fromTo('#s5-quote .qi', { scale: 0, rotation: -30 }, { scale: 1, rotation: 0, duration: .5, ease: 'back.out(2.4)' }, 20.75);
+tl.fromTo('#s5-quote .paws > *', { scale: 0 }, { scale: 1, duration: .4, stagger: .12, ease: 'back.out(3)' }, 21.6);
+tl.to('#s5', { y: -300, opacity: 0, filter: 'blur(10px)', duration: .45, ease: 'power3.in' }, 23.5);
+hide('#s5', 24.0);
+
+// ═════ S6 · AGENDA: web → WhatsApp (23.8 – 27.8) ═════
+show('#s6', 23.75);
+tl.fromTo('#s6', { opacity: 0 }, { opacity: 1, duration: .35, ease: 'power2.out' }, 23.75);
+tl.fromTo('.blob.t', { x: 0, y: 0 }, { x: 260, y: 160, duration: 4.5, ease: 'sine.inOut' }, 23.75);
+tl.fromTo('.blob.g', { x: 0, y: 0 }, { x: -240, y: -140, duration: 4.5, ease: 'sine.inOut' }, 23.75);
+rise('#s6 .head .w', 23.85, { st: .06 });
+tl.fromTo('#phone', { y: 420, rotation: 6, opacity: 0 }, { y: 0, rotation: 0, opacity: 1, duration: 1.0, ease: 'expo.out' }, 23.9);
+tl.fromTo('#s6-url', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: .6 }, 24.3);
+// toque en "Agendar cita": destino medido del layout real (centro del botón)
+const SCR = $('#scr');
+const at = sel => { let el = $(sel), x = el.offsetWidth / 2, y = el.offsetHeight / 2;
+  while (el && el !== SCR) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; } return { x, y }; };
+tl.set('#tch', { x: 470, y: 1060, scale: 1.4 }, 24.6);
+tl.to('#tch', { opacity: 1, scale: 1, duration: .25, ease: 'power2.out' }, 24.6);
+tl.to('#tch', { x: () => at('#web-btn').x, duration: .45, ease: 'power2.inOut' }, 24.65);
+tl.to('#tch', { y: () => at('#web-btn').y, duration: .45, ease: 'power3.out' }, 24.65);
+tl.to('#tch', { scale: .78, duration: .09, ease: 'power2.in' }, 25.1).to('#tch', { scale: 1, duration: .3, ease: 'back.out(3)' }, 25.19);
+tl.fromTo('#tring', { x: () => at('#web-btn').x, y: () => at('#web-btn').y, scale: .4, opacity: .9 }, { scale: 1.8, opacity: 0, duration: .55, ease: 'expo.out' }, 25.12);
+tl.to('#web-btn', { scale: .95, duration: .1, ease: 'power2.in' }, 25.1).to('#web-btn', { scale: 1, duration: .3, ease: 'back.out(3)' }, 25.2);
+tl.to('#tch', { opacity: 0, duration: .2 }, 25.35);
+tl.to('#web', { xPercent: -30, duration: .5, ease: 'power3.inOut' }, 25.35);
+tl.to('#wa', { xPercent: -100, duration: .5, ease: 'power3.inOut' }, 25.35);
+tl.fromTo('#bub', { scale: .4, opacity: 0 }, { scale: 1, opacity: 1, duration: .5, ease: 'back.out(1.8)' }, 25.85);
+tl.fromTo('#bub .ln', { x: 14, opacity: 0 }, { x: 0, opacity: 1, duration: .4, stagger: .1, ease: 'expo.out' }, 25.95);
+tl.to('#tk', { color: '#53bdeb', duration: .2 }, 26.8);
+tl.to('#phone', { y: -20, duration: 2, ease: 'sine.inOut' }, 25.6);
+tl.to('#s6', { scale: .9, opacity: 0, filter: 'blur(12px)', duration: .45, ease: 'power3.in' }, 27.4);
+hide('#s6', 27.9);
+
+// ═════ S7 · CIERRE (27.7 – 31.5) ═════
+show('#s7', 27.6);
+tl.fromTo('#s7', { opacity: 0 }, { opacity: 1, duration: .4, ease: 'power2.out' }, 27.6);
+tl.fromTo('#s7-bg', { scale: 1.25 }, { scale: 1.05, duration: 3.9, ease: 'sine.out' }, 27.6);
+tl.fromTo('#s7-logo', { scale: 0, rotation: -80 }, { scale: 1, rotation: 0, duration: .8, ease: 'back.out(1.7)' }, 27.65);
+tl.fromTo('#r3', { scale: .9, opacity: .9 }, { scale: 2.8, opacity: 0, duration: 1.2, ease: 'expo.out' }, 27.8);
+tl.fromTo('#s7-wm .w', { y: 50, opacity: 0, filter: 'blur(12px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: .8, stagger: .045, ease: 'expo.out' }, 28.05);
+rise('#s7-tag', 28.55, { y: 30, blur: 6 });
+tl.fromTo('#s7-info', { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: .7 }, 28.95);
+tl.fromTo('#s7-info .row', { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: .55, stagger: .12, ease: 'expo.out' }, 29.05);
+tl.fromTo('#s7-info .ri', { scale: 0 }, { scale: 1, duration: .45, stagger: .12, ease: 'back.out(2.4)' }, 29.1);
+tl.to('#fade', { opacity: 1, duration: .6, ease: 'power2.in' }, 30.9);
+
+// ═════ PLAN DE SONIDO ═════
+// Regla (skill hyperframes, references/sound.md): pocos y exactos, cada efecto con una causa en pantalla.
+// Sonidos de las referencias del cliente, cada uno solo en su momento. Ver SONIDOS-clientes.md.
+sfx('riser', 2.9, { dur: 1.3 });          // 2.9 → 4.2  sube hacia el logo…
+sfx('impact', 4.25);                       // …y golpea cuando aparece (clímax: una sola vez en el video)
+sfx('sparkle', 4.75);                      // brillo: el logo se asienta y entra la marca
+sfx('pop', 6.05);                          // aterriza el chip "Desde 2011"
+sfx('cut', 8.0);                           // corte: logo → montaje de servicios
+CUT.slice(1).forEach(t => sfx('swipe', t));  // cortes entre los 6 servicios: whoosh rápido, más sutil, tomas alternas
+sfx('cut', 14.95);                         // corte: montaje → equipo
+sfx('swish', 15.45);                       // la foto de la Dra. Carolina entra rápida y grande
+sfx('whooshSoft', 16.45);                  // el equipo aparece en onda desde el centro…
+[16.66, 16.76, 16.86].forEach((t, i) => sfx('pop', t, { pitch: 1 + i * .06 }));  // …y aterrizan las fotos ("click ×3")
+sfx('cut', 19.15);                         // corte: equipo → testimonio
+for (let n = 1; n <= 9; n++)                // el contador sube 0 → 9: un tic digital por número, al ritmo del conteo
+  sfx('count', 19.55 + .9 * (1 - Math.sqrt(1 - n / 9)), { pitch: 1 + n * .02 });
+sfx('cut', 23.55);                         // corte: testimonio → agenda
+sfx('tap', 25.12);                         // el dedo toca "Agendar cita"
+sfx('swish', 25.35);                       // la pantalla se desliza a WhatsApp
+sfx('notify', 25.85);                      // llega el mensaje
+sfx('cut', 27.4);                          // corte: agenda → cierre
+sfx('pop', 29.1);                          // aterriza la tarjeta de contacto
+sfx('hit', 27.75);                         // el logo final gira y aterriza
+sfx('sparkle', 28.1);                      // brillo: entra la marca del cierre
+// Tecleo: cada palabra que se escribe en pantalla suena con una tecla suave (2 tomas alternas, 3 tonos), en el mismo
+// instante en que aparece. No se suma si cae a menos de 0.09 s de otro efecto (no se amontonan).
+const typed = (sel, t, st) => $$(sel).forEach((_, i) => {
+  const at = t + i * st; if (!CUES.some(c => Math.abs(c.t - at) < .09)) sfx('key', at);
+});
+typed('#s1 .l1 .w', .3, .07);              // "¿Qué tiene mi perro?"…
+typed('#s1 .l2 .w', 2.1, .1);
+typed('#s2-sub', 5.4, 0);
+typed('#s3-head', 8.35, 0);
+SHOTS.forEach((_, i) => typed(`#shot${i} .name`, CUT[i] + .16, 0));   // nombre de cada servicio
+typed('#s3-final .w', 13.65, .08);
+typed('#s4 .head .w', 15.3, .06);
+typed('#crew-label', 17.2, 0);
+typed('#s5-stat .l', 19.9, 0);
+typed('#s6 .head .w', 23.85, .06);
+typed('#s7-tag', 28.55, 0);
+
+tl.set({}, {}, DURATION);
+window.CUES = CUES;
+window.DURATION = DURATION;
+window.__seek = async t => {
+  tl.time(t, false);
+  const waits = [];
+  for (const c of CLIPS) {
+    if (t < c.start - .1 || t > c.end + .1 || !c.el.duration) continue;
+    const target = Math.min(c.el.duration - .05, c.from + Math.max(0, t - c.start));
+    if (Math.abs(c.el.currentTime - target) > .001) {
+      waits.push(new Promise(r => { c.el.addEventListener('seeked', r, { once: true }); setTimeout(r, 3000); }));
+      c.el.currentTime = target;
+    }
+  }
+  if (waits.length) { await Promise.all(waits); await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))); }
+};
+if (location.search.includes('play')) { tl.play(); CLIPS.forEach(c => setTimeout(() => { c.el.currentTime = c.from; c.el.play(); }, c.start * 1000)); }
+</script>
+</body>
+</html>

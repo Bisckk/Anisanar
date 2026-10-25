@@ -1,0 +1,14 @@
+node_modules/
+.hyperframes/
+renders/
+*.mp4
+!assets/video/*.mp4
+# Mixkit: licencia sin redistribución de archivos sueltos → se descargan con tools/fetch-media.mjs
+assets/sfx/*.mp3
+!assets/sfx/typing.mp3
+!assets/sfx/key-a.mp3
+!assets/sfx/key-b.mp3
+!assets/sfx/sparkle.mp3
+assets/music/
+.thumbnails/
+.waveform-cache/

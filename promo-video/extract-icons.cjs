@@ -3,7 +3,8 @@ const fs = require('fs'), path = require('path');
 const dir = path.join(__dirname, '..', 'node_modules', 'lucide-react', 'dist', 'esm', 'icons');
 const names = ['stethoscope','syringe','microscope','activity','apple','cross','clock','moon','calendar-check',
   'message-circle','search','smartphone','star','shield-check','zap','users','trending-up','check','dog','cat',
-  'rabbit','send','globe','bell','heart-pulse','phone-off','sparkles','arrow-right','map-pin','bed'];
+  'rabbit','send','globe','bell','heart-pulse','phone-off','sparkles','arrow-right','map-pin','bed',
+  'scissors','flask-conical','pill','shopping-bag','quote','paw-print','heart','phone','hand-heart','store'];
 const out = {};
 for (const n of names) {
   const src = fs.readFileSync(path.join(dir, n + '.js'), 'utf8');

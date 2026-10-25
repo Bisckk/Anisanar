@@ -1,0 +1,79 @@
+<template>
+  <style>
+  #root { position: absolute; inset: 0; overflow: hidden; background: #0b151d; font-family: Montserrat, sans-serif; color: #fff; }
+  .cam { position: absolute; inset: 0; transform-origin: 50% 45%; }
+  .bg-media { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+  .line { position: absolute; left: 60px; width: 960px; text-align: center; line-height: 1.02; }
+  .w { display: inline-block; opacity: 0; margin: 0 0.12em; text-shadow: 0 4px 24px rgba(0,0,0,.8), 0 0 3px rgba(0,0,0,.6); }
+  .sm { font: 700 66px/1.1 Montserrat, sans-serif; letter-spacing: -0.01em; }
+  .serif { font: italic 900 92px/1.05 'Playfair Display', serif; }
+  .em { font: 900 220px/0.92 Montserrat, sans-serif; letter-spacing: -0.04em; text-transform: uppercase; color: #8CC63F; display: block; margin: 0.04em 0; }
+  .em.white { color: #fff; }
+  .em.teal { color: #2BAABC; }
+  .mono { font: 700 210px/1 'Space Mono', monospace; letter-spacing: -0.04em; }
+  .ch { display: inline-block; }
+  [data-slam] { position: relative; }
+  .echo { position: absolute; left: 0; top: 0; width: 100%; margin: 0 !important; opacity: 0; pointer-events: none;
+          color: transparent !important; -webkit-text-stroke: 3px rgba(255,255,255,.85); text-shadow: none !important; }
+  .echo * { color: transparent !important; text-shadow: none !important; }
+.face { height: 262px; border-radius: 24px; background: center 18%/cover; box-shadow: 0 20px 40px rgba(0,0,0,.5); opacity: 0; }
+   .em.nine { font-size: 190px; } #s6-l2b .w, #s6-l2 .w { font-size: 58px; } .em.fam { font-size: 230px; }</style>
+  <div data-hf-id="hf-xyuy" id="root" data-composition-id="s6" data-width="1080" data-height="1920" data-start="0" data-duration="3.3">
+    
+    <div data-hf-id="hf-pcfr" class="cam" id="s6-cam" data-layout-allow-overflow=""><img data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:1,&quot;adjust&quot;:{&quot;exposure&quot;:-0.18,&quot;contrast&quot;:0.5,&quot;highlights&quot;:-0.2,&quot;shadows&quot;:0,&quot;whites&quot;:0,&quot;blacks&quot;:-0.35,&quot;temperature&quot;:0,&quot;tint&quot;:0,&quot;vibrance&quot;:0,&quot;saturation&quot;:0.08},&quot;details&quot;:{&quot;vignette&quot;:0.4,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0.04,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-jca6" id="s6-bg" class="clip bg-media" data-start="0" data-duration="3.3" src="assets/img/hero-equipo-veterinario.jpg" style="object-position:42% 50%" alt=""></div>
+    <div data-hf-id="hf-mm1y" class="clip" id="s6-grid" data-start="0.1" data-duration="3.2" style="position:absolute;left:184px;top:430px;width:712px;display:grid;grid-template-columns:repeat(3,220px);gap:26px" data-layout-allow-overlap="">
+      <div data-hf-id="hf-6ucq" class="face" id="s6-face0" style="background-image:url('assets/team/maria-jose-acevedo.webp')"></div><div data-hf-id="hf-0eth" class="face" id="s6-face1" style="background-image:url('assets/team/juan-jose-rueda.webp')"></div><div data-hf-id="hf-exxe" class="face" id="s6-face2" style="background-image:url('assets/team/luis-martinez.webp')"></div><div data-hf-id="hf-38hi" class="face" id="s6-face3" style="background-image:url('assets/team/daniela-ruiz.webp')"></div><div data-hf-id="hf-urrh" class="face" id="s6-face4" style="background-image:url('assets/team/carolina-martinez.webp');box-shadow:0 0 0 6px #8CC63F, 0 20px 40px rgba(0,0,0,.5)"></div><div data-hf-id="hf-lzq8" class="face" id="s6-face5" style="background-image:url('assets/team/ana-maria-villamizar.webp')"></div><div data-hf-id="hf-t3m0" class="face" id="s6-face6" style="background-image:url('assets/team/ximena-munoz.webp')"></div><div data-hf-id="hf-ej9h" class="face" id="s6-face7" style="background-image:url('assets/team/veronica-bustos.webp')"></div><div data-hf-id="hf-75rg" class="face" id="s6-face8" style="background-image:url('assets/team/alexander-cely.webp')"></div>
+    </div>
+    <div data-hf-id="hf-ua7j" class="line clip" id="s6-l1" data-start="0.07" data-duration="2.23" style="top:230px" data-layout-allow-overlap=""><span data-hf-id="hf-c4y2" class="w em white nine" id="s6-w37" data-t="0.12" data-slam="1">Nueve</span></div>
+    <div data-hf-id="hf-vv9a" class="line clip" id="s6-l2" data-start="0.37" data-duration="0.76" style="top:1236px" data-layout-allow-overlap=""><span data-hf-id="hf-fiwk" class="w sm" id="s6-w38" data-t="0.42">profesionales</span></div>
+    <div data-hf-id="hf-6cso" class="line clip" id="s6-l2b" data-start="1.11" data-duration="2.19" style="top:1236px" data-layout-allow-overlap=""><span data-hf-id="hf-12ro" class="w sm" id="s6-w39" data-t="1.16">que</span><span data-hf-id="hf-vvxg" class="w sm" id="s6-w40" data-t="1.28">tratan</span><span data-hf-id="hf-pr87" class="w sm" id="s6-w41" data-t="1.58">a</span><span data-hf-id="hf-fq8v" class="w sm" id="s6-w42" data-t="1.66">tu</span><span data-hf-id="hf-f33e" class="w sm" id="s6-w43" data-t="1.78">mascota</span><span data-hf-id="hf-iyqv" class="w sm" id="s6-w44" data-t="2.28">como</span></div>
+    <div data-hf-id="hf-uv9n" class="line clip" id="s6-l3" data-start="2.47" data-duration="0.83" style="top:700px" data-layout-allow-overlap=""><span data-hf-id="hf-a3fc" class="w em fam" id="s6-w45" data-t="2.52" data-slam="1">familia</span></div>
+  </div>
+  <script>
+  const tl = gsap.timeline({ paused: true });
+  const RGB0 = '-14px 0 rgba(255,40,140,0.85), 14px 0 rgba(40,220,255,0.85), 0 6px 30px rgba(0,0,0,0.6)';
+  const RGB1 = '0px 0 rgba(255,40,140,0), 0px 0 rgba(40,220,255,0), 0 6px 30px rgba(0,0,0,0.6)';
+  const cam = document.querySelector('#s6-cam');
+  const split = el => { const walk = n => [...n.childNodes].forEach(c => {
+      if (c.nodeType === 3) { const fr = document.createDocumentFragment();
+        [...c.textContent].forEach(ch => { const sp = document.createElement('span'); sp.className = 'ch'; sp.textContent = ch; fr.appendChild(sp); });
+        c.replaceWith(fr); } else walk(c); });
+    walk(el); return [...el.querySelectorAll('.ch')]; };
+  let punch = 1;
+  [...document.querySelectorAll('#root .w')].forEach(el => {
+    const at = +el.dataset.t;
+    if (el.dataset.slam) {
+      const echo = el.cloneNode(true); echo.removeAttribute('id'); echo.removeAttribute('data-slam'); echo.classList.add('echo'); echo.style.rotate = '0deg'; echo.setAttribute('aria-hidden', 'true'); echo.setAttribute('data-layout-ignore', '');
+      const chars = split(el); el.appendChild(echo); el.setAttribute('data-layout-ignore', '');   // (ya verificada a ojo: el lector de texto cuenta cada letra como palabra)
+      tl.set(el, { opacity: 1 }, at);
+      const st = Math.min(0.03, 0.3 / chars.length), land = at + st * chars.length + 0.12;   // el eco sale cuando ya aterrizó la última letra
+      tl.fromTo(chars, { opacity: 0, yPercent: 90, rotationX: -85, transformPerspective: 700, filter: 'blur(10px)' },
+        { opacity: 1, yPercent: 0, rotationX: 0, filter: 'blur(0px)', duration: 0.34, ease: 'expo.out', stagger: st }, at);
+      tl.fromTo(el, { scale: 1.25, textShadow: RGB0 }, { scale: 1, duration: 0.45, ease: 'expo.out', immediateRender: false }, at);
+      tl.to(el, { textShadow: RGB1, duration: 0.3, ease: 'power2.out' }, at + 0.08);
+      tl.fromTo(echo, { opacity: 0.6, scale: 1 }, { opacity: 0, scale: 1.35, duration: 0.5, ease: 'power2.out', immediateRender: false }, land);
+      if (cam && at > 0.3) {
+        punch += 0.045;
+        tl.to(cam, { scale: punch, duration: 0.35, ease: 'power3.out' }, at);
+        tl.to(cam, { keyframes: [{ x: -12, y: 6, duration: 0.033 }, { x: 9, y: -5, duration: 0.033 }, { x: -5, y: 3, duration: 0.033 }, { x: 0, y: 0, duration: 0.05 }] }, at);
+      }
+    } else {
+      tl.fromTo(el, { opacity: 0, filter: 'blur(6px)' }, { opacity: 1, filter: 'blur(0px)', duration: 0.13, ease: 'power4.out' }, at);
+    }
+  });
+  // salida de cada línea: blur-out + fade de 0.15 s al final de su ventana
+  document.querySelectorAll('#root .line').forEach(ln => {
+    const end = +ln.dataset.start + +ln.dataset.duration;
+    tl.to(ln.querySelectorAll('.w:not(.echo)'), { opacity: 0, filter: 'blur(8px)', duration: 0.15, ease: 'power2.in' }, end - 0.16);
+  });
+  tl.fromTo('#s6-cam', { y: 300, scale: 1.5, filter: 'blur(30px)' }, { y: 0, scale: 1, filter: 'blur(0px)', duration: 0.24, ease: 'expo.out' }, 0);
+   tl.to('#s6-bg', { opacity: 0.35, duration: 0.01 }, 0);
+   const faces = [...document.querySelectorAll('#s6-grid .face')];
+   const order = [4, 1, 3, 5, 7, 0, 2, 6, 8];   // onda desde el centro
+   order.forEach((idx, k) => tl.fromTo(faces[idx], { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'expo.out' }, 0.24 + k * 0.05));
+   // FAMILIA: la cuadrícula se atenúa para que la palabra mande
+   tl.to('#s6-grid', { opacity: 0.35, filter: 'blur(3px)', duration: 0.2, ease: 'power2.out' }, 2.52);
+   tl.to('#root', { filter: 'blur(10px)', opacity: 0, duration: 0.15, ease: 'power2.in' }, 3.15);
+  window.__timelines["s6"] = tl;
+  </script>
+</template>

@@ -1,0 +1,56 @@
+{
+ "voiceId": "hpp4J3VqNfWAUOO0d1Us",
+ "voiceName": "Bella - Professional, Bright, Warm",
+ "model": "eleven_v4",
+ "lines": [
+  {
+   "t": 0.3,
+   "file": "01.mp3",
+   "dur": 3.794,
+   "tempo": 1.084,
+   "text": "No pueden decirte qué les pasa, pero nosotros sabemos escucharlos."
+  },
+  {
+   "t": 4.5,
+   "file": "02.mp3",
+   "dur": 3.576,
+   "tempo": 1.081,
+   "text": "Somos Anisanar, veterinaria en San Gil desde 2011."
+  },
+  {
+   "t": 8.3,
+   "file": "03.mp3",
+   "dur": 6.558,
+   "tempo": 1.1,
+   "text": "Consulta, cirugía, laboratorio, hospitalización, fisioterapia y tienda, todo en un solo lugar."
+  },
+  {
+   "t": 15.4,
+   "file": "04.mp3",
+   "dur": 3.376,
+   "tempo": 1,
+   "text": "Un equipo que cuida a tu mascota como parte de su familia."
+  },
+  {
+   "t": 19.6,
+   "file": "05.mp3",
+   "dur": 3.392,
+   "tempo": 1,
+   "text": "Por eso, nueve de cada diez familias nos recomiendan."
+  },
+  {
+   "t": 24,
+   "file": "06.mp3",
+   "dur": 3.561,
+   "tempo": 1.028,
+   "text": "Agenda tu cita en anisanar punto com, directo a WhatsApp."
+  },
+  {
+   "t": 28.1,
+   "file": "07.mp3",
+   "dur": 2.787,
+   "tempo": 1,
+   "text": "Anisanar. Cuidamos a tu mejor amigo."
+  }
+ ]
+}

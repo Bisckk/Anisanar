@@ -1,19 +1,25 @@
-// Sintetiza la banda sonora completa (música + efectos) en soundtrack.wav.
-// Los efectos se colocan desde cues.json, exportado por la misma timeline GSAP (node render.mjs --cues),
-// así cada sonido cae en el frame exacto de su animación.
+// Sintetiza la banda sonora completa (música + efectos + voz) en soundtrack-<video>.wav.
+//   node audio.mjs [video]   (video: ver videos.mjs; por defecto "entrega")
+// Los efectos se colocan desde cues-<video>.json, exportado por la misma timeline GSAP (node render.mjs --cues),
+// así cada sonido cae en el frame exacto de su animación. La estructura musical (window.MUSIC) también sale de la página.
 // Paleta: cálida y sutil — pad redondo, marimba, pulso discreto; efectos de "aire" y campanas suaves.
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
+import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import ffmpegPath from 'ffmpeg-static';
 import { TRIM } from './voice.mjs';
+import { pickVideo } from './videos.mjs';
+import { SFX as LIB, MUSIC as TRACKS, sfxFile, musicFile } from './sounds.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const cuesPath = path.join(here, 'cues.json');
+const video = pickVideo();
+// --sfx-only: solo los efectos de las animaciones (sin música ni voz) para revisarlos uno a uno → <video>-sfx.wav
+const SFX_ONLY = process.argv.includes('--sfx-only');
+if (SFX_ONLY) video.soundtrack = video.soundtrack.replace(/.wav$/, '-sfx.wav');
 // siempre regenerar los cues para que el audio siga a la timeline actual
-execFileSync(process.execPath, [path.join(here, 'render.mjs'), '--cues'], { stdio: 'inherit' });
-const { duration: DUR, cues } = JSON.parse(readFileSync(cuesPath, 'utf8'));
+execFileSync(process.execPath, [path.join(here, 'render.mjs'), video.id, '--cues'], { stdio: 'inherit' });
+const { duration: DUR, cues, music } = JSON.parse(readFileSync(path.join(here, video.cues), 'utf8'));
 
 const SR = 44100;
 const N = Math.ceil(DUR * SR);
@@ -125,18 +131,82 @@ const FX = {
   },
   pad() {},
 };
-for (const c of cues) (FX[c.type] || (() => console.warn('cue sin sonido:', c.type)))(c);
+// ── Efectos grabados (sounds/, ver sounds.mjs); si falta un archivo se usa el sintetizado de FX ──
+const soundsDir = path.join(here, 'sounds');
+const decode = (file, args = [], ch = 1) => {
+  const raw = execFileSync(ffmpegPath, ['-nostdin', '-v', 'error', ...args.pre ?? [], '-i', file, ...(args.post ?? []), '-f', 'f32le', '-ac', String(ch), '-ar', String(SR), '-'], { maxBuffer: 1 << 30 });
+  return new Float32Array(raw.buffer.slice(raw.byteOffset, raw.byteOffset + raw.length));
+};
+const sampleCache = {};
+function sample(id, { reverse = false, lowpass = 0 } = {}) {
+  const key = `${id}|${reverse}|${lowpass}`;
+  if (key in sampleCache) return sampleCache[key];
+  const file = path.join(soundsDir, sfxFile(id));
+  if (!existsSync(file)) return (sampleCache[key] = null);
+  const x = decode(file, { post: ['-af', [TRIM, reverse && 'areverse', lowpass && `lowpass=f=${lowpass}`].filter(Boolean).join(',')] });
+  let pk = 0, pi = 0;
+  for (let i = 0; i < x.length; i++) if (Math.abs(x[i]) > pk) { pk = Math.abs(x[i]); pi = i; }
+  for (let i = 0; i < x.length; i++) x[i] *= 0.7 / (pk || 1);   // todos a pico -3 dB antes de su ganancia de mezcla
+  return (sampleCache[key] = { x, peak: pi });
+}
+const uses = {};
+function playSample(c) {
+  const def = LIB[c.type];
+  if (!def) return false;
+  const n = (uses[c.type] = (uses[c.type] ?? 0) + 1) - 1;
+  const id = def.ids ? def.ids[n % def.ids.length] : def.alt && n % 2 ? def.alt : def.id;
+  const s = sample(id, def);
+  if (!s) return false;
+  // variación de velocidad: rotación propia del tipo × "pitch" del cue (p. ej. pops escalonados ascendentes)
+  const rate = (def.rates ? def.rates[n % def.rates.length] : 1) * clamp(c.pitch ?? 1, 0.85, 1.25);
+  // el pico del sonido cae 1 fotograma DESPUÉS de su imagen (la luz llega antes que el sonido; adelantado se nota más)
+  const anchor = (def.alignEnd ? c.t + (c.dur ?? 0) : c.t) + 1 / 30;
+  const len = Math.floor(s.x.length / rate), data = new Float32Array(len), g = def.gain * (c.gain ?? 1);
+  for (let i = 0; i < len; i++) { const p = i * rate, j = Math.floor(p), f = p - j; data[i] = ((s.x[j] ?? 0) * (1 - f) + (s.x[j + 1] ?? 0) * f) * g; }
+  // se mezcla más tarde (levelEvents), cuando ya existen música y voz para medir la "cama"
+  EVENTS.push({ type: c.type, start: Math.round((anchor - s.peak / rate / SR) * SR), peakAt: Math.round(anchor * SR), data, target: def.target ?? 3 });
+  return true;
+}
+const EVENTS = [];
+let recorded = 0;
+for (const c of cues) {
+  if (playSample(c)) recorded++;
+  else (FX[c.type] || (() => console.warn('cue sin sonido:', c.type)))(c);
+}
+console.log(`✔ efectos: ${recorded}/${cues.length} grabados${recorded < cues.length ? ' (resto sintetizados)' : ''}`);
 
-// ── Música: 120 BPM, Cmaj7–Am7–Fmaj7–G, grid alineado con el logo ───────────
-const BEAT = 0.5, T0 = 0.62;                 // beat 8 = 4.62s (logo), 71 ≈ 36.12, 93 ≈ 47.12 (cierre)
+// ── Música: 120 BPM, Cmaj7–Am7–Fmaj7–G, grid alineado con los golpes de la timeline ──
+// Estructura por video (window.MUSIC en la página); por defecto, la del video de entrega:
+// beat 8 = 4.62s (logo), pausa en el beat 70, beat 93 ≈ 47.12 (cierre).
+const M = { t0: 0.62, drop: 8, arpFrom: 8.6, breakIn: 45.4, final: 93, end: 52.6, pause: [70, 71], ...music };
+const BEAT = 0.5, T0 = M.t0;
 const beatT = b => T0 + b * BEAT;
 const CH = [[60, 64, 67, 71], [57, 60, 64, 67], [53, 57, 60, 64], [55, 59, 62, 67]];
 const ROOT = [36, 33, 41, 43];
-const DROP = beatT(8), BREAK_IN = 45.4, FINAL = beatT(93), END = 52.6;
-const OUT_A = beatT(70), OUT_B = beatT(71);  // pausa de un beat antes de la escena de beneficios
+const DROP = beatT(M.drop), BREAK_IN = M.breakIn, FINAL = beatT(M.final), END = M.end;
+const [OUT_A, OUT_B] = M.pause ? M.pause.map(beatT) : [-1, -1];
 const playing = t => (t >= DROP && t < BREAK_IN && !(t >= OUT_A && t < OUT_B)) || (t >= FINAL && t < END);
 const kicks = [];
 
+// Pista grabada (window.MUSIC.track): se recorta y se ajusta a 120 BPM para que su "drop" caiga en el beat M.drop
+const track = M.track && TRACKS[M.track.id];
+const trackFile = track && path.join(soundsDir, musicFile(M.track.id));
+const useTrack = !!track && existsSync(trackFile);
+if (useTrack && !SFX_ONLY) {
+  const tempo = track.stretch === false ? 1 : 120 / track.bpm;           // factor atempo (<1 = un poco más lenta)
+  const start = track.stretch === false ? track.start ?? 0 : track.drop - tempo * DROP;  // segundo de la pista donde arranca el video
+  const st = decode(trackFile, { pre: ['-ss', start.toFixed(3)], post: ['-t', String(DUR / tempo + 1), '-af', `atempo=${tempo.toFixed(5)}`] }, 2);
+  let e = 0; for (let i = 0; i < st.length; i++) e += st[i] * st[i];
+  const g = 0.11 / Math.sqrt(e / st.length) * (M.track.gain ?? 1);
+  for (let k = 0; k < N && 2 * k + 1 < st.length; k++) {
+    const fadeIn = Math.min(1, k / (0.12 * SR));
+    MUSIC[0][k] += st[2 * k] * g * fadeIn; MUSIC[1][k] += st[2 * k + 1] * g * fadeIn;
+  }
+  console.log(`✔ música: ${track.title} desde ${start.toFixed(2)} s, x${tempo.toFixed(4)}${track.stretch === false ? ' (velocidad original)' : ` → drop en ${DROP.toFixed(2)} s`}`);
+}
+
+// Música sintetizada (respaldo si no hay pista grabada)
+if (!useTrack && !SFX_ONLY) {
 // Pad: senos + triángulo suave, filtro cálido
 {
   const lpL = new BQ('lp', 900), lpR = new BQ('lp', 900);
@@ -181,8 +251,8 @@ for (let b = 0; beatT(b) < DUR; b++) {
     // bajo sinusoidal suave
     voice(MUSIC, t, BEAT * 0.9, tt => Math.sin(TAU * midi(root) * tt) * env(tt, 0.01, 0.22), { gain: 0.16 });
   }
-  // marimba: arpegio en corcheas desde la web hasta el final de reseñas
-  if (t >= 8.6 && t < BREAK_IN + 1 && !(t >= OUT_A && t < OUT_B)) {
+  // marimba: arpegio en corcheas en la parte central del video
+  if (t >= M.arpFrom && t < BREAK_IN + 1 && !(t >= OUT_A && t < OUT_B)) {
     for (let s = 0; s < 2; s++) {
       if ((b * 2 + s) % 8 === 7) continue;     // respiración: una nota en silencio por compás
       const n = chord[(b * 2 + s) % chord.length] + 12;
@@ -204,17 +274,18 @@ for (const tk of kicks) {
     MUSIC[0][s0 + i] *= g; MUSIC[1][s0 + i] *= g;
   }
 }
+}
 
-// ── Locución (voice/lines.json, generado por voice.mjs) ────────────────────
+// ── Locución (<voiceDir>/lines.json, generado por voice.mjs) ────────────────────
 // La voz se coloca en su segundo exacto; música y efectos se apartan mientras habla (ducking suave).
 const VOICE = new Float32Array(N);
 const duck = new Float32Array(N);              // 0 = sin voz, 1 = voz activa (suavizado)
-const voiceManifest = path.join(here, 'voice', 'lines.json');
-if (existsSync(voiceManifest)) {
+const voiceManifest = path.join(here, video.voiceDir, 'lines.json');
+if (existsSync(voiceManifest) && !SFX_ONLY) {
   const { lines } = JSON.parse(readFileSync(voiceManifest, 'utf8'));
   const active = new Uint8Array(N);
   for (const line of lines) {
-    const raw = execFileSync(ffmpegPath, ['-v', 'error', '-i', path.join(here, 'voice', line.file), '-af', TRIM, '-f', 'f32le', '-ac', '1', '-ar', String(SR), '-'], { maxBuffer: 1 << 28 });
+    const raw = execFileSync(ffmpegPath, ['-v', 'error', '-i', path.join(here, video.voiceDir, line.file), '-af', TRIM, '-f', 'f32le', '-ac', '1', '-ar', String(SR), '-'], { maxBuffer: 1 << 28 });
     const pcm = new Float32Array(raw.buffer, raw.byteOffset, raw.length / 4);
     const hp = new BQ('hp', 90);                // limpia graves de la voz para que no choque con el pad
     let e = 0; for (const v of pcm) e += v * v;
@@ -227,14 +298,34 @@ if (existsSync(voiceManifest)) {
   const att = 1 - Math.exp(-1 / (0.15 * SR)), rel = 1 - Math.exp(-1 / (0.6 * SR));
   let d = 0;
   for (let k = 0; k < N; k++) { d += (active[k] - d) * (active[k] > d ? att : rel); duck[k] = d; }
-  // nivel de voz relativo a la música en los tramos hablados: ~7 dB por encima
+  // nivel de voz relativo a la música en los tramos hablados: ~7 dB por encima (≈9 dB con música grabada, más densa)
   let em = 0, ev = 0, n = 0;
   for (let k = 0; k < N; k++) if (active[k]) { const m = (MUSIC[0][k] + KICK[0][k]) * 0.5; em += m * m; ev += VOICE[k] * VOICE[k]; n++; }
-  const vGain = n ? (Math.sqrt(em / n) * 0.5 * 2.24) / Math.sqrt(ev / n) : 0;
+  // window.MUSIC.track.under: dB extra que la música queda por debajo (música de fondo discreta)
+  const vGain = n ? (Math.sqrt(em / n) * 0.5 * (useTrack ? 2.8 * Math.pow(10, (M.track.under ?? 0) / 20) : 2.24)) / Math.sqrt(ev / n) : 0;
   for (let k = 0; k < N; k++) VOICE[k] *= vGain;
   // un toque de sala para integrarla con la mezcla
   for (let k = 0; k < N; k++) { VERB[0][k] += VOICE[k] * 0.04; VERB[1][k] += VOICE[k] * 0.04; }
   console.log(`✔ locución: ${lines.length} frases mezcladas`);
+}
+
+// ── Mezcla automática de efectos por prominencia ───────────────────────────
+// Cada efecto grabado se ajusta para sobresalir `target` dB sobre la cama (música + voz) en ±150 ms de su pico.
+// Solo se atenúa (nunca supera la ganancia de sounds.mjs): así un whoosh no "estalla" sobre una intro suave.
+const duckM = k => 1 - (useTrack ? M.track.duck ?? 0.6 : 0.5) * duck[k], duckS = k => 1 - 0.25 * duck[k];
+for (const ev of EVENTS) {
+  const W = Math.round(0.15 * SR), a = Math.max(0, ev.peakAt - W), b = Math.min(N, ev.peakAt + W);
+  let be = 0; for (let k = a; k < b; k++) { const m = (MUSIC[0][k] + KICK[0][k]) * duckM(k) + VOICE[k]; be += m * m; }
+  const bed = Math.sqrt(be / Math.max(1, b - a)) || 1e-4;
+  // pico efectivo tal como sonará: con el 0.9 del bus y la atenuación de efectos bajo la voz
+  let pk = 0; for (let i = 0; i < ev.data.length; i++) { const k = ev.start + i; if (k >= 0 && k < N) pk = Math.max(pk, Math.abs(ev.data[i] * 0.9 * duckS(k))); }
+  // sin música ni voz no hay cama que medir: cada efecto suena a su ganancia de sounds.mjs
+  ev.scale = SFX_ONLY ? 1 : Math.min(1, bed * Math.pow(10, ev.target / 20) / (pk || 1));
+  for (let i = 0; i < ev.data.length; i++) {
+    const k = ev.start + i; if (k < 0 || k >= N) continue;
+    const v = ev.data[i] * ev.scale;
+    SFX[0][k] += v; SFX[1][k] += v; VERB[0][k] += v * 0.08; VERB[1][k] += v * 0.08;
+  }
 }
 
 // ── Reverb (Freeverb reducido) ─────────────────────────────────────────────
@@ -252,15 +343,34 @@ function reverb(input, spread) {
 }
 const RV = [reverb(VERB[0], 0), reverb(VERB[1], 23)];
 
-// ── Mezcla y master (objetivo ≈ -16 LUFS, sin saturar) ─────────────────────
+// ── Mezcla y master ─────────────────────────────────────────────────────────
+// Nivel final: -14 LUFS integrados, techo -1.5 dBTP (rango recomendado para Reels/TikTok), con loudnorm de 2 pasadas.
+const LUFS = -14, TRUE_PEAK = -1.5;
 const L = new Float32Array(N), R = new Float32Array(N);
 let peak = 0;
 for (let k = 0; k < N; k++) {
   const t = k / SR, fade = t > DUR - 0.8 ? Math.max(0, (DUR - t) / 0.8) : 1;
-  const dm = 1 - 0.5 * duck[k], ds = 1 - 0.25 * duck[k];   // música -6 dB, efectos -2.5 dB bajo la voz
+  // bajo la voz: música -6 dB (-8 dB si es grabada) y efectos -2.5 dB
+  const dm = 1 - (useTrack ? 0.6 : 0.5) * duck[k], ds = 1 - 0.25 * duck[k];
   L[k] = ((MUSIC[0][k] + KICK[0][k]) * dm + SFX[0][k] * 0.9 * ds + RV[0][k] * 2 + VOICE[k]) * fade;
   R[k] = ((MUSIC[1][k] + KICK[1][k]) * dm + SFX[1][k] * 0.9 * ds + RV[1][k] * 2 + VOICE[k]) * fade;
   peak = Math.max(peak, Math.abs(L[k]), Math.abs(R[k]));
+}
+// --report: cuánto sobresale cada efecto (pico en ±150 ms) sobre la "cama" de música + voz (RMS en esa ventana).
+// Referencia: transiciones a ~50–70 % del volumen de la voz; un efecto que sobresale > 6 dB se percibe invasivo.
+if (process.argv.includes('--report')) {
+  const W = Math.round(0.15 * SR), rows = [];
+  for (const c of cues) {
+    const c0 = Math.max(0, Math.round(c.t * SR) - W), c1 = Math.min(N, Math.round(c.t * SR) + W);
+    let sp = 0, be = 0;
+    for (let k = c0; k < c1; k++) {
+      const ds = 1 - 0.25 * duck[k], dm = 1 - (useTrack ? 0.6 : 0.5) * duck[k];
+      sp = Math.max(sp, Math.abs(SFX[0][k] * 0.9 * ds));
+      const b = (MUSIC[0][k] + KICK[0][k]) * dm + VOICE[k]; be += b * b;
+    }
+    rows.push({ t: c.t, tipo: c.type, 'sobresale dB': +(20 * Math.log10(sp / Math.sqrt(be / (c1 - c0) + 1e-12))).toFixed(1) });
+  }
+  console.table(rows);
 }
 // ganancia por RMS (no por pico) para un nivel estable; limitador suave solo en los picos
 let e = 0; for (let k = 0; k < N; k++) e += L[k] * L[k] + R[k] * R[k];
@@ -274,5 +384,15 @@ for (let k = 0; k < N; k++) {
   wav.writeInt16LE(Math.round(clamp(soft(L[k] * norm), -1, 1) * 32767), 44 + k * 4);
   wav.writeInt16LE(Math.round(clamp(soft(R[k] * norm), -1, 1) * 32767), 46 + k * 4);
 }
-writeFileSync(path.join(here, 'soundtrack.wav'), wav);
-console.log(`✔ soundtrack.wav — ${DUR}s, ${cues.length} efectos`);
+// loudnorm en 2 pasadas: medir y aplicar ganancia lineal hasta el objetivo sin pasar el techo
+const pre = path.join(here, video.soundtrack.replace(/\.wav$/, '.pre.wav'));
+writeFileSync(pre, wav);
+const ln = `loudnorm=I=${LUFS}:TP=${TRUE_PEAK}:LRA=11`;
+// pasada 1: loudnorm imprime las medidas en JSON por stderr
+const pass1 = spawnSync(ffmpegPath, ['-nostdin', '-hide_banner', '-i', pre, '-af', `${ln}:print_format=json`, '-f', 'null', '-'], { encoding: 'utf8' });
+const meas = JSON.parse(pass1.stderr.slice(pass1.stderr.lastIndexOf('{')));
+execFileSync(ffmpegPath, ['-nostdin', '-v', 'error', '-y', '-i', pre, '-af',
+  `${ln}:measured_I=${meas.input_i}:measured_TP=${meas.input_tp}:measured_LRA=${meas.input_lra}:measured_thresh=${meas.input_thresh}:offset=${meas.target_offset}:linear=true`,
+  '-ar', String(SR), '-c:a', 'pcm_s16le', path.join(here, video.soundtrack)]);
+rmSync(pre);
+console.log(`✔ ${video.soundtrack} — ${DUR}s, ${cues.length} efectos, ${meas.input_i} → ${LUFS} LUFS`);

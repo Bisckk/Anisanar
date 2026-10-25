@@ -1,0 +1,62 @@
+{
+ "hit-a": {
+  "peak": 0.087,
+  "dur": 1.1
+ },
+ "hit-b": {
+  "peak": 0.151,
+  "dur": 0.48
+ },
+ "hit-c": {
+  "peak": 0.092,
+  "dur": 1.276
+ },
+ "swish-a": {
+  "peak": 0.163,
+  "dur": 1.39
+ },
+ "swish-b": {
+  "peak": 0.111,
+  "dur": 1.1
+ },
+ "swish-c": {
+  "peak": 0.471,
+  "dur": 0.606
+ },
+ "zoom-in": {
+  "peak": 0.435,
+  "dur": 1.275
+ },
+ "zoom-out": {
+  "peak": 0.226,
+  "dur": 1.056
+ },
+ "pops": {
+  "peak": 0.034,
+  "dur": 0.18
+ },
+ "pop": {
+  "peak": 0.006,
+  "dur": 1.175
+ },
+ "message": {
+  "peak": 0.055,
+  "dur": 1.059
+ },
+ "typing": {
+  "peak": 0.455,
+  "dur": 1.5
+ },
+ "key-a": {
+  "peak": 0.075,
+  "dur": 0.4
+ },
+ "key-b": {
+  "peak": 0.051,
+  "dur": 0.366
+ },
+ "sparkle": {
+  "peak": 0.025,
+  "dur": 1.802
+ }
+}

@@ -1,0 +1,77 @@
+<template>
+  <style>
+  #root { position: absolute; inset: 0; overflow: hidden; background: #0b151d; font-family: Montserrat, sans-serif; color: #fff; }
+  .cam { position: absolute; inset: 0; transform-origin: 50% 45%; }
+  .bg-media { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+  .line { position: absolute; left: 60px; width: 960px; text-align: center; line-height: 1.02; }
+  .w { display: inline-block; opacity: 0; margin: 0 0.12em; text-shadow: 0 4px 24px rgba(0,0,0,.8), 0 0 3px rgba(0,0,0,.6); }
+  .sm { font: 700 66px/1.1 Montserrat, sans-serif; letter-spacing: -0.01em; }
+  .serif { font: italic 900 92px/1.05 'Playfair Display', serif; }
+  .em { font: 900 220px/0.92 Montserrat, sans-serif; letter-spacing: -0.04em; text-transform: uppercase; color: #8CC63F; display: block; margin: 0.04em 0; }
+  .em.white { color: #fff; }
+  .em.teal { color: #2BAABC; }
+  .mono { font: 700 210px/1 'Space Mono', monospace; letter-spacing: -0.04em; }
+  .ch { display: inline-block; }
+  [data-slam] { position: relative; }
+  .echo { position: absolute; left: 0; top: 0; width: 100%; margin: 0 !important; opacity: 0; pointer-events: none;
+          color: transparent !important; -webkit-text-stroke: 3px rgba(255,255,255,.85); text-shadow: none !important; }
+  .echo * { color: transparent !important; text-shadow: none !important; }
+.em.amigo { font-size: 175px; }
+   .pill { display: inline-block; margin: 10px; padding: 20px 36px; border-radius: 60px; font: 700 40px Montserrat; background: rgba(255,255,255,.12); border: 2px solid rgba(255,255,255,.3); }
+   .pill.wa { background: #25D366; border-color: #25D366; color: #06210f; }</style>
+  <div data-hf-id="hf-0jq1" id="root" data-composition-id="s9" data-width="1080" data-height="1920" data-start="0" data-duration="5.45">
+    
+    <div data-hf-id="hf-ioig" class="cam" id="s9-cam" data-layout-allow-overflow=""><img data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:1,&quot;adjust&quot;:{&quot;exposure&quot;:-0.75,&quot;contrast&quot;:0.5,&quot;highlights&quot;:-0.2,&quot;shadows&quot;:0,&quot;whites&quot;:0,&quot;blacks&quot;:-0.35,&quot;temperature&quot;:0,&quot;tint&quot;:0,&quot;vibrance&quot;:0,&quot;saturation&quot;:0.08},&quot;details&quot;:{&quot;vignette&quot;:0.4,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0.04,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0.25,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-k6mo" id="s9-bg" class="clip bg-media" data-start="0" data-duration="5.45" src="assets/img/hero-equipo-veterinario.jpg" style="object-position:58% 50%" alt=""></div>
+    <div data-hf-id="hf-eoyy" class="clip" id="s9-logo" data-start="0.05" data-duration="5.4" style="position:absolute;left:420px;top:250px;width:240px;height:240px">
+      <div data-hf-id="hf-pq2b" id="s9-logo-card" style="width:240px;height:240px;border-radius:62px;background:#fff;display:grid;place-items:center;box-shadow:0 30px 80px rgba(0,0,0,.5)"><img data-hf-id="hf-a3w8" src="assets/img/logo-anisanar.png" style="width:176px" alt=""></div>
+    </div>
+    <div data-hf-id="hf-1eqs" class="line clip" id="s9-l1" data-start="0.1" data-duration="5.35" style="top:540px" data-layout-allow-overlap=""><span data-hf-id="hf-raqm" class="w em white" id="s9-w61" data-t="0.15" data-slam="1" style="font-size:150px">ANIS<span data-hf-id="hf-w8nv" style="color:#2BAABC">ANAR</span></span></div>
+    <div data-hf-id="hf-0bb3" class="line clip" id="s9-l2" data-start="1.12" data-duration="4.33" style="top:740px" data-layout-allow-overlap=""><span data-hf-id="hf-649g" class="w sm" id="s9-w62" data-t="1.17">cuidamos</span><span data-hf-id="hf-wggy" class="w sm" id="s9-w63" data-t="1.69">a</span><span data-hf-id="hf-vkfm" class="w sm" id="s9-w64" data-t="1.77">tu</span></div>
+    <div data-hf-id="hf-mijt" class="line clip" id="s9-l3" data-start="1.86" data-duration="3.59" style="top:840px" data-layout-allow-overlap=""><span data-hf-id="hf-q814" class="w em amigo" id="s9-w65" data-t="1.91" data-slam="1">mejor</span><span data-hf-id="hf-wcyz" class="w em amigo" id="s9-w66" data-t="2.25" data-slam="1">amigo</span></div>
+    <div data-hf-id="hf-ew6s" class="clip" id="s9-contact" data-start="2.95" data-duration="2.5" style="position:absolute;left:0;width:1080px;top:1170px;text-align:center">
+      <div data-hf-id="hf-hzfe" class="pill" id="s9-pill1">anisanar.com</div><div data-hf-id="hf-2e94" class="pill wa" id="s9-pill2">WhatsApp 310 312 04 30</div>
+    </div>
+  </div>
+  <script>
+  const tl = gsap.timeline({ paused: true });
+  const RGB0 = '-14px 0 rgba(255,40,140,0.85), 14px 0 rgba(40,220,255,0.85), 0 6px 30px rgba(0,0,0,0.6)';
+  const RGB1 = '0px 0 rgba(255,40,140,0), 0px 0 rgba(40,220,255,0), 0 6px 30px rgba(0,0,0,0.6)';
+  const cam = document.querySelector('#s9-cam');
+  const split = el => { const walk = n => [...n.childNodes].forEach(c => {
+      if (c.nodeType === 3) { const fr = document.createDocumentFragment();
+        [...c.textContent].forEach(ch => { const sp = document.createElement('span'); sp.className = 'ch'; sp.textContent = ch; fr.appendChild(sp); });
+        c.replaceWith(fr); } else walk(c); });
+    walk(el); return [...el.querySelectorAll('.ch')]; };
+  let punch = 1;
+  [...document.querySelectorAll('#root .w')].forEach(el => {
+    const at = +el.dataset.t;
+    if (el.dataset.slam) {
+      const echo = el.cloneNode(true); echo.removeAttribute('id'); echo.removeAttribute('data-slam'); echo.classList.add('echo'); echo.style.rotate = '0deg'; echo.setAttribute('aria-hidden', 'true'); echo.setAttribute('data-layout-ignore', '');
+      const chars = split(el); el.appendChild(echo); el.setAttribute('data-layout-ignore', '');   // (ya verificada a ojo: el lector de texto cuenta cada letra como palabra)
+      tl.set(el, { opacity: 1 }, at);
+      const st = Math.min(0.03, 0.3 / chars.length), land = at + st * chars.length + 0.12;   // el eco sale cuando ya aterrizó la última letra
+      tl.fromTo(chars, { opacity: 0, yPercent: 90, rotationX: -85, transformPerspective: 700, filter: 'blur(10px)' },
+        { opacity: 1, yPercent: 0, rotationX: 0, filter: 'blur(0px)', duration: 0.34, ease: 'expo.out', stagger: st }, at);
+      tl.fromTo(el, { scale: 1.25, textShadow: RGB0 }, { scale: 1, duration: 0.45, ease: 'expo.out', immediateRender: false }, at);
+      tl.to(el, { textShadow: RGB1, duration: 0.3, ease: 'power2.out' }, at + 0.08);
+      tl.fromTo(echo, { opacity: 0.6, scale: 1 }, { opacity: 0, scale: 1.35, duration: 0.5, ease: 'power2.out', immediateRender: false }, land);
+      if (cam && at > 0.3) {
+        punch += 0.045;
+        tl.to(cam, { scale: punch, duration: 0.35, ease: 'power3.out' }, at);
+        tl.to(cam, { keyframes: [{ x: -12, y: 6, duration: 0.033 }, { x: 9, y: -5, duration: 0.033 }, { x: -5, y: 3, duration: 0.033 }, { x: 0, y: 0, duration: 0.05 }] }, at);
+      }
+    } else {
+      tl.fromTo(el, { opacity: 0, filter: 'blur(6px)' }, { opacity: 1, filter: 'blur(0px)', duration: 0.13, ease: 'power4.out' }, at);
+    }
+  });
+  // salida de cada línea: blur-out + fade de 0.15 s al final de su ventana
+  document.querySelectorAll('#root .line:not([id^="s9-"])').forEach(ln => {
+    const end = +ln.dataset.start + +ln.dataset.duration;
+    tl.to(ln.querySelectorAll('.w:not(.echo)'), { opacity: 0, filter: 'blur(8px)', duration: 0.15, ease: 'power2.in' }, end - 0.16);
+  });
+  tl.fromTo('#s9-cam', { scale: 1.15, filter: 'blur(12px)' }, { scale: 1.03, filter: 'blur(0px)', duration: 0.5, ease: 'expo.out' }, 0);
+   tl.fromTo('#s9-logo-card', { y: 700, rotation: 25, rotationY: -540, transformPerspective: 900, scale: 0.6 }, { y: 0, rotation: 0, rotationY: 0, scale: 1, duration: 0.75, ease: 'expo.out' }, 0.05);
+   tl.fromTo('#s9-contact .pill', { opacity: 0, filter: 'blur(8px)' }, { opacity: 1, filter: 'blur(0px)', duration: 0.2, stagger: 0.09, ease: 'power4.out' }, 0.02 + 2.95);
+  window.__timelines["s9"] = tl;
+  </script>
+</template>

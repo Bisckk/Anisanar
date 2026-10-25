@@ -1,21 +1,40 @@
-# Video de entrega — Web de Anisanar
+# Videos de Anisanar
 
-Video de 54 s (1920×1080, 30 fps, H.264 + AAC) para presentarle a la veterinaria su nueva página web.
+| Video | Formato | Para qué | Salida |
+|---|---|---|---|
+| `entrega` | 16:9 · 54 s | Presentarle a la veterinaria su nueva página web | `anisanar-lanzamiento.mp4` |
+| `clientes` | 9:16 · 31 s | Promocionar la clínica y la web a clientes y nuevas personas (Reels, TikTok, estados de WhatsApp) | `anisanar-clientes-vertical.mp4` |
+
+Cada script recibe el video como argumento (por defecto `entrega`); la lista está en `videos.mjs`.
+El video `clientes` usa fotos y videos **reales** de la clínica (`../public/anisanar/`), sincronizados fotograma a fotograma.
 Todo se genera por código: composición HTML + GSAP, render determinista con Chrome headless y banda sonora sintetizada.
 
 ```bash
 cd promo-video
 npm install
-npm run voice      # (opcional) locución con ElevenLabs → voice/*.mp3 + voice/lines.json
-npm run build      # audio.mjs → soundtrack.wav (música + efectos + voz), luego render.mjs → anisanar-lanzamiento.mp4
+node fetch-sounds.mjs      # efectos y música grabados → sounds/ (una vez)
+node voice.mjs clientes    # (opcional) locución con ElevenLabs → voice-clientes/*.mp3
+node audio.mjs clientes    # música + efectos + voz → soundtrack-clientes.wav
+node render.mjs clientes   # → anisanar-clientes-vertical.mp4   (sin argumento: video de entrega)
 ```
+
+### Sonido
+
+- **Efectos y música grabados** (Mixkit, Licencia Gratuita: uso comercial en redes y publicidad, sin atribución).
+  Se descargan con `node fetch-sounds.mjs` en `sounds/` y **no se versionan** (la licencia no permite redistribuir los archivos sueltos).
+  Si faltan, `audio.mjs` usa los efectos sintetizados de respaldo.
+- Selección en `sounds.mjs`, tras analizar ~35 candidatos por dureza (> 5 kHz), centroide espectral, pegada y ataque.
+- **Música** del video `clientes`: *Motivating Mornings*; se recorta y se ajusta a 120 BPM para que su drop caiga en el logo (4.2 s).
+- **Mezcla automática por prominencia**: cada efecto se ajusta a cuántos dB debe sobresalir sobre música + voz
+  (`target` en `sounds.mjs`), así nunca "estalla" sobre una parte suave. `node audio.mjs clientes --report` lo muestra.
+- Master a **-14 LUFS / -1.5 dBTP** con `loudnorm` de 2 pasadas.
 
 ### Locución (ElevenLabs)
 
 - La clave vive en `../.env.local` (creada con `npx -y @elevenlabs/cli@latest onboard init` desde la raíz; está en `.gitignore`).
 - Voz: Bella (premade, cálida y profesional) con el modelo `eleven_v4` en español. Para otra voz, `ELEVEN_VOICE_ID` en
   `.env.local` (`node voice.mjs --voices` lista las disponibles). Las voces de la biblioteca de la comunidad requieren plan de pago.
-- El guion está en `SCRIPT` dentro de `voice.mjs`: cada frase tiene su ventana `[t, until]`. Si no cabe, se acelera con
+- Los guiones están en `SCRIPTS` dentro de `voice.mjs` (uno por video): cada frase tiene su ventana `[t, until]`. Si no cabe, se acelera con
   `atempo` (sin cambiar el tono, máx. x1.18). Solo se regeneran las frases cuyo texto cambia.
 - Bajo la voz, la música baja ~6 dB y los efectos ~2.5 dB automáticamente.
 - Licencia: el plan gratuito de ElevenLabs no permite uso comercial; para entregar el video a un cliente, usa un plan de pago.

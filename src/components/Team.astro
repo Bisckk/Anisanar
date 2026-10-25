@@ -1,10 +1,10 @@
 ---
-import { Check } from '@lucide/astro';
-import { team } from '@data/team';
+import { Check, ChevronDown } from '@lucide/astro';
+import { team, specialties, imagingDetail } from '@data/team';
 import TiltedCard from './react/TiltedCard.jsx';
 
-const featured = team.filter((m) => !m.comingSoon);
-const upcoming = team.filter((m) => m.comingSoon);
+const featured = team.filter((m) => m.featured);
+const crew = team.filter((m) => !m.featured);
 
 const socialIcons = {
   instagram: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>`,
@@ -85,20 +85,71 @@ const socialIcons = {
       </article>
     ))}
 
-    <!-- Coming soon -->
-    {upcoming.length > 0 && (
-      <div class="team__upcoming reveal-up">
-        <p class="team__upcoming-label">Seguimos ampliando el equipo</p>
-        <ul class="team__upcoming-list" data-stagger-parent aria-label="Próximas incorporaciones">
-          {upcoming.map((m) => (
-            <li class="team__upcoming-chip" data-stagger-child>
-              {m.role}
-              <span class="team__upcoming-tag">Próximamente</span>
+    <!-- Resto del equipo -->
+    {crew.length > 0 && (
+      <div class="crew">
+        <div class="crew__header reveal-up">
+          <p class="team__eyebrow">Junto a la Dra. Carolina</p>
+          <h3 class="crew__heading">Un equipo que cuida a tu mascota <em>como familia</em>.</h3>
+        </div>
+
+        <ul class="crew__grid" data-stagger-parent aria-label="Equipo de Anisanar">
+          {crew.map((m) => (
+            <li class="crew-card" data-stagger-child>
+              <div class="crew-card__photo">
+                <TiltedCard
+                  client:visible
+                  imageSrc={m.img}
+                  imageAlt={m.imgAlt}
+                  badgeText={m.role}
+                  rotateAmplitude={10}
+                />
+              </div>
+              <h4 class="crew-card__name">{m.name}</h4>
+              <p class="crew-card__role">{m.specialty}</p>
+              <p class="crew-card__bio">{m.bio}</p>
+
+              <details class="crew-card__more">
+                <summary>
+                  Conocer más
+                  <ChevronDown stroke-width="2" class="crew-card__chevron" aria-hidden="true" />
+                </summary>
+                <div class="crew-card__more-body">
+                  <p>{m.longBio}</p>
+                  {m.credentials.length > 0 && (
+                    <ul class="crew-card__credentials" aria-label={`Formación y experiencia de ${m.name}`}>
+                      {m.credentials.map((c) => (
+                        <li>
+                          <Check stroke-width="2.5" class="crew-card__check" aria-hidden="true" />
+                          <span>{c}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </details>
             </li>
           ))}
         </ul>
       </div>
     )}
+
+    <!-- Especialidades -->
+    <div class="team__specialties reveal-up">
+      <p class="team__eyebrow">Especialistas al cuidado de tu mascota</p>
+      <ul class="team__specialty-list" data-stagger-parent aria-label="Especialidades de Anisanar">
+        {specialties.map((s) => (
+          <li
+            class="team__specialty-chip"
+            data-stagger-child
+            title={s === 'Imagenología' ? imagingDetail : undefined}
+          >
+            {s}
+            {s === 'Imagenología' && <span class="team__specialty-detail">{imagingDetail}</span>}
+          </li>
+        ))}
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -240,14 +291,8 @@ const socialIcons = {
     color: var(--color-clay);
   }
 
-  /* ── Coming soon ────────────────────────────────────────────────────────── */
-  .team__upcoming {
-    margin-top: clamp(4rem, 6vw, 6rem);
-    padding-top: clamp(2.5rem, 4vw, 3.5rem);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .team__upcoming-label {
+  /* ── Etiqueta pequeña compartida (equipo y especialidades) ─────────────── */
+  .team__eyebrow {
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -256,36 +301,209 @@ const socialIcons = {
     margin-bottom: 1.25rem;
   }
 
-  .team__upcoming-list {
+  /* ── Resto del equipo ──────────────────────────────────────────────────── */
+  .crew {
+    margin-top: clamp(4rem, 6vw, 6rem);
+    padding-top: clamp(2.5rem, 4vw, 3.5rem);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .crew__header { margin-bottom: clamp(2rem, 4vw, 3rem); }
+
+  .crew__heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.6vw, 2.25rem);
+    font-weight: 500;
+    line-height: 1.2;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+    max-width: 24ch;
+  }
+
+  .crew__heading em {
+    color: var(--color-clay);
+    font-style: normal;
+  }
+
+  .crew__grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: clamp(2.5rem, 4vw, 3.5rem) clamp(1.5rem, 2.5vw, 2rem);
+    align-items: start;
+  }
+
+  .crew-card__photo {
+    aspect-ratio: 4 / 5;
+    margin-bottom: 1.25rem;
+  }
+
+  /* Etiqueta de rol algo más compacta que en la tarjeta destacada */
+  .crew-card__photo :global(.tilted-card__badge) {
+    bottom: 0.875rem;
+    left: 0.875rem;
+    right: 0.875rem;
+    width: fit-content;
+    max-width: calc(100% - 1.75rem);
+    padding: 0.5rem 0.85rem;
+  }
+
+  .crew-card__photo :global(.tilted-card__badge span) {
+    font-size: 0.75rem;
+    white-space: normal;
+  }
+
+  .crew-card__name {
+    font-family: var(--font-display);
+    font-size: 1.1875rem;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #ffffff;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.25rem;
+  }
+
+  .crew-card__role {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-clay);
+    margin-bottom: 0.75rem;
+  }
+
+  .crew-card__bio {
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  /* "Conocer más": desplegable nativo (accesible y sin JS) */
+  .crew-card__more { margin-top: 0.875rem; }
+
+  .crew-card__more summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+    cursor: pointer;
+    list-style: none;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 9999px;
+    transition: border-color 0.25s ease, color 0.25s ease;
+  }
+
+  .crew-card__more summary::-webkit-details-marker { display: none; }
+
+  .crew-card__more summary:hover,
+  .crew-card__more summary:focus-visible {
+    border-color: var(--color-clay);
+    color: var(--color-clay);
+  }
+
+  .crew-card__more summary:focus-visible { outline: 2px solid var(--color-clay); outline-offset: 3px; }
+
+  .crew-card__chevron {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.3s ease;
+  }
+
+  .crew-card__more[open] .crew-card__chevron { transform: rotate(180deg); }
+
+  .crew-card__more-body {
+    padding-top: 1rem;
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .crew-card__more[open] .crew-card__more-body { animation: crew-more-in 0.35s ease; }
+
+  @keyframes crew-more-in {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .crew-card__credentials {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .crew-card__credentials li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .crew-card__check {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    margin-top: 0.2em;
+    color: var(--color-clay);
+  }
+
+  /* ── Especialidades ────────────────────────────────────────────────────── */
+  .team__specialties {
+    margin-top: clamp(4rem, 6vw, 6rem);
+    padding-top: clamp(2.5rem, 4vw, 3.5rem);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .team__specialty-list {
     list-style: none;
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
   }
 
-  .team__upcoming-chip {
+  .team__specialty-chip {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     font-size: 0.8125rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.65);
+    color: rgba(255, 255, 255, 0.75);
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 0.5rem 1rem;
     border-radius: 9999px;
+    transition: border-color 0.25s ease, color 0.25s ease;
   }
 
-  .team__upcoming-tag {
+  .team__specialty-chip:hover {
+    border-color: var(--color-clay);
+    color: #ffffff;
+  }
+
+  .team__specialty-detail {
     font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
+    font-weight: 500;
     color: var(--color-clay);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .crew-card__chevron { transition: none; }
+    .crew-card__more[open] .crew-card__more-body { animation: none; }
   }
 
   /* ── Responsive ─────────────────────────────────────────────────────────── */
   @media (max-width: 900px) {
     .member { grid-template-columns: 1fr; }
     .member__frame { max-width: 320px; margin: 0 auto; }
+  }
+
+  @media (max-width: 560px) {
+    .crew__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 1rem; }
+    .crew-card__name { font-size: 1rem; }
+    .crew-card__bio { display: none; }  /* en móvil la frase va dentro de "Conocer más" */
   }
 </style>

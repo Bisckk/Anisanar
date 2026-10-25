@@ -1,0 +1,76 @@
+<template>
+  <style>
+  #root { position: absolute; inset: 0; overflow: hidden; background: #0b151d; font-family: Montserrat, sans-serif; color: #fff; }
+  .cam { position: absolute; inset: 0; transform-origin: 50% 45%; }
+  .bg-media { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+  .line { position: absolute; left: 60px; width: 960px; text-align: center; line-height: 1.02; }
+  .w { display: inline-block; opacity: 0; margin: 0 0.12em; text-shadow: 0 4px 24px rgba(0,0,0,.8), 0 0 3px rgba(0,0,0,.6); }
+  .sm { font: 700 66px/1.1 Montserrat, sans-serif; letter-spacing: -0.01em; }
+  .serif { font: italic 900 92px/1.05 'Playfair Display', serif; }
+  .em { font: 900 220px/0.92 Montserrat, sans-serif; letter-spacing: -0.04em; text-transform: uppercase; color: #8CC63F; display: block; margin: 0.04em 0; }
+  .em.white { color: #fff; }
+  .em.teal { color: #2BAABC; }
+  .mono { font: 700 210px/1 'Space Mono', monospace; letter-spacing: -0.04em; }
+  .ch { display: inline-block; }
+  [data-slam] { position: relative; }
+  .echo { position: absolute; left: 0; top: 0; width: 100%; margin: 0 !important; opacity: 0; pointer-events: none;
+          color: transparent !important; -webkit-text-stroke: 3px rgba(255,255,255,.85); text-shadow: none !important; }
+  .echo * { color: transparent !important; text-shadow: none !important; }
+</style>
+  <div data-hf-id="hf-l4gr" id="root" data-composition-id="s3" data-width="1080" data-height="1920" data-start="0" data-duration="4.4">
+    
+    <div data-hf-id="hf-1ku2" class="cam" id="s3-cam" data-layout-allow-overflow=""><video data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:1,&quot;adjust&quot;:{&quot;exposure&quot;:-0.18,&quot;contrast&quot;:0.5,&quot;highlights&quot;:-0.2,&quot;shadows&quot;:0,&quot;whites&quot;:0,&quot;blacks&quot;:-0.35,&quot;temperature&quot;:0,&quot;tint&quot;:0,&quot;vibrance&quot;:0,&quot;saturation&quot;:0.08},&quot;details&quot;:{&quot;vignette&quot;:0.4,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0.04,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-r8ik" id="s3-bg" class="clip bg-media" data-start="0" data-duration="4.4" data-media-start="0.2" src="assets/video/video-entrada-clinica.mp4" style="object-position:50% 50%" muted playsinline></video></div>
+    <div data-hf-id="hf-xsos" class="line clip" id="s3-l1" data-start="0.11" data-duration="2.17" style="top:360px" data-layout-allow-overlap=""><span data-hf-id="hf-o8ai" class="w sm" id="s3-w17" data-t="0.16">En</span><span data-hf-id="hf-ojji" class="w sm" id="s3-w18" data-t="0.32">San</span><span data-hf-id="hf-h7jh" class="w sm" id="s3-w19" data-t="0.54">Gil,</span></div>
+    <div data-hf-id="hf-8ioz" class="line clip" id="s3-l2" data-start="1.01" data-duration="1.27" style="top:470px" data-layout-allow-overlap=""><span data-hf-id="hf-08au" class="w sm" id="s3-w20" data-t="1.06">desde</span><br data-hf-id="hf-x5px"><span data-hf-id="hf-qjqz" class="w mono" id="s3-w21" data-t="1.46"><span data-hf-id="hf-1w72" id="s3-year">0000</span></span></div>
+    <div data-hf-id="hf-pz7q" class="line clip" id="s3-l3" data-start="2.35" data-duration="2.05" style="top:660px" data-layout-allow-overlap=""><span data-hf-id="hf-fnvx" class="w sm" id="s3-w22" data-t="2.4">la</span><span data-hf-id="hf-a524" class="w sm" id="s3-w23" data-t="2.52">respuesta</span><span data-hf-id="hf-5drg" class="w sm" id="s3-w24" data-t="3.1">es</span></div>
+    <div data-hf-id="hf-4408" class="clip" id="s3-logo" data-start="3.45" data-duration="0.95" style="position:absolute;left:390px;top:300px;width:300px;height:300px">
+      <div data-hf-id="hf-174e" id="s3-logo-card" style="width:300px;height:300px;border-radius:78px;background:#fff;display:grid;place-items:center;box-shadow:0 30px 80px rgba(0,0,0,.5)"><img data-hf-id="hf-eccq" src="assets/img/logo-anisanar.png" style="width:220px" alt=""></div>
+    </div>
+    <div data-hf-id="hf-o4jq" class="line clip" id="s3-l4" data-start="3.45" data-duration="0.95" style="top:750px" data-layout-allow-overlap=""><span data-hf-id="hf-7f3m" class="w em white" id="s3-w25" data-t="3.5" data-slam="1" style="font-size:176px">ANIS<span data-hf-id="hf-w8nv" style="color:#2BAABC">ANAR</span></span></div>
+  </div>
+  <script>
+  const tl = gsap.timeline({ paused: true });
+  const RGB0 = '-14px 0 rgba(255,40,140,0.85), 14px 0 rgba(40,220,255,0.85), 0 6px 30px rgba(0,0,0,0.6)';
+  const RGB1 = '0px 0 rgba(255,40,140,0), 0px 0 rgba(40,220,255,0), 0 6px 30px rgba(0,0,0,0.6)';
+  const cam = document.querySelector('#s3-cam');
+  const split = el => { const walk = n => [...n.childNodes].forEach(c => {
+      if (c.nodeType === 3) { const fr = document.createDocumentFragment();
+        [...c.textContent].forEach(ch => { const sp = document.createElement('span'); sp.className = 'ch'; sp.textContent = ch; fr.appendChild(sp); });
+        c.replaceWith(fr); } else walk(c); });
+    walk(el); return [...el.querySelectorAll('.ch')]; };
+  let punch = 1;
+  [...document.querySelectorAll('#root .w')].forEach(el => {
+    const at = +el.dataset.t;
+    if (el.dataset.slam) {
+      const echo = el.cloneNode(true); echo.removeAttribute('id'); echo.removeAttribute('data-slam'); echo.classList.add('echo'); echo.style.rotate = '0deg'; echo.setAttribute('aria-hidden', 'true'); echo.setAttribute('data-layout-ignore', '');
+      const chars = split(el); el.appendChild(echo); el.setAttribute('data-layout-ignore', '');   // (ya verificada a ojo: el lector de texto cuenta cada letra como palabra)
+      tl.set(el, { opacity: 1 }, at);
+      const st = Math.min(0.03, 0.3 / chars.length), land = at + st * chars.length + 0.12;   // el eco sale cuando ya aterrizó la última letra
+      tl.fromTo(chars, { opacity: 0, yPercent: 90, rotationX: -85, transformPerspective: 700, filter: 'blur(10px)' },
+        { opacity: 1, yPercent: 0, rotationX: 0, filter: 'blur(0px)', duration: 0.34, ease: 'expo.out', stagger: st }, at);
+      tl.fromTo(el, { scale: 1.25, textShadow: RGB0 }, { scale: 1, duration: 0.45, ease: 'expo.out', immediateRender: false }, at);
+      tl.to(el, { textShadow: RGB1, duration: 0.3, ease: 'power2.out' }, at + 0.08);
+      tl.fromTo(echo, { opacity: 0.6, scale: 1 }, { opacity: 0, scale: 1.35, duration: 0.5, ease: 'power2.out', immediateRender: false }, land);
+      if (cam && at > 0.3) {
+        punch += 0.045;
+        tl.to(cam, { scale: punch, duration: 0.35, ease: 'power3.out' }, at);
+        tl.to(cam, { keyframes: [{ x: -12, y: 6, duration: 0.033 }, { x: 9, y: -5, duration: 0.033 }, { x: -5, y: 3, duration: 0.033 }, { x: 0, y: 0, duration: 0.05 }] }, at);
+      }
+    } else {
+      tl.fromTo(el, { opacity: 0, filter: 'blur(6px)' }, { opacity: 1, filter: 'blur(0px)', duration: 0.13, ease: 'power4.out' }, at);
+    }
+  });
+  // salida de cada línea: blur-out + fade de 0.15 s al final de su ventana
+  document.querySelectorAll('#root .line').forEach(ln => {
+    const end = +ln.dataset.start + +ln.dataset.duration;
+    tl.to(ln.querySelectorAll('.w:not(.echo)'), { opacity: 0, filter: 'blur(8px)', duration: 0.15, ease: 'power2.in' }, end - 0.16);
+  });
+  tl.fromTo('#s3-cam', { scale: 1.25, filter: 'blur(12px)' }, { scale: 1.0, filter: 'blur(0px)', duration: 0.6, ease: 'expo.out' }, 0);
+   tl.to('#s3-cam', { scale: 1.08, duration: 3.6, ease: 'power1.inOut' }, 0.6);
+   // contador del año: gira hasta 2011 justo cuando la voz dice "2011"
+   const y = document.getElementById('s3-year'), y0 = 1.46;
+   ['1990','1996','2002','2007','2011'].forEach((v, i) => tl.set(y, { textContent: v }, y0 + i * 0.06));   // (tics en el plan de sonido)
+   tl.fromTo('#s3-logo-card', { scale: 0, rotation: -40, rotationY: 180, transformPerspective: 900 }, { scale: 1, rotation: 0, rotationY: 0, duration: 0.6, ease: 'back.out(1.6)' }, 3.5);
+  window.__timelines["s3"] = tl;
+  </script>
+</template>
