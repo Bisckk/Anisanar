@@ -1,0 +1,84 @@
+{
+ "voiceId": "hpp4J3VqNfWAUOO0d1Us",
+ "voiceName": "Bella - Professional, Bright, Warm",
+ "model": "eleven_v4",
+ "lines": [
+  {
+   "t": 0.9,
+   "file": "01.mp3",
+   "dur": 3.529,
+   "tempo": 1,
+   "text": "La clínica está cerrada… pero tu web sigue atendiendo."
+  },
+  {
+   "t": 5.25,
+   "file": "02.mp3",
+   "dur": 2.721,
+   "tempo": 1,
+   "text": "Te presentamos la nueva página web de Anisanar."
+  },
+  {
+   "t": 9.1,
+   "file": "03.mp3",
+   "dur": 4.458,
+   "tempo": 1.08,
+   "text": "Tu clínica, a primera vista: con tu identidad y en cualquier dispositivo."
+  },
+  {
+   "t": 14.5,
+   "file": "04.mp3",
+   "dur": 2.732,
+   "tempo": 1,
+   "text": "Cada uno de tus servicios tiene su propia página…"
+  },
+  {
+   "t": 18.3,
+   "file": "05.mp3",
+   "dur": 1.892,
+   "tempo": 1,
+   "text": "lista para que te encuentren en Google."
+  },
+  {
+   "t": 21.6,
+   "file": "06.mp3",
+   "dur": 2.25,
+   "tempo": 1,
+   "text": "Tu equipo, presentado como merece."
+  },
+  {
+   "t": 25.9,
+   "file": "07.mp3",
+   "dur": 4.462,
+   "tempo": 1.024,
+   "text": "Tus clientes piden cita en tres pasos, desde el celular y a cualquier hora."
+  },
+  {
+   "t": 32.7,
+   "file": "08.mp3",
+   "dur": 3.119,
+   "tempo": 1.074,
+   "text": "Y la solicitud te llega al instante, directo a tu WhatsApp."
+  },
+  {
+   "t": 37.2,
+   "file": "09.mp3",
+   "dur": 4.222,
+   "tempo": 1,
+   "text": "Más citas, menos llamadas, y una clínica fácil de encontrar."
+  },
+  {
+   "t": 43.1,
+   "file": "10.mp3",
+   "dur": 3.189,
+   "tempo": 1.028,
+   "text": "Y las opiniones de tus pacientes, a la vista de todos."
+  },
+  {
+   "t": 47.9,
+   "file": "11.mp3",
+   "dur": 2.966,
+   "tempo": 1,
+   "text": "Anisanar. Tu nueva web ya está en línea."
+  }
+ ]
+}

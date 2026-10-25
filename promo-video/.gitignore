@@ -1,0 +1,7 @@
+node_modules/
+frames/
+*.wav
+cues.json
+*.mp4
+.env
+voice/tmp-*
