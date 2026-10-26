@@ -141,7 +141,7 @@ export const services: Service[] = [
     id: 'hospitalizacion',
     emoji: 'Cross',
     title: 'Hospitalización',
-    shortDesc: 'Área de hospitalización con monitoreo continuo y cuidados especializados 24/7.',
+    shortDesc: 'Área de hospitalización con monitoreo y cuidados especializados durante nuestro horario de atención.',
     fullDesc: 'Nuestra unidad de hospitalización ofrece atención especializada para pacientes que requieren supervisión continua, fluidoterapia, oxigenoterapia o cuidados post-quirúrgicos. Las instalaciones están diseñadas para reducir el estrés del animal con espacios confortables, separación por especie y comunicación diaria con el propietario.',
     features: [
       'Monitoreo continuo de signos vitales',

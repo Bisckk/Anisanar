@@ -139,6 +139,7 @@ const socialIcons = {
                     <X stroke-width="2" aria-hidden="true" />
                   </button>
 
+                  <img class="profile__avatar" src={m.img} alt="" aria-hidden="true" loading="lazy" decoding="async" />
                   <p class="profile__role">{m.role}</p>
                   <h3 id={`perfil-${m.id}-name`} class="profile__name" tabindex="-1" autofocus>{m.name}</h3>
                   <p class="profile__specialty">{m.specialty}</p>
@@ -667,18 +668,44 @@ const socialIcons = {
   @media (max-width: 720px) {
     .profile {
       width: 100vw;
-      max-height: 92dvh;
+      max-height: calc(100dvh - 0.75rem);
       margin: auto 0 0;
       border-radius: 1.5rem 1.5rem 0 0;
       border-bottom: 0;
     }
-    .profile__panel { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: auto; max-height: 92dvh; }
-    .profile__photo { height: 240px; }
+    .profile__panel { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: auto; max-height: calc(100dvh - 0.75rem); }
+    .profile__photo { height: var(--photo-h, 240px); }   /* el script la ajusta para que todo quepa sin scroll */
     .profile__photo::after { background: linear-gradient(180deg, transparent 55%, #16202f 100%); }
     .profile__body { padding: 1.5rem 1.25rem 1.5rem; }
     .profile__panel { position: relative; }
     .profile__body { position: static; }  /* la X se ancla al panel: queda sobre la foto y no se desplaza con el texto */
     .profile__close { top: 0.75rem; right: 0.75rem; z-index: 2; background: rgba(8, 13, 22, 0.7); }
+
+    /* nivel 1: texto un poco más compacto */
+    .profile.is-compact .profile__body { padding: 1.15rem 1.25rem 1.1rem; }
+    .profile.is-compact .profile__role { margin-bottom: 0.5rem; }
+    .profile.is-compact .profile__name { font-size: 1.35rem; }
+    .profile.is-compact .profile__specialty { padding-bottom: 0.85rem; margin-bottom: 0.85rem; }
+    .profile.is-compact .profile__bio { font-size: 0.84rem; line-height: 1.6; }
+    .profile.is-compact .profile__credentials { margin-top: 0.9rem; gap: 0.4rem; }
+    .profile.is-compact .profile__footer { padding-top: 1.1rem; }
+
+    /* nivel 2 (pantallas muy bajas): la banda de foto pasa a ser un avatar junto al cargo */
+    .profile.is-mini .profile__photo { display: none; }
+    .profile.is-mini .profile__body { padding-top: 1.25rem; }
+    .profile.is-mini .profile__avatar { display: block; }
+    .profile.is-mini .profile__close { background: rgba(255, 255, 255, 0.06); }
+  }
+
+  .profile__avatar {
+    display: none;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center 18%;
+    margin-bottom: 0.85rem;
+    box-shadow: 0 0 0 2px var(--color-clay);
   }
 
   /* ── Especialidades ────────────────────────────────────────────────────── */
@@ -768,6 +795,27 @@ const socialIcons = {
     catch { /* navegador sin animación de ::backdrop: aparece sin fundido */ }
   };
 
+  // En móvil el perfil nunca debe tener scroll: primero se achica la foto, luego se compacta el texto y, si la pantalla
+  // es muy baja, la foto pasa a ser un avatar. Se mide el contenido real de cada integrante.
+  const PHOTO_MAX = 240, PHOTO_MIN = 130;
+  function fit(dlg: HTMLDialogElement) {
+    dlg.classList.remove('is-compact', 'is-mini');
+    dlg.style.removeProperty('--photo-h');
+    if (!mobile()) return;
+    const body = dlg.querySelector<HTMLElement>('.profile__body')!;
+    const room = () => window.innerHeight - 12 - body.scrollHeight;   // alto que queda para la foto
+    for (const level of ['', 'is-compact', 'is-mini']) {
+      if (level) dlg.classList.add(level);
+      dlg.style.setProperty('--photo-h', '0px');
+      const free = room();
+      if (level === 'is-mini' || free >= PHOTO_MIN) {
+        dlg.style.setProperty('--photo-h', `${Math.max(0, Math.min(PHOTO_MAX, free))}px`);
+        return;
+      }
+    }
+  }
+  addEventListener('resize', () => { if (current) fit(current); });
+
   function reveal(dlg: HTMLDialogElement, dir = 0) {
     const p = parts(dlg);
     const m = mobile();
@@ -800,6 +848,7 @@ const socialIcons = {
     const switching = !!current && dir !== 0;
     if (current) { gsap.killTweensOf(current); current.close(); gsap.set(current, { clearProps: 'all' }); }
     next.showModal();   // los estados iniciales se fijan en la misma tarea: no hay cuadro intermedio visible
+    fit(next);
     next.querySelector<HTMLElement>('.profile__body')?.scrollTo({ top: 0 });
     current = next;
     lenis?.stop();
