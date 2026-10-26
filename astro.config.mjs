@@ -19,6 +19,10 @@ export default defineConfig({
   // y necesitan ejecutarse como función serverless (ej. /api/book envía WhatsApp).
   output: 'hybrid',
   adapter: netlify(),
+  // el servicio "Diagnóstico por Imagen" pasó a ser "Laboratorio Clínico": la URL anterior redirige a la nueva
+  redirects: {
+    '/servicios/diagnostico-imagen': '/servicios/laboratorio-clinico',
+  },
   compressHTML: true,
   build: {
     inlineStylesheets: 'always',

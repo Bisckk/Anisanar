@@ -36,7 +36,7 @@ const PET_OPTIONS = [
 const SERVICES = [
   { value: 'Medicina general',       Icon: Stethoscope },
   { value: 'Cirugía',                Icon: Scissors    },
-  { value: 'Diagnóstico por imagen', Icon: Activity    },
+  { value: 'Laboratorio clínico',    Icon: Activity    },
   { value: 'Hospitalización',        Icon: Bed         },
   { value: 'Nutrición',              Icon: Apple       },
   { value: 'Vacunación',             Icon: Syringe     },
