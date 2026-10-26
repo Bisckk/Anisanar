@@ -1,4 +1,7 @@
 {
+  "redirects": [
+    { "source": "/servicios/diagnostico-imagen", "destination": "/servicios/laboratorio-clinico", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/(.*)",
