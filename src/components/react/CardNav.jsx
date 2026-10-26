@@ -178,7 +178,9 @@ const CardNav = ({
   };
 
   const handleCtaClick = () => {
-    window.location.href = '#contact';
+    // mismo scroll suave que el resto de enlaces (BaseLayout); sin JS de Lenis, salto normal
+    if (window.__scrollToHash?.('#contact')) history.pushState(null, '', '#contact');
+    else window.location.href = '#contact';
   };
 
   const handleLinkClick = () => {

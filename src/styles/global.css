@@ -37,7 +37,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: smooth;  /* respaldo sin JS; con Lenis activo se desactiva (abajo) */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -228,3 +228,8 @@ body::after {
     transform: none !important;
   }
 }
+
+/* Lenis: el scroll suave lo hace Lenis; el nativo se apaga para que no se peleen */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }

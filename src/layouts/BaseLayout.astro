@@ -64,6 +64,34 @@ const { title, description, canonical, image, imageAlt, type, schema, noindex } 
         lenis.raf(time * 1000);
       });
       gsap.ticker.lagSmoothing(0);
+      (window as any).__lenis = lenis;   // la usan otros componentes (navegación, perfiles del equipo)
+
+      // ─── Enlaces a secciones (#id) con el mismo scroll suave de Lenis ──────
+      // El salto nativo (scroll-behavior) choca con Lenis y se ve brusco; aquí cada enlace interno se anima con Lenis
+      // y el historial guarda la sección, así "Atrás" vuelve con el mismo suavizado.
+      const scrollToHash = (hash: string, immediate = false) => {
+        const target = hash && hash !== '#' ? document.querySelector<HTMLElement>(hash) : null;
+        if (hash && hash !== '#' && !target) return false;
+        lenis.scrollTo(target ?? 0, {
+          duration: immediate ? 0 : 1.5,
+          easing: (t: number) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),   // expo.out, como el resto del sitio
+          immediate,
+        });
+        return true;
+      };
+      (window as any).__scrollToHash = scrollToHash;
+
+      document.addEventListener('click', (e) => {
+        if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        const link = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href*="#"]');
+        if (!link || link.target === '_blank') return;
+        const url = new URL(link.href, location.href);
+        if (url.pathname !== location.pathname || url.origin !== location.origin) return;
+        if (!scrollToHash(url.hash)) return;
+        e.preventDefault();
+        if (url.hash !== location.hash) history.pushState(null, '', url.hash || location.pathname);
+      });
+      window.addEventListener('popstate', () => scrollToHash(location.hash));
 
       // Custom cursor animations have been removed.
 
