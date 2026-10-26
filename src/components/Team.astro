@@ -130,6 +130,7 @@ const socialIcons = {
               <div class="profile__panel">
                 <div class="profile__photo">
                   <img src={m.img} alt={m.imgAlt} loading="lazy" decoding="async" />
+                  <span class="profile__curtain" aria-hidden="true"></span>
                   <span class="profile__count">{String(i + 1).padStart(2, '0')} / {String(crew.length).padStart(2, '0')}</span>
                 </div>
 
@@ -468,13 +469,11 @@ const socialIcons = {
     background: #16202f;
     color: #ffffff;
     overflow: hidden;
-    box-shadow: 0 40px 120px rgba(0, 0, 0, 0.55);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
   }
 
   .profile::backdrop {
-    background: rgba(8, 13, 22, 0.62);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    background: rgba(8, 13, 22, 0.74);   /* oscuro sólido: el desenfoque del fondo costaba cada cuadro */
   }
 
   /* la apertura y el cierre los anima el script (GSAP): fondo, panel, cortina de la foto y texto en cascada */
@@ -489,6 +488,17 @@ const socialIcons = {
     position: relative;
     overflow: hidden;   /* el zoom de la foto al abrir no se sale de su columna */
     background: #0f1724;
+  }
+
+  /* cortina de la foto: una capa del color del panel que se recoge con scaleX/scaleY (compuesta en la GPU) */
+  .profile__curtain {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: #16202f;
+    transform: scaleX(0);
+    transform-origin: 100% 50%;
+    pointer-events: none;
   }
 
   .profile__photo img {
@@ -510,16 +520,14 @@ const socialIcons = {
 
   .profile__count {
     position: absolute;
+    z-index: 2;
     left: 1.25rem;
     bottom: 1.25rem;
-    z-index: 1;
     font-size: 0.6875rem;
     font-weight: 600;
     letter-spacing: 0.12em;
     color: #ffffff;
-    background: rgba(8, 13, 22, 0.55);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(8, 13, 22, 0.7);
     padding: 0.35rem 0.7rem;
     border-radius: 9999px;
   }
@@ -670,7 +678,7 @@ const socialIcons = {
     .profile__body { padding: 1.5rem 1.25rem 1.5rem; }
     .profile__panel { position: relative; }
     .profile__body { position: static; }  /* la X se ancla al panel: queda sobre la foto y no se desplaza con el texto */
-    .profile__close { top: 0.75rem; right: 0.75rem; z-index: 2; background: rgba(8, 13, 22, 0.55); backdrop-filter: blur(8px); }
+    .profile__close { top: 0.75rem; right: 0.75rem; z-index: 2; background: rgba(8, 13, 22, 0.7); }
   }
 
   /* ── Especialidades ────────────────────────────────────────────────────── */
@@ -734,6 +742,7 @@ const socialIcons = {
 
   // Perfiles del equipo: un <dialog> por integrante (foco atrapado y teclado nativos). La apertura es una coreografía:
   // el fondo se oscurece, el panel sube y se asienta, la foto se descubre con una cortina y el texto entra en cascada.
+  // Todo se anima con transform/opacity (sin filtros ni clip-path) para que vaya fluido también en equipos modestos.
   // Corre aunque el sistema pida reducir movimiento (Windows con animaciones apagadas lo reporta así y el modal
   // solo "aparecía"): son movimientos cortos que se asientan, sin bucles. Se cierra con la X, haciendo clic fuera o con Esc; las flechas pasan al anterior o siguiente deslizando el contenido.
   const lenis = (window as any).__lenis;
@@ -743,7 +752,7 @@ const socialIcons = {
   let closing = false;
 
   const parts = (dlg: HTMLDialogElement) => ({
-    photo: dlg.querySelector<HTMLElement>('.profile__photo'),
+    curtain: dlg.querySelector<HTMLElement>('.profile__curtain'),
     img: dlg.querySelector<HTMLElement>('.profile__photo img'),
     count: dlg.querySelector<HTMLElement>('.profile__count'),
     close: dlg.querySelector<HTMLElement>('.profile__close'),
@@ -761,26 +770,28 @@ const socialIcons = {
 
   function reveal(dlg: HTMLDialogElement, dir = 0) {
     const p = parts(dlg);
-    gsap.killTweensOf([dlg, p.photo, p.img, p.count, p.close, ...p.items]);
-    const tl = gsap.timeline({ defaults: { ease: EASE } });
+    const m = mobile();
+    gsap.killTweensOf([dlg, p.curtain, p.img, p.count, p.close, ...p.items]);
+    // solo transform y opacity (compuestos en la GPU, sin repintar); will-change mientras dura y se limpia al final
+    const layers = [dlg, p.curtain, p.img, ...p.items];
+    gsap.set(layers, { willChange: 'transform, opacity' });
+    const tl = gsap.timeline({ defaults: { ease: EASE, force3D: true }, onComplete: () => gsap.set(layers, { clearProps: 'willChange' }) });
     // cada estado inicial se fija ya (antes del primer cuadro), así el panel nunca se ve completo un instante
     const ft = (t: gsap.TweenTarget, from: gsap.TweenVars, to: gsap.TweenVars, at: number) => { gsap.set(t, { ...from, lazy: false }); tl.fromTo(t, from, to, at); };
     if (dir === 0) {
-      backdrop(dlg, 0, 1, 450);
-      ft(dlg, mobile()
-        ? { yPercent: 100, opacity: 1 }
-        : { opacity: 0, y: 46, scale: 0.92, rotationX: 7, transformPerspective: 1400, transformOrigin: '50% 100%' },
-        { yPercent: 0, opacity: 1, y: 0, scale: 1, rotationX: 0, duration: mobile() ? 0.65 : 0.8 }, 0);
+      backdrop(dlg, 0, 1, 380);
+      ft(dlg, m ? { yPercent: 100 } : { opacity: 0, y: 36, scale: 0.94 },
+        { yPercent: 0, opacity: 1, y: 0, scale: 1, duration: m ? 0.55 : 0.6 }, 0);
     }
-    // cortina sobre la foto (de izquierda a derecha; en móvil, de arriba abajo) y un leve zoom que se asienta
-    const shut = dir < 0 ? 'inset(0% 0% 0% 100%)' : mobile() ? 'inset(0% 0% 100% 0%)' : 'inset(0% 100% 0% 0%)';
-    ft(p.photo, { clipPath: shut }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.9, ease: 'power4.inOut' }, dir ? 0 : 0.08);
-    ft(p.img, { scale: 1.22 }, { scale: 1, duration: 1.3 }, dir ? 0 : 0.08);
-    ft(p.count, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5 }, dir ? 0.35 : 0.55);
-    ft(p.items, { opacity: 0, x: dir * 36, y: dir ? 0 : 22, filter: 'blur(6px)' },
-      { opacity: 1, x: 0, y: 0, filter: 'blur(0px)', duration: 0.7, stagger: 0.06, clearProps: 'filter' }, dir ? 0.05 : 0.22);
-    if (dir === 0) ft(p.close, { opacity: 0, scale: 0.5, rotation: -90 },
-      { opacity: 1, scale: 1, rotation: 0, duration: 0.6, ease: 'back.out(2)', clearProps: 'transform' }, 0.4);
+    // cortina: cubre la foto y se recoge (hacia la derecha; al ir hacia atrás, a la izquierda; en móvil, hacia abajo)
+    const axis = m && !dir ? 'scaleY' : 'scaleX';
+    const origin = m && !dir ? '50% 100%' : dir < 0 ? '0% 50%' : '100% 50%';
+    ft(p.curtain, { [axis]: 1, transformOrigin: origin }, { [axis]: 0, duration: 0.7, ease: 'power3.inOut' }, dir ? 0 : 0.06);
+    ft(p.img, { scale: 1.12 }, { scale: 1, duration: 0.9 }, dir ? 0 : 0.06);
+    ft(p.count, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power1.out' }, dir ? 0.3 : 0.45);
+    ft(p.items, { opacity: 0, x: dir * 28, y: dir ? 0 : 16 },
+      { opacity: 1, x: 0, y: 0, duration: 0.5, stagger: 0.045 }, dir ? 0.04 : 0.16);
+    if (dir === 0) ft(p.close, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(2)', clearProps: 'transform' }, 0.3);
   }
 
   const open = (id: string, dir = 0) => {
@@ -809,17 +820,42 @@ const socialIcons = {
     if (!animate) { finish(dlg); return; }
     closing = true;
     const p = parts(dlg);
-    gsap.killTweensOf([dlg, ...p.items]);
-    backdrop(dlg, 1, 0, 300);
+    gsap.killTweensOf([dlg, p.curtain, p.img, ...p.items]);
+    backdrop(dlg, 1, 0, 260);
     gsap.timeline({ onComplete: () => finish(dlg) })
-      .to(p.items, { opacity: 0, y: -8, duration: 0.18, stagger: 0.02, ease: 'power2.in' }, 0)
       .to(dlg, mobile()
-        ? { yPercent: 100, duration: 0.4, ease: 'power3.in' }
-        : { opacity: 0, y: 28, scale: 0.95, duration: 0.32, ease: 'power3.in' }, 0.06);
+        ? { yPercent: 100, duration: 0.35, ease: 'power3.in', force3D: true }
+        : { opacity: 0, y: 20, scale: 0.96, duration: 0.25, ease: 'power2.in', force3D: true }, 0);
   };
 
   document.querySelectorAll<HTMLElement>('[data-profile-open]').forEach((btn) =>
     btn.addEventListener('click', () => open(btn.dataset.profileOpen!, Number(btn.dataset.dir ?? 0))));
+
+  // la foto del perfil se carga y decodifica antes de abrir (al acercarse a la tarjeta o al llegar a la sección), así
+  // el primer cuadro de la animación no se traba esperando la imagen
+  const warm = (id?: string) => {
+    const img = id && document.querySelector<HTMLImageElement>(`#${id} .profile__photo img`);
+    if (!img || img.dataset.warm) return;
+    img.dataset.warm = '1';
+    img.loading = 'eager';
+    img.decode?.().catch(() => {});
+  };
+  document.querySelectorAll<HTMLElement>('.crew-card').forEach((card) => {
+    const id = card.querySelector<HTMLElement>('[data-profile-open]')?.dataset.profileOpen;
+    card.addEventListener('pointerenter', () => warm(id), { once: true });
+    card.addEventListener('focusin', () => warm(id), { once: true });
+  });
+  const crewGrid = document.querySelector('.crew__grid');
+  if (crewGrid && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      const all = [...document.querySelectorAll<HTMLElement>('dialog.profile')].map((d) => d.id);
+      const idle = (window as any).requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 300));
+      all.forEach((id, i) => idle(() => warm(id), { timeout: 1500 + i * 200 }));   // en ratos libres, una por una
+    }, { rootMargin: '200px' });
+    io.observe(crewGrid);
+  }
 
   document.querySelectorAll<HTMLDialogElement>('dialog.profile').forEach((dlg) => {
     dlg.addEventListener('close', () => { if (current === dlg) { current = null; lenis?.start(); } });

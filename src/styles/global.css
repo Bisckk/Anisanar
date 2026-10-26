@@ -232,4 +232,4 @@ body::after {
 /* Lenis: el scroll suave lo hace Lenis; el nativo se apaga para que no se peleen */
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
-.lenis.lenis-stopped { overflow: hidden; }
+/* (sin overflow:hidden al detener Lenis: cambiarlo re-maqueta toda la página y quita la barra de scroll; Lenis ya bloquea la rueda) */
