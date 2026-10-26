@@ -148,7 +148,6 @@ export const services: Service[] = [
       'Fluidoterapia y soporte nutricional',
       'Oxigenoterapia',
       'Fisioterapia post-quirúrgica',
-      'UCI de cuidados intensivos',
     ],
     includes: [
       'Parte médico diario al propietario',
