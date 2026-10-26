@@ -36,7 +36,7 @@ const NAV_ITEMS = [
     textColor: '#ffffff',
     links: [
       { label: 'Contactar ahora', href: '#contact' },
-      { label: 'Ubicación 24h', href: '#contact' },
+      { label: 'Ubicación y horarios', href: '#contact' },
     ],
   },
 ];

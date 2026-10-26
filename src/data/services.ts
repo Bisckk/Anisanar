@@ -142,9 +142,9 @@ export const services: Service[] = [
     emoji: 'Cross',
     title: 'Hospitalización',
     shortDesc: 'Área de hospitalización con monitoreo y cuidados especializados durante nuestro horario de atención.',
-    fullDesc: 'Nuestra unidad de hospitalización ofrece atención especializada para pacientes que requieren supervisión continua, fluidoterapia, oxigenoterapia o cuidados post-quirúrgicos. Las instalaciones están diseñadas para reducir el estrés del animal con espacios confortables, separación por especie y comunicación diaria con el propietario.',
+    fullDesc: 'Nuestra unidad de hospitalización ofrece atención especializada para pacientes que requieren supervisión médica, fluidoterapia, oxigenoterapia o cuidados post-quirúrgicos durante nuestro horario de atención. Las instalaciones están diseñadas para reducir el estrés del animal con espacios confortables, separación por especie y comunicación diaria con el propietario.',
     features: [
-      'Monitoreo continuo de signos vitales',
+      'Monitoreo de signos vitales',
       'Fluidoterapia y soporte nutricional',
       'Oxigenoterapia',
       'Fisioterapia post-quirúrgica',
