@@ -7,6 +7,12 @@
   to     = "/#services"
   status = 301
 
+# "Diagnóstico por Imagen" pasó a ser "Laboratorio Clínico" (enlaces viejos y Google)
+[[redirects]]
+  from   = "/servicios/diagnostico-imagen"
+  to     = "/servicios/laboratorio-clinico"
+  status = 301
+
 [[redirects]]
   from   = "/*"
   to     = "/404"
